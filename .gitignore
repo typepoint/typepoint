@@ -66,6 +66,18 @@ index.js
 index.d.ts
 index.js.map
 
+server.js
+server.d.ts
+server.js.map
+
+shared.js
+shared.d.ts
+shared.js.map
+
+client.js
+client.d.ts
+client.js.map
+
 server/**/*.js
 server/**/*.map
 server/**/*.d.ts
