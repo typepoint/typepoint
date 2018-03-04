@@ -89,3 +89,6 @@ shared/**/*.d.ts
 client/**/*.js
 client/**/*.map
 client/**/*.d.ts
+
+tests/**/*.js
+tests/**/*.map
