@@ -1,0 +1,17 @@
+.vscode/
+
+**/*.ts
+!**/*.d.ts
+
+server.ts
+server.js.map
+
+shared.ts
+shared.js.map
+
+client.ts
+client.js.map
+
+**/*.test.ts
+**/*.test.map
+tests/**/*.*
