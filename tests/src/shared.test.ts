@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { defineEndpoint } from '../../../shared';
+import { defineEndpoint } from '../../shared';
 
 describe('defineEndpoint', () => {
   it('should return an endpoint definition with the specified method and path', () => {
