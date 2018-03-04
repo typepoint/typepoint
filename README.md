@@ -1,2 +1,7 @@
 # strongpoint
-Library for defining, serving and consuming strongly typed endpoints in TypeScript
+Library for defining, consuming and/or serving **strongly typed** REST API endpoints in TypeScript.
+
+## Install
+```sh
+npm install strongpoint --save
+```
