@@ -1,0 +1,9 @@
+{
+  "extends": "./tsconfig.json",
+  "files": [
+    "./client.ts"
+  ],
+  "lib": [
+    "dom"
+  ]
+}

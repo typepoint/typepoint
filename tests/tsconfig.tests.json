@@ -1,0 +1,16 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "declaration": false,
+    "lib": [
+      "dom",
+      "es2015"
+    ],
+    "types": [
+      "mocha"
+    ]
+  },
+  "include": [
+    "**/*.test.ts"
+  ]
+}
