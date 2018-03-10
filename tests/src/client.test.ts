@@ -9,25 +9,22 @@ import { Product, products } from '../fixtures/products';
 
 describe('client', () => {
   describe('StrongPointClient', () => {
-    interface Product {
-      name: string;
-      description: string;
-    }
     let getProducts: EndpointDefinition<undefined, undefined, Product>;
+    let axiosMock: typeof axios;
 
     beforeEach(() => {
       getProducts = defineEndpoint('/products');
-    });
 
-    it('should make requests through axios', async () => {
-      const axiosMock = partialMockOf<typeof axios>({
+      axiosMock = partialMockOf<typeof axios>({
         request: sinon.stub().returns(Promise.resolve({
           status: 200,
           statusText: 'OK',
           data: products
         }))
       });
+    });
 
+    it('should make requests through axios', async () => {
       const client = new StrongPointClient({
         axios: axiosMock
       });
