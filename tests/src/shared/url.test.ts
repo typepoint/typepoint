@@ -3,7 +3,7 @@ import { expect } from 'chai';
 import { parseQueryString, parseUrl, QueryParameterValues } from '../../../shared/url';
 import { TestCase } from '../../infrastructure/testCase';
 
-describe('url', () => {
+describe('shared/url', () => {
   describe('parseUrl', () => {
     type ParsePathPatternTestCase = TestCase<string, { prePath: string, path: string, postPath: string }>;
 

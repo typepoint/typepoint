@@ -2,7 +2,7 @@ import { cleanseHttpMethod, HttpMethod } from '../../../shared/http';
 import { expect } from 'chai';
 import { TestCase } from '../../infrastructure/testCase';
 
-describe('http', () => {
+describe('shared/http', () => {
   describe('cleanseHttpMethod', () => {
     it('should return method in uppercase', () => {
       type CleanseHttpMethodCaseTestCase = TestCase<any, HttpMethod>;

@@ -3,7 +3,7 @@ import { expect } from 'chai';
 import { PathHelper } from '../../../shared/pathHelper';
 import { TestCase } from '../../infrastructure/testCase';
 
-describe('PathHelper', () => {
+describe('shared/pathHelper', () => {
 
   describe('parsePathPattern', () => {
     type ParsePathPatternTestCase = TestCase<string, { prePath: string, path: string, postPath: string }>;

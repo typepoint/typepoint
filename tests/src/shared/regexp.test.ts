@@ -3,7 +3,7 @@ import { expect } from 'chai';
 import { escapeRegExp } from '../../../shared/regexp';
 import { TestCase } from '../../infrastructure/testCase';
 
-describe('regexp', () => {
+describe('shared/regexp', () => {
   describe('escapeRegExp', () => {
     it('should escape text with regex characters characters', () => {
       type EscapeRegExpTestCase = TestCase<string, string>;
