@@ -35,7 +35,7 @@ export class PathHelper {
 
   private static generateParseFunction(
     parsedPathPattern: ParsedPathPattern
-  ): (path: string) => (PathHelperParseMatch | null) {
+  ): (path: string) => (PathHelperParseMatch | undefined) {
     const parameterNames: string[] = [];
     const getParameterPlaceholder = (index: number) => `-----${ index }-----`;
 
@@ -52,7 +52,7 @@ export class PathHelper {
 
     const pathParametersRegEx = new RegExp(pathParametersRegExpPattern, 'i');
 
-    return (path: string): PathHelperParseMatch | null => {
+    return (path: string): PathHelperParseMatch | undefined => {
       const parsedUrl = parseUrl(path);
 
       // Test url and extract path parameters
@@ -60,7 +60,7 @@ export class PathHelper {
       const parameterValues: string[] = [];
       const match = pathParametersRegEx.exec(parsedUrl.path);
       if (!match) {
-        return null;
+        return undefined;
       }
 
       const result: PathHelperParseMatch = {
@@ -121,8 +121,8 @@ export class PathHelper {
     PathHelper.checkForQueryString(pathPattern);
   }
 
-  public url(params: { [key: string]: any }): string {
-    const providedParameterNames = Object.getOwnPropertyNames(params);
+  public url(params?: { [key: string]: any }): string {
+    const providedParameterNames = params ? Object.getOwnPropertyNames(params) : [];
 
     const missingParameterNames: string[] = [];
     const queryStringParameterNames: string[] = [];
