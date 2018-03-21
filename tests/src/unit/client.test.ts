@@ -2,24 +2,27 @@ import axios from 'axios';
 import { expect } from 'chai';
 import * as sinon from 'sinon';
 
-import StrongPointClient from '../../client';
-import partialMockOf from '../infrastructure/mockOf';
-import { defineEndpoint, EndpointDefinition } from '../../shared';
-import { Product, products } from '../fixtures/products';
+import StrongPointClient from '../../../client';
+import partialMockOf from '../../infrastructure/mockOf';
+import { defineEndpoint, EndpointDefinition, Empty } from '../../../shared';
+import { Product } from '../../fixtures';
+import * as fixtures from '../../fixtures';
 
 describe('client', () => {
   describe('StrongPointClient', () => {
-    let getProducts: EndpointDefinition<undefined, undefined, Product>;
+    let products: Product[];
+    let getProducts: EndpointDefinition<Empty, Empty, Product>;
     let axiosMock: typeof axios;
 
     beforeEach(() => {
+      products = fixtures.getProducts();
       getProducts = defineEndpoint('/products');
 
       axiosMock = partialMockOf<typeof axios>({
         request: sinon.stub().returns(Promise.resolve({
           status: 200,
           statusText: 'OK',
-          data: products
+          data: fixtures.getProducts()
         }))
       });
     });
@@ -29,8 +32,7 @@ describe('client', () => {
         axios: axiosMock
       });
 
-      const response = await client.fetch(getProducts, {
-      });
+      const response = await client.fetch(getProducts);
 
       expect(axiosMock.request).to.have.been.calledWith({
         method: 'GET',

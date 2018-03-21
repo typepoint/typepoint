@@ -21,6 +21,11 @@ export interface ParsedPathPattern extends ParsedUrl {
   parameters: string[];
 }
 
+export interface GetUrlOptions {
+  params?: { [key: string]: any } | undefined;
+  server?: string | undefined;
+}
+
 export class PathHelper {
   public static parsePathPattern(pathPattern: string): ParsedPathPattern {
     const parsedUrl = parseUrl(pathPattern);
@@ -49,6 +54,7 @@ export class PathHelper {
       pathParametersRegExpPattern = pathParametersRegExpPattern
         .replace(escapeRegExp(getParameterPlaceholder(parameterIndex)), '([^&?\/\\\\]+)');
     }
+    pathParametersRegExpPattern = '^' + pathParametersRegExpPattern + '$';
 
     const pathParametersRegEx = new RegExp(pathParametersRegExpPattern, 'i');
 
@@ -121,9 +127,11 @@ export class PathHelper {
     PathHelper.checkForQueryString(pathPattern);
   }
 
-  public url(params?: { [key: string]: any }): string {
-    const providedParameterNames = params ? Object.getOwnPropertyNames(params) : [];
+  public url(options?: GetUrlOptions): string {
+    const params = (options && options.params) || {};
+    const server = (options && options.server) || '';
 
+    const providedParameterNames = params ? Object.getOwnPropertyNames(params) : [];
     const missingParameterNames: string[] = [];
     const queryStringParameterNames: string[] = [];
 
@@ -161,6 +169,10 @@ export class PathHelper {
 
     if (queryString) {
       url = url + (url.indexOf('?') === -1 ? '?' : '&') + queryString;
+    }
+
+    if (server) {
+      url = server + url;
     }
 
     return url;

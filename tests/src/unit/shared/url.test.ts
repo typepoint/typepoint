@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 
-import { parseQueryString, parseUrl, QueryParameterValues } from '../../../shared/url';
-import { TestCase } from '../../infrastructure/testCase';
+import { parseQueryString, parseUrl, QueryParameterValues } from '../../../../shared/url';
+import { TestCase } from '../../../infrastructure/testCase';
 
 describe('shared/url', () => {
   describe('parseUrl', () => {

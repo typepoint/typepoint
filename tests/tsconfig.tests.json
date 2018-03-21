@@ -11,6 +11,7 @@
     ]
   },
   "include": [
-    "**/*.test.ts"
+    "**/*.test.ts",
+    "../server/typings/**/*.ts"
   ]
 }

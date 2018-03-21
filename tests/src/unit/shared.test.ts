@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { defineEndpoint } from '../../shared';
+import { defineEndpoint } from '../../../shared';
 
 describe('shared', () => {
   describe('defineEndpoint', () => {
@@ -28,10 +28,10 @@ describe('shared', () => {
       expect(() => defineEndpoint(method as any, path)).to.throw('Unsupported HTTP method: SQUANCH');
     });
 
-    it('should error when trying to reference context property', () => {
+    it('should error when trying to reference typeInfo property', () => {
       const path = '/products';
       const getProducts = defineEndpoint(path);
-      expect(() => getProducts.context).to.throw('o not call definition.context directly. It is only used for internal use only.');
+      expect(() => getProducts.typeInfo).to.throw('Do not evaluate definition.typeInfo. It is reserved for internal use only.');
     })
   });
 });
