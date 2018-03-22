@@ -30,6 +30,7 @@
 
 ## Client
 - ✔ ~~Ability to call endpoint by providing definition and be forced to provide required params, body, etc~~
+- ✔ ~~Not have to pass params or body in options if they are not required~~
 
 ### Middleware example in Koa
 ```js
