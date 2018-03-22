@@ -1,19 +1,17 @@
 import axios, { AxiosRequestConfig } from 'axios';
+import { If } from 'typelevel-ts';
 
 // import './shared';
 import { Empty, EndpointDefinition, IsEmptyFieldName } from './shared';
 
 declare global {
   interface Object {
-    [IsEmptyFieldName]: '0';
+    [IsEmptyFieldName]: 'F';
   }
 }
 
 // tslint:disable-next-line:ban-types
-export type IfEmpty<TValue extends Object | Empty, TThen, TElse> = {
-  ['1']: TThen;
-  ['0']: TElse
-}[TValue[typeof IsEmptyFieldName]];
+export type IfEmpty<TValue extends Object | Empty, TThen, TElse> = If<TValue[typeof IsEmptyFieldName], TThen, TElse>;
 
 export interface StrongPointClientResponse<TBody> {
   statusCode: number;

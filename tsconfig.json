@@ -10,7 +10,6 @@
     "target": "es5"
   },
   "files": [
-    "./node_modules/typelogic/index.d.ts",
     "./index.ts"
   ]
 }

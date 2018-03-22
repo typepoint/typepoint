@@ -4,7 +4,7 @@ import { PathHelper, PathHelperParseMatch } from './shared/pathHelper';
 export const IsEmptyFieldName = ' isEmpty ';
 
 export interface Empty {
-  [IsEmptyFieldName]: '1';
+  [IsEmptyFieldName]: 'T';
 }
 
 export class DoNotReferenceEndpointDefinitionTypeInfo extends Error {
