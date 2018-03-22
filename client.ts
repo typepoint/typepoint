@@ -1,13 +1,16 @@
 import axios, { AxiosRequestConfig } from 'axios';
 
+// import './shared';
 import { Empty, EndpointDefinition, IsEmptyFieldName } from './shared';
 
-export interface Object {
-  [IsEmptyFieldName]: '0';
+declare global {
+  interface Object {
+    [IsEmptyFieldName]: '0';
+  }
 }
 
 // tslint:disable-next-line:ban-types
-export type IfEmpty<TValue extends Object, TThen, TElse> = {
+export type IfEmpty<TValue extends Object | Empty, TThen, TElse> = {
   ['1']: TThen;
   ['0']: TElse
 }[TValue[typeof IsEmptyFieldName]];
@@ -109,26 +112,3 @@ class StrongPointClient {
 }
 
 export default StrongPointClient;
-
-// interface Product {
-//   id: string;
-//   name: string;
-//   url: string;
-// }
-
-// declare const getProduct: EndpointDefinition<{ id: string }, Empty, Product>;
-// declare const addProduct: EndpointDefinition<Empty, Product, Product>;
-
-// const client = new StrongPointClient();
-// client.fetch(getProduct, {
-//   params: {
-//     id: '1'
-//   }
-// });
-
-// client.fetch(addProduct, {
-//   body: {
-//     id: '2',
-//     url: 'Some new url'
-//   }
-// });

@@ -1,8 +1,7 @@
 import { cleanseHttpMethod, HttpMethod, HttpMethods } from './shared/http';
 import { PathHelper, PathHelperParseMatch } from './shared/pathHelper';
 
-// tslint:disable-next-line:no-reference
-export const IsEmptyFieldName = '                                                        ';
+export const IsEmptyFieldName = ' isEmpty ';
 
 export interface Empty {
   [IsEmptyFieldName]: '1';
@@ -35,8 +34,8 @@ export interface EndpointDefinitionUrlOptions<TRequestParams> {
 
 // tslint:disable:ban-types
 export class EndpointDefinition<
-  TRequestParams extends object | Empty,
-  TRequestBody extends object | Empty,
+  TRequestParams extends Object | Empty,
+  TRequestBody extends Object | Empty,
   TResponseBody
   > {
   // tslint:enable:ban-types
