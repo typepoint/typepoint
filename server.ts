@@ -180,4 +180,6 @@ export class Router {
   }
 }
 
+declare const window: any | undefined;
+
 warnIfWindowDetected(typeof window === 'undefined' ? undefined : window, console);
