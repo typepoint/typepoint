@@ -1,6 +1,10 @@
 import { cleanseHttpMethod, HttpMethod, HttpMethods } from './shared/http';
 import { PathHelper, PathHelperParseMatch } from './shared/pathHelper';
 
+export interface Constructor<T> {
+  new(...args: any[]): T;
+}
+
 export const IsEmptyFieldName = ' isEmpty ';
 
 export interface Empty {

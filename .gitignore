@@ -62,33 +62,5 @@ typings/
 !.vscode/settings.json
 
 # Build artifacts
-index.js
-index.d.ts
-index.js.map
-
-server.js
-server.d.ts
-server.js.map
-
-shared.js
-shared.d.ts
-shared.js.map
-
-client.js
-client.d.ts
-client.js.map
-
-server/**/*.js
-server/**/*.map
-server/**/*.d.ts
-
-shared/**/*.js
-shared/**/*.map
-shared/**/*.d.ts
-
-client/**/*.js
-client/**/*.map
-client/**/*.d.ts
-
-tests/**/*.js
-tests/**/*.map
+dist
+tests-output

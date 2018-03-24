@@ -1,14 +1,15 @@
 import { expect } from 'chai';
 import { Response as ExpressResponse } from 'express';
-
-import { Response as StrongPointResponse } from '../../../../../server';
-import { StrongPointExpressResponse } from '../../../../../server/express/strongPointExpressResponse';
-import partialMockOf from '../../../../infrastructure/mockOf';
-import { Product } from '../../../../fixtures';
-import * as fixtures from '../../../../fixtures';
 import * as httpStatusCodes from 'http-status-codes';
 import * as sinon from 'sinon';
 import 'sinon-chai';
+
+import { Response as StrongPointResponse } from '../../../../../server';
+import { StrongPointExpressResponse } from '../../../../../server/express/strongPointExpressResponse';
+
+import partialMockOf from '../../../../infrastructure/mockOf';
+import { Product } from '../../../../fixtures';
+import * as fixtures from '../../../../fixtures';
 
 type ResponseBody<TBody> = (
   {

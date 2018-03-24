@@ -1,9 +1,14 @@
 {
+  "compilerOptions": {
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true
+  },
   "extends": "./tsconfig.json",
   "files": [
     "./server.ts"
   ],
   "include": [
-    "./server/**/*.ts"
+    "./server/**/*.ts",
+    "./server/typings/**/*.ts"
   ]
 }

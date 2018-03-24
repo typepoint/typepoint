@@ -2,16 +2,25 @@
   "extends": "../tsconfig.json",
   "compilerOptions": {
     "declaration": false,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
     "lib": [
       "dom",
       "es2015"
     ],
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "outDir": "../tests-output",
+    "target": "es5",
     "types": [
-      "mocha"
+      "mocha",
+      "node",
+      "reflect-metadata"
     ]
   },
   "include": [
     "**/*.test.ts",
+    "infrastructure/sinonChai.ts",
     "../server/typings/**/*.ts"
   ]
 }

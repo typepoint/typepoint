@@ -1,7 +1,6 @@
-import global = require('global');
 import { warnIfWindowDetected } from './server/clientDetection';
 import { EndpointDefinition } from './shared';
-import { Constructor } from './shared/constructor';
+import { Constructor } from './shared';
 import { HttpMethod } from './shared/http';
 import { PathHelper, PathHelperParseMatch } from './shared/pathHelper';
 
@@ -48,7 +47,7 @@ export interface EndpointContext<TRequestParams, TRequestBody, TResponseBody> {
   response: Response<TResponseBody>;
 }
 
-type EndpointHandlerFunction<TEndpointDefinition extends EndpointDefinition<any, any, any>> =
+export type EndpointHandlerFunction<TEndpointDefinition extends EndpointDefinition<any, any, any>> =
   (context: EndpointContext<
     TEndpointDefinition['typeInfo']['request']['params'],
     TEndpointDefinition['typeInfo']['request']['body'],
@@ -100,11 +99,11 @@ function handleEndpoint<TEndpointDefinition extends EndpointDefinition<any, any,
   return AnonymousEndpointHandler;
 }
 
-interface RouterIoc {
+export interface RouterIoc {
   get<T>(Class: Constructor<T>): T;
 }
 
-interface RouterOptions {
+export interface RouterOptions {
   handlers?: EndpointHandlerClass[];
   ioc?: RouterIoc;
 }
@@ -113,6 +112,26 @@ export type RouterHandleMethod = (request: Request<any, any>, response: Response
 
 export interface UnprotectedRouter {
   readonly handle: RouterHandleMethod;
+}
+
+export class HandlerConstructorError extends Error {
+  constructor(Handler: Constructor<EndpointHandler>, innerError: Error | string | any) {
+    let message = `Error creating handler`;
+    if (Handler.name) {
+      message += ` ${ Handler.name }`;
+    }
+    if (innerError) {
+      if (typeof innerError === 'string') {
+        message += `: ${ innerError }`;
+      } else if (innerError.message) {
+        message += `: ${ innerError.message }`;
+      }
+      if (innerError.stack) {
+        message += `\n\n${ innerError.stack }`;
+      }
+    }
+    super(message);
+  }
 }
 
 export class Router {
@@ -147,13 +166,18 @@ export class Router {
     return this.handlers;
   }
 
+  private createHandler(Handler: Constructor<EndpointHandler>) {
+    try {
+      return this.ioc.get(Handler);
+    } catch (err) {
+      throw new HandlerConstructorError(Handler, err);
+    }
+  }
+
   private createHandlers(): EndpointHandler[] {
-    const result: EndpointHandler[] = this.handlerClasses.map(Handler => {
-      const handler = this.ioc.get(Handler);
-      return handler;
-    });
+    const result: EndpointHandler[] = this.handlerClasses.map(Handler => this.createHandler(Handler));
     return result;
   }
 }
 
-warnIfWindowDetected(global, global.console);
+warnIfWindowDetected(typeof window === 'undefined' ? undefined : window, console);

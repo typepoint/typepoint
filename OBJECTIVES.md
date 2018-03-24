@@ -10,7 +10,7 @@
   - Allow easy decoration for permissions
 
 ## Endpoint Handlers
-- Ability to have services you need injected for testability
+- ✔ ~~Ability to have services you need injected for testability~~
 - ✔ ~~Read access to typed versions of request~~
 - ✔ ~~Read/Write access to typed response body~~
 - Access to extra typed attachments like User, Database, etc

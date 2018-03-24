@@ -2,7 +2,7 @@ import { EndpointHandler } from '../server';
 import { HttpMethod } from '../shared/http';
 import { PathHelperParseMatch } from '../shared/pathHelper';
 
-interface HandlerMatch {
+export interface HandlerMatch {
   handler: EndpointHandler;
   parsedUrl: PathHelperParseMatch;
 }
