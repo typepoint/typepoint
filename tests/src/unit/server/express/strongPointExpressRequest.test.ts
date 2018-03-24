@@ -1,8 +1,8 @@
 import { expect } from 'chai';
 import { Request as ExpressRequest } from 'express';
 
-import { Request as StrongPointRequest } from '../../../../../server';
-import { StrongPointExpressRequest } from '../../../../../server/express/strongPointExpressRequest';
+import { Request as StrongPointRequest } from '../../../../../src/server';
+import { StrongPointExpressRequest } from '../../../../../src/server/express/strongPointExpressRequest';
 
 import partialMockOf from '../../../../infrastructure/mockOf';
 import { Product } from '../../../../fixtures';

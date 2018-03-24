@@ -9,8 +9,5 @@
     "outDir": "./dist",
     "strict": true,
     "target": "es5"
-  },
-  "files": [
-    "./index.ts"
-  ]
+  }
 }

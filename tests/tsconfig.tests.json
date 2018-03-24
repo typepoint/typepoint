@@ -21,6 +21,7 @@
   "include": [
     "**/*.test.ts",
     "infrastructure/sinonChai.ts",
-    "../server/typings/**/*.ts"
+    "../src/server/typings/**/*.ts",
+    "../src/index.ts"
   ]
 }

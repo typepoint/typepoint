@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 
-import { PathHelper } from '../../../../shared/pathHelper';
+import { PathHelper } from '../../../../src/shared/pathHelper';
 import { TestCase } from '../../../infrastructure/testCase';
 
 describe('shared/pathHelper', () => {

@@ -1,8 +1,8 @@
 import { expect } from 'chai';
 import * as sinon from 'sinon';
 
-import { HandlerMatchIterator } from '../../../../server/middlewareHelper';
-import { EndpointHandler } from '../../../../server';
+import { HandlerMatchIterator } from '../../../../src/server/middlewareHelper';
+import { EndpointHandler } from '../../../../src/server';
 import partialMockOf from '../../../infrastructure/mockOf';
 
 describe('server/middlewareHelper', () => {

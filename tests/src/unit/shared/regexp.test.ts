@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 
-import { escapeRegExp } from '../../../../shared/regexp';
+import { escapeRegExp } from '../../../../src/shared/regexp';
 import { TestCase } from '../../../infrastructure/testCase';
 
 describe('shared/regexp', () => {

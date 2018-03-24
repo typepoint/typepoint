@@ -1,6 +1,6 @@
 import { injectable } from 'inversify';
 
-import { EndpointHandler } from '../../../../../server';
+import { EndpointHandler } from '../../../../../src/server';
 
 import { updateTodo } from '../../definitions';
 import { TodoService } from '../../services/todoService';
@@ -16,3 +16,4 @@ export class UpdateTodoHandler extends EndpointHandler {
     });
   }
 }
+

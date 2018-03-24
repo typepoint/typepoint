@@ -1,4 +1,4 @@
-import { defineEndpoint, Empty } from '../../../../../shared';
+import { defineEndpoint, Empty } from '../../../../../src/shared';
 import { Todo } from '../../models/todo';
 import { HasId } from '../../models/hasId';
 

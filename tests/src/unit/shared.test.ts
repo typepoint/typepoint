@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { defineEndpoint } from '../../../shared';
+import { defineEndpoint } from '../../../src/shared';
 
 describe('shared', () => {
   describe('defineEndpoint', () => {

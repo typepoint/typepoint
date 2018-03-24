@@ -3,7 +3,7 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true
   },
-  "extends": "./tsconfig.json",
+  "extends": "../tsconfig.json",
   "files": [
     "./server.ts"
   ],

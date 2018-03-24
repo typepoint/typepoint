@@ -4,8 +4,8 @@ import * as httpStatusCodes from 'http-status-codes';
 import * as sinon from 'sinon';
 import 'sinon-chai';
 
-import { Response as StrongPointResponse } from '../../../../../server';
-import { StrongPointExpressResponse } from '../../../../../server/express/strongPointExpressResponse';
+import { Response as StrongPointResponse } from '../../../../../src/server';
+import { StrongPointExpressResponse } from '../../../../../src/server/express/strongPointExpressResponse';
 
 import partialMockOf from '../../../../infrastructure/mockOf';
 import { Product } from '../../../../fixtures';

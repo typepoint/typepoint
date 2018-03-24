@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import * as sinon from 'sinon';
 
-import { BasicConsole, warnIfWindowDetected } from '../../../../server/clientDetection';
+import { BasicConsole, warnIfWindowDetected } from '../../../../src/server/clientDetection';
 
 describe('server/clientDetection', () => {
   describe('warnIfWindowDetected', () => {

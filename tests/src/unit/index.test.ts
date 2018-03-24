@@ -5,7 +5,7 @@ describe('strongpoint', () => {
     // Allow a bit more time for test to require module on demand
     this.timeout(3000);
 
-    expect(() => require('../../../index')).to.throw(
+    expect(() => require('../../../src')).to.throw(
       `Do not import from/require \'strongpoint\' directly. ` +
       `Instead import from/require \'strongpoint/client\', \'strongpoint/shared\' or \'strongpoint/server\'`
     );
