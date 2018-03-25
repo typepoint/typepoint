@@ -7,26 +7,28 @@
   - ✔ ~~Request Params Type~~
   - ✔ ~~Request Body Type~~
   - ✔ ~~Response Body Type~~
-  - Allow easy decoration for permissions
+  - □ Validation of request input
+  - □ Coercion of request input to correct types
+  - ↓ Allow easy decoration for permissions
 
 ## Endpoint Handlers
 - ✔ ~~Ability to have services you need injected for testability~~
 - ✔ ~~Read access to typed versions of request~~
 - ✔ ~~Read/Write access to typed response body~~
-- Access to extra typed attachments like User, Database, etc
-- Ability to not handle route in a handler
-- Read request headers
-- Write response headers
-- Read request cookies
-- Write response cookies
+- □ Access to extra typed attachments like User, Database, etc
+- □ Ability to not handle route in a handler
+- □ Read request headers
+- □ Write response headers
+- □ Read request cookies
+- □ Write response cookies
 - ✔ ~~Rendering views not required~~
 
 ## Router
-- Support for middleware
-- Ability to extend context with extra metadata
-- Nested routers?
-- Should gracefully handle uncaught server errors
-- Should allow providing your own error handler
+- □ Support for middleware
+- □ Ability to extend context with extra metadata
+- □ Nested routers?
+- □ Should gracefully handle uncaught server errors
+- □ Should allow providing your own error handler
 
 ## Client
 - ✔ ~~Ability to call endpoint by providing definition and be forced to provide required params, body, etc~~
