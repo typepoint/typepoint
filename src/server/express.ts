@@ -1,13 +1,15 @@
 import * as express from 'express';
-
 import * as httpStatusCodes from 'http-status-codes';
+
 import { EndpointContext, EndpointHandler, Request, Response, Router, UnprotectedRouter } from '../server';
 import { cleanseHttpMethod } from '../shared/http';
+import { combineMiddlewares } from './express/middleware';
 import { StrongPointExpressRequest } from './express/strongPointExpressRequest';
 import { StrongPointExpressResponse } from './express/strongPointExpressResponse';
 import { HandlerMatchIterator } from './middlewareHelper';
 
 export interface ToMiddlewareOptions {
+  expressMiddlewares?: express.RequestHandler[];
   log?: (...args: any[]) => void;
 }
 
@@ -18,7 +20,7 @@ export function toMiddleware(router: Router, options?: ToMiddlewareOptions): exp
 
   const log = (options && options.log) || noop;
 
-  const middleware: express.RequestHandler = async (
+  const handlersMiddleware: express.RequestHandler = async (
     req: express.Request, res: express.Response, next: express.NextFunction
   ) => {
     let context: EndpointContext<any, any, any> | undefined;
@@ -77,5 +79,12 @@ export function toMiddleware(router: Router, options?: ToMiddlewareOptions): exp
     }
   };
 
-  return middleware;
+  const allMiddleware: express.Handler[] = [
+    ...(options && options.expressMiddlewares) || [],
+    handlersMiddleware
+  ];
+
+  const combinedMiddleware = combineMiddlewares(allMiddleware);
+
+  return combinedMiddleware;
 }
