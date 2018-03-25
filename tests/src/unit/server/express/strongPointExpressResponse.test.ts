@@ -34,8 +34,12 @@ describe('server/express/strongPointExpressResponse', () => {
         headersSent: false,
         sendStatus: sinon.spy(),
         send: sinon.spy(),
-        get: sinon.stub().returns('some header value'),
-        set: sinon.spy(),
+        getHeader: sinon.stub().returns('some header value'),
+        getHeaders: sinon.stub().returns({
+          'some-header-name': 'some-header-value',
+          'another-header-name': 'another-header-value'
+        }),
+        setHeader: sinon.spy(),
         removeHeader: sinon.spy()
       });
 
@@ -79,34 +83,28 @@ describe('server/express/strongPointExpressResponse', () => {
       expect(expressResponse.flushHeaders).not.to.have.been.called;
     });
 
-    it('should get headers from express response using headers.get(name)', () => {
-      const actual = response.headers.get('some-header-name');
+    it('should get header from express response using header(name)', () => {
+      const actual = response.header('some-header-name');
       expect(actual).to.equal('some header value');
     });
 
-    it('should get headers from express response using headers(name)', () => {
-      const actual = response.headers('some-header-name');
-      expect(actual).to.equal('some header value');
+    it('should set header in express response using header(name, value)', () => {
+      response.header('some-header-name', 'some-header-value');
+      expect(expressResponse.setHeader).to.have.been.calledWith('some-header-name', 'some-header-value');
     });
 
-    it('should set headers in express response using headers.set(name, value)', () => {
-      response.headers.set('some-header-name', 'some value');
-      expect(expressResponse.set).to.have.been.calledWith('some-header-name', 'some value');
-    });
-
-    it('should set headers in express response using headers(name, value)', () => {
-      response.headers('some-header-name', 'some value');
-      expect(expressResponse.set).to.have.been.calledWith('some-header-name', 'some value');
-    });
-
-    it('should remove headers from express response', () => {
-      response.headers.remove('some-header-name');
+    it('should remove header in express response when calling header(name, undefined)', () => {
+      response.header('some-header-name', undefined);
       expect(expressResponse.removeHeader).to.have.been.calledWith('some-header-name');
     });
 
-    it('should remove headers from express response using headers.set(name, undefined)', () => {
-      response.headers.set('some-header-name', undefined);
-      expect(expressResponse.removeHeader).to.have.been.calledWith('some-header-name');
+    it('should get list of all headers from express response', () => {
+      const actual = response.headers();
+      expect(expressResponse.getHeaders).to.have.been.called;
+      expect(actual).to.deep.equal({
+        'some-header-name': 'some-header-value',
+        'another-header-name': 'another-header-value'
+      });
     });
   });
 });

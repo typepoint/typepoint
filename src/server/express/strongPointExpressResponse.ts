@@ -3,36 +3,6 @@ import * as httpStatusCodes from 'http-status-codes';
 
 import { HeadersAlreadySent, Response as StrongPointResponse, ResponseHeaders } from '../../server';
 
-function createResponseHeadersWrapper(response: ExpressResponse): ResponseHeaders {
-  const remove = (name: string) => response.removeHeader(name);
-
-  const get = (name: string) => response.get(name);
-
-  const set = (name: string, value: string | undefined) => {
-    if (value === undefined) {
-      remove(name);
-    } else {
-      response.set(name, value);
-    }
-  };
-
-  function getOrSetHeader(name: string, value?: string | undefined) {
-    if (arguments.length === 2) {
-      set(name, value);
-    } else {
-      return get(name);
-    }
-  }
-
-  const result = getOrSetHeader as ResponseHeaders;
-
-  result.get = get;
-  result.set = set;
-  result.remove = remove;
-
-  return result;
-}
-
 export class StrongPointExpressResponse<TResponseBody> implements StrongPointResponse<TResponseBody> {
   public get hasFlushedHeaders(): boolean {
     return this.response.headersSent;
@@ -55,8 +25,6 @@ export class StrongPointExpressResponse<TResponseBody> implements StrongPointRes
       this.response.statusCode = value;
     }
   }
-
-  public readonly headers = createResponseHeadersWrapper(this.response);
 
   public get body(): TResponseBody | undefined {
     return this.innerBody;
@@ -93,6 +61,30 @@ export class StrongPointExpressResponse<TResponseBody> implements StrongPointRes
       this.response.json(this.body);
     }
     this.innerHasFlushedBody = true;
+  }
+
+  public header(name: string): string | string[] | number | undefined;
+  public header(name: string, value: string | string[] | number | undefined): void;
+
+  public header(
+    name: string,
+    value?: string | string[] | number | undefined
+  ): string | string[] | number | undefined | void {
+    if (arguments.length === 1) {
+      return this.response.getHeader(name);
+    }
+    if (this.hasFlushedHeaders) {
+      throw new HeadersAlreadySent('Cannot set header');
+    }
+    if (value === undefined) {
+      this.response.removeHeader(name);
+    } else {
+      this.response.setHeader(name, value);
+    }
+  }
+
+  public headers(): ResponseHeaders {
+    return this.response.getHeaders();
   }
 
   private ensureHeadersNotSent() {

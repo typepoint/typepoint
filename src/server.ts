@@ -4,11 +4,57 @@ import { Constructor } from './shared';
 import { HttpMethod } from './shared/http';
 import { PathHelper, PathHelperParseMatch } from './shared/pathHelper';
 
+export interface RequestHeaders {
+  'accept'?: string;
+  'access-control-allow-origin'?: string;
+  'access-control-allow-credentials'?: string;
+  'access-control-expose-headers'?: string;
+  'access-control-max-age'?: string;
+  'access-control-allow-methods'?: string;
+  'access-control-allow-headers'?: string;
+  'accept-patch'?: string;
+  'accept-ranges'?: string;
+  'age'?: string;
+  'allow'?: string;
+  'alt-svc'?: string;
+  'cache-control'?: string;
+  'connection'?: string;
+  'content-disposition'?: string;
+  'content-encoding'?: string;
+  'content-language'?: string;
+  'content-length'?: string;
+  'content-location'?: string;
+  'content-range'?: string;
+  'content-type'?: string;
+  'date'?: string;
+  'expires'?: string;
+  'host'?: string;
+  'last-modified'?: string;
+  'location'?: string;
+  'pragma'?: string;
+  'proxy-authenticate'?: string;
+  'public-key-pins'?: string;
+  'retry-after'?: string;
+  'set-cookie'?: string[];
+  'strict-transport-security'?: string;
+  'trailer'?: string;
+  'transfer-encoding'?: string;
+  'tk'?: string;
+  'upgrade'?: string;
+  'vary'?: string;
+  'via'?: string;
+  'warning'?: string;
+  'www-authenticate'?: string;
+  [name: string]: string | string[] | undefined;
+}
+
 export interface Request<TRequestParams, TRequestBody> {
   readonly method: HttpMethod;
   readonly url: string;
   params: TRequestParams;
   readonly body: TRequestBody;
+  readonly headers: RequestHeaders;
+  header(name: string): string | string[] | undefined;
 }
 
 export class HeadersAlreadySent extends Error {
@@ -20,18 +66,11 @@ export class HeadersAlreadySent extends Error {
 }
 
 export interface ResponseHeaders {
-  (name: string): string | undefined;
-  (name: string, value: string | undefined): void;
-
-  get(name: string): string | undefined;
-  set(name: string, value: string | undefined): void;
-  remove(name: string): void;
+  [name: string]: string | string[] | number | undefined;
 }
 
 export interface Response<TResponseBody> {
   statusCode: number | undefined;
-
-  readonly headers: ResponseHeaders;
 
   body: TResponseBody | undefined;
 
@@ -40,6 +79,10 @@ export interface Response<TResponseBody> {
 
   flush(): void;
   flushHeaders(): void;
+
+  header(name: string): string | string[] | number | undefined;
+  header(name: string, value: string | string[] | number | undefined): void;
+  headers(): ResponseHeaders;
 }
 
 export interface EndpointContext<TRequestParams, TRequestBody, TResponseBody> {
