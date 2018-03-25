@@ -13,21 +13,29 @@ export interface ToMiddlewareOptions {
 
 export function toMiddleware(router: Router, options?: ToMiddlewareOptions): express.RequestHandler {
 
-  const noop = () => {
-    //
-  };
-  const log = (options && options.log) || noop; // console.log;
+  // tslint:disable-next-line:no-empty
+  const noop = () => { };
+
+  const log = (options && options.log) || noop;
 
   const middleware: express.RequestHandler = async (
     req: express.Request, res: express.Response, next: express.NextFunction
   ) => {
-    const request = new StrongPointExpressRequest(req);
-    const response = new StrongPointExpressResponse(res);
+    let context: EndpointContext<any, any, any> | undefined;
 
-    const context: EndpointContext<any, any, any> = {
-      request,
-      response
-    };
+    try {
+      const request = new StrongPointExpressRequest(req);
+      const response = new StrongPointExpressResponse(res);
+      context = { request, response };
+    } catch (err) {
+      log('Error constructing context: ', err);
+      res.statusCode = httpStatusCodes.INTERNAL_SERVER_ERROR;
+      res.end();
+    }
+
+    if (!context) {
+      return;
+    }
 
     try {
       const allHandlers = router.getHandlers();
@@ -40,12 +48,14 @@ export function toMiddleware(router: Router, options?: ToMiddlewareOptions): exp
       const executeNextHandler = async () => {
         const handlerMatch = handlerMatchIterator.getNextMatch();
         if (handlerMatch) {
-          context.request.params = handlerMatch.parsedUrl.params;
-          const handlerName = handlerMatch.handler.constructor && handlerMatch.handler.constructor.name;
-          if (handlerName) {
-            log(`Executing handler: ${ handlerName }`);
+          if (context) {
+            context.request.params = handlerMatch.parsedUrl.params;
+            const handlerName = handlerMatch.handler.constructor && handlerMatch.handler.constructor.name;
+            if (handlerName) {
+              log(`Executing handler: ${ handlerName }`);
+            }
+            await handlerMatch.handler.handle(context, executeNextHandler);
           }
-          await handlerMatch.handler.handle(context, executeNextHandler);
         }
       };
 
