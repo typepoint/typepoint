@@ -104,6 +104,10 @@ export abstract class EndpointHandler {
   private handler: EndpointHandlerFunction<any> = undefined as any;
   private pathHelper: PathHelper = undefined as any;
 
+  public get name(): string {
+    return this.constructor.name;
+  }
+
   public match(request: { method: string, url: string }): PathHelperParseMatch | undefined {
     if (request.method !== this.definition.method) {
       return undefined;
@@ -128,7 +132,7 @@ export abstract class EndpointHandler {
 
 export type EndpointHandlerClass = Constructor<EndpointHandler>;
 
-function handleEndpoint<TEndpointDefinition extends EndpointDefinition<any, any, any>>(
+export function defineHandler<TEndpointDefinition extends EndpointDefinition<any, any, any>>(
   definition: TEndpointDefinition,
   handler: EndpointHandlerFunction<TEndpointDefinition>
 ): Constructor<EndpointHandler> {
@@ -136,6 +140,10 @@ function handleEndpoint<TEndpointDefinition extends EndpointDefinition<any, any,
     constructor() {
       super();
       this.define(definition, handler);
+    }
+
+    public get name(): string {
+      return handler.name || 'AnonymousEndpointHandler';
     }
   }
 
