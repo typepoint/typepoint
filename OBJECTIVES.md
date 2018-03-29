@@ -15,10 +15,10 @@
 - ✔ ~~Ability to have services you need injected for testability~~
 - ✔ ~~Read access to typed versions of request~~
 - ✔ ~~Read/Write access to typed response body~~
-- □ Access to extra typed attachments like User, Database, etc
-- □ Ability to not handle route in a handler
-- □ Read request headers
-- □ Write response headers
+- □ Access to extra typed attachments like User, etc
+- ✔ Ability to not handle route in a handler
+- ✔ Read request headers
+- ✔ Write response headers
 - □ Read request cookies
 - □ Write response cookies
 - ✔ ~~Rendering views not required~~
