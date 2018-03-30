@@ -1,8 +1,4 @@
-export interface Todo {
-  id: string;
-  title: string;
-  isCompleted: boolean;
-}
+import { Todo } from '../api/models/todo';
 
 export function getTodos(): Todo[] {
   return [{
