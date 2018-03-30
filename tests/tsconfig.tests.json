@@ -19,8 +19,8 @@
     ]
   },
   "include": [
+    "infrastructure/testSetup.ts",
     "**/*.test.ts",
-    "infrastructure/sinonChai.ts",
     "../src/server/typings/**/*.ts",
     "../src/index.ts"
   ]
