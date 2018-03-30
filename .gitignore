@@ -58,8 +58,9 @@ typings/
 .env
 
 # VSCode IDE
-.vscode
+.vscode/**/*
 !.vscode/settings.json
+!.vscode/launch.json
 
 # Build artifacts
 dist
