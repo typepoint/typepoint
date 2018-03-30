@@ -1,5 +1,6 @@
 import 'reflect-metadata';
-import { expect } from 'chai';
+import { assert, expect } from 'chai';
+import 'chai-as-promised';
 import * as sinon from 'sinon';
 import * as linq from 'linq';
 import * as clone from 'clone';
@@ -126,6 +127,28 @@ describe('e2e/Sample Server', () => {
     expect(actual)
       .to.have.property('body')
       .that.deep.equals(expectation);
+  });
+
+  it(`should not return a todo that doesn't exist`, async () => {
+    await client.fetch(getTodo, {
+      params: {
+        id: '999'
+      }
+    }).then(() => {
+      assert.fail('Expected fetch to return a promise rejection')
+    }, err => {
+      expect(err)
+        .to.have.property('response')
+        .to.have.property('status', httpStatusCodes.NOT_FOUND);
+
+      expect(err)
+        .to.have.property('response')
+        .to.have.property('statusText', httpStatusCodes.getStatusText(httpStatusCodes.NOT_FOUND));
+
+      expect(err)
+        .to.have.property('response')
+        .to.not.have.property('body');
+    });
   });
 
   it('should add a todo', async () => {
