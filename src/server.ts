@@ -4,6 +4,10 @@ import { Constructor } from './shared';
 import { HttpMethod } from './shared/http';
 import { PathHelper, PathHelperParseMatch } from './shared/pathHelper';
 
+export interface RequestCookies {
+  [name: string]: string | undefined;
+}
+
 export interface RequestHeaders {
   'accept'?: string;
   'access-control-allow-origin'?: string;
@@ -53,8 +57,12 @@ export interface Request<TRequestParams, TRequestBody> {
   readonly url: string;
   params: TRequestParams;
   readonly body: TRequestBody;
+  readonly cookies: RequestCookies;
   readonly headers: RequestHeaders;
+  readonly signedCookies: RequestCookies;
+  cookie(name: string): string | undefined;
   header(name: string): string | string[] | undefined;
+  signedCookie(name: string): string | undefined;
 }
 
 export class HeadersAlreadySent extends Error {

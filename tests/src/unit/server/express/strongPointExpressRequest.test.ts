@@ -2,7 +2,7 @@ import { expect } from 'chai';
 import { Request as ExpressRequest } from 'express';
 import * as sinon from 'sinon';
 
-import { Request as StrongPointRequest } from '../../../../../src/server';
+import { Request as StrongPointRequest, RequestCookies } from '../../../../../src/server';
 import { StrongPointExpressRequest } from '../../../../../src/server/express/strongPointExpressRequest';
 
 import partialMockOf from '../../../../infrastructure/mockOf';
@@ -108,6 +108,56 @@ describe('server/express/strongPointExpressRequest', () => {
           'Accept-Language': 'en-AU,en',
           'Referer': 'https://www.example.com'
         });
+      });
+    });
+
+    describe('for a request with cookies', () => {
+      let request: StrongPointExpressRequest<any, any>;
+      let widgetEnabled: string;
+      let sessionId: string;
+      let cookies: RequestCookies;
+      let signedCookies: RequestCookies;
+
+      beforeEach(() => {
+        sessionId = 'd219d446-3f9d-41cd-aadf-b534b1b5c774';
+        widgetEnabled = 'true'
+        cookies = {
+          widgetEnabled
+        };
+        signedCookies = {
+          sessionId
+        };
+        const expressRequest = partialMockOf<ExpressRequest>({
+          url: '/todos',
+          method: 'get',
+          cookies,
+          signedCookies
+        });
+        request = new StrongPointExpressRequest(expressRequest);
+      });
+
+      it('should return a specific cookie', () => {
+        expect(request.cookie('widgetEnabled')).to.equal(widgetEnabled);
+      });
+
+      it('should return undefined for a missing cookie', () => {
+        expect(request.cookie('Oceanic Flight 815')).to.equal(undefined);
+      });
+
+      it('should return all cookies', () => {
+        expect(request.cookies).to.deep.equal(cookies);
+      });
+
+      it('should return a specific signed cookie', () => {
+        expect(request.signedCookie('sessionId')).to.equal(sessionId);
+      });
+
+      it('should return undefined for a missing signed cookie', () => {
+        expect(request.signedCookie('widgetEnabled')).to.equal(undefined);
+      });
+
+      it('should return all signed cookies', () => {
+        expect(request.signedCookies).to.deep.equal(signedCookies);
       });
     });
 
