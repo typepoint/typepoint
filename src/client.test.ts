@@ -2,11 +2,11 @@ import axios from 'axios';
 import { expect } from 'chai';
 import * as sinon from 'sinon';
 
-import StrongPointClient from '../../../src/client';
-import partialMockOf from '../../infrastructure/mockOf';
-import { defineEndpoint, EndpointDefinition, Empty } from '../../../src/shared';
-import { Product } from '../../fixtures';
-import * as fixtures from '../../fixtures';
+import { Product } from '../tests/fixtures';
+import * as fixtures from '../tests/fixtures';
+import partialMockOf from '../tests/infrastructure/mockOf';
+import StrongPointClient from './client';
+import { defineEndpoint, Empty, EndpointDefinition } from './shared';
 
 describe('client', () => {
   describe('StrongPointClient', () => {

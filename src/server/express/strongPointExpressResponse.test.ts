@@ -4,12 +4,12 @@ import * as httpStatusCodes from 'http-status-codes';
 import * as sinon from 'sinon';
 import 'sinon-chai';
 
-import { Response as StrongPointResponse } from '../../../../../src/server';
-import { StrongPointExpressResponse } from '../../../../../src/server/express/strongPointExpressResponse';
+import { Response as StrongPointResponse } from '../../server';
+import { StrongPointExpressResponse } from './strongPointExpressResponse';
 
-import partialMockOf from '../../../../infrastructure/mockOf';
-import { Product } from '../../../../fixtures';
-import * as fixtures from '../../../../fixtures';
+import partialMockOf from '../../../tests/infrastructure/mockOf';
+import { Product } from '../../../tests/fixtures';
+import * as fixtures from '../../../tests/fixtures';
 
 type ResponseBody<TBody> = (
   {

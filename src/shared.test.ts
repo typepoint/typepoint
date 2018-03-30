@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { defineEndpoint } from '../../../src/shared';
+import { defineEndpoint } from './shared';
 
 describe('shared', () => {
   describe('defineEndpoint', () => {
@@ -31,7 +31,9 @@ describe('shared', () => {
     it('should error when trying to reference typeInfo property', () => {
       const path = '/products';
       const getProducts = defineEndpoint(path);
-      expect(() => getProducts.typeInfo).to.throw('Do not evaluate definition.typeInfo. It is reserved for internal use only.');
-    })
+      expect(() => getProducts.typeInfo).to.throw(
+        'Do not evaluate definition.typeInfo. It is reserved for internal use only.'
+      );
+    });
   });
 });

@@ -1,9 +1,9 @@
 import { expect } from 'chai';
 
-import { defineHandler, EndpointContext, Response, Request } from '../../../src/server';
-import { defineEndpoint, Empty } from '../../../src/shared';
-import { Todo } from '../../fixtures/todos';
-import partialMockOf from '../../infrastructure/mockOf';
+import { Todo } from '../tests/fixtures/todos';
+import partialMockOf from '../tests/infrastructure/mockOf';
+import { defineHandler, EndpointContext, Request, Response } from './server';
+import { defineEndpoint, Empty } from './shared';
 
 describe('server', () => {
   describe('defineHandler', () => {
@@ -28,8 +28,8 @@ describe('server', () => {
         context.response.body = todos;
       });
 
-      const getTodosHandler = new GetTodosHandler();
-      expect(getTodosHandler.name).to.equal('getTodosHandler');
+      const handler = new GetTodosHandler();
+      expect(handler.name).to.equal('getTodosHandler');
     });
 
     it('should define an handler class that can parse matching requests', async () => {
@@ -45,7 +45,7 @@ describe('server', () => {
         params: {
         }
       });
-      let match = getTodosHandler.match(request);
+      const match = getTodosHandler.match(request);
 
       expect(match).to.deep.equal({
         prePath: '',
@@ -74,8 +74,8 @@ describe('server', () => {
     });
 
     it('should define an handler class that can handle requests', async () => {
-      const GetTodosHandler = defineHandler(getTodos, context => {
-        context.response.body = todos;
+      const GetTodosHandler = defineHandler(getTodos, ctx => {
+        ctx.response.body = todos;
       });
 
       const context = partialMockOf<EndpointContext<any, any, any>>({

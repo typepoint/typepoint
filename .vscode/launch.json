@@ -14,7 +14,7 @@
         "test-run",
       ],
       "outFiles": [
-        "${workspaceFolder}/tests-output/tests/**/*.js"
+        "${workspaceFolder}/tests-output/**/*.js"
       ],
       "sourceMaps": true
     }

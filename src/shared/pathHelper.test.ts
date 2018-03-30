@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 
-import { PathHelper } from '../../../../src/shared/pathHelper';
-import { TestCase } from '../../../infrastructure/testCase';
+import { TestCase } from '../../tests/infrastructure/testCase';
+import { PathHelper } from './pathHelper';
 
 describe('shared/pathHelper', () => {
 

@@ -2,11 +2,11 @@ import { expect } from 'chai';
 import { Request as ExpressRequest } from 'express';
 import * as sinon from 'sinon';
 
-import { Request as StrongPointRequest, RequestCookies } from '../../../../../src/server';
-import { StrongPointExpressRequest } from '../../../../../src/server/express/strongPointExpressRequest';
+import { Request as StrongPointRequest, RequestCookies } from '../../server';
+import { StrongPointExpressRequest } from './strongPointExpressRequest';
 
-import partialMockOf from '../../../../infrastructure/mockOf';
-import { getTodos, Todo } from '../../../../fixtures/todos';
+import partialMockOf from '../../../tests/infrastructure/mockOf';
+import { getTodos, Todo } from '../../../tests/fixtures/todos';
 import { ObjectOmit } from 'typelevel-ts';
 
 describe('server/express/strongPointExpressRequest', () => {

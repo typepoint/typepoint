@@ -1,5 +1,5 @@
 {
-  "extends": "../tsconfig.json",
+  "extends": "./tsconfig.json",
   "compilerOptions": {
     "declaration": false,
     "emitDecoratorMetadata": true,
@@ -10,7 +10,7 @@
     ],
     "module": "commonjs",
     "moduleResolution": "node",
-    "outDir": "../tests-output",
+    "outDir": "tests-output",
     "target": "es5",
     "types": [
       "mocha",
@@ -19,9 +19,9 @@
     ]
   },
   "include": [
-    "infrastructure/testSetup.ts",
+    "./tests/infrastructure/testSetup.ts",
     "**/*.test.ts",
-    "../src/server/typings/**/*.ts",
-    "../src/index.ts"
+    "src/server/typings/**/*.ts",
+    "src/index.ts"
   ]
 }

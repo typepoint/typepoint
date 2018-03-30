@@ -1,9 +1,9 @@
 import { expect } from 'chai';
 import * as sinon from 'sinon';
 
-import { HandlerMatchIterator } from '../../../../src/server/middlewareHelper';
-import { EndpointHandler } from '../../../../src/server';
-import partialMockOf from '../../../infrastructure/mockOf';
+import partialMockOf from '../../tests/infrastructure/mockOf';
+import { EndpointHandler } from '../server';
+import { HandlerMatchIterator } from './middlewareHelper';
 
 describe('server/middlewareHelper', () => {
   describe('HandlerMatchIterator', () => {
@@ -14,11 +14,11 @@ describe('server/middlewareHelper', () => {
 
       const getProduct = partialMockOf<EndpointHandler>({
         match: sinon.stub().returns({ id: '1337' })
-      })
+      });
 
       const getProducts = partialMockOf<EndpointHandler>({
         match: sinon.stub().returns(undefined)
-      })
+      });
 
       const allHandlers = [requestLogger, getProducts, getProduct];
 
@@ -41,10 +41,10 @@ describe('server/middlewareHelper', () => {
     it('should return undefined when no matching handlers', () => {
       const handler1 = partialMockOf<EndpointHandler>({
         match: sinon.stub().returns(undefined)
-      })
+      });
       const handler2 = partialMockOf<EndpointHandler>({
         match: sinon.stub().returns(undefined)
-      })
+      });
 
       const allHandlers = [handler1, handler2];
 

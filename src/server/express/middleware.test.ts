@@ -2,8 +2,8 @@ import * as express from 'express';
 import * as sinon from 'sinon';
 import { expect } from 'chai';
 
-import { combineMiddlewares } from '../../../../../src/server/express/middleware';
-import partialMockOf from '../../../../infrastructure/mockOf';
+import { combineMiddlewares } from './middleware';
+import partialMockOf from '../../../tests/infrastructure/mockOf';
 
 describe('server/express/middleware', () => {
   describe('combineMiddlewares', () => {

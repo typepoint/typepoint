@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 
-import { cleanseHttpMethod, HttpMethod } from '../../../../src/shared/http';
-import { TestCase } from '../../../infrastructure/testCase';
+import { TestCase } from '../../tests/infrastructure/testCase';
+import { cleanseHttpMethod, HttpMethod } from './http';
 
 describe('shared/http', () => {
   describe('cleanseHttpMethod', () => {
