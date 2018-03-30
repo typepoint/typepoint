@@ -49,15 +49,13 @@ export function toMiddleware(router: Router, options?: ToMiddlewareOptions): exp
 
       const executeNextHandler = async () => {
         const handlerMatch = handlerMatchIterator.getNextMatch();
-        if (handlerMatch) {
-          if (context) {
-            context.request.params = handlerMatch.parsedUrl.params;
-            const handlerName = handlerMatch.handler.constructor && handlerMatch.handler.constructor.name;
-            if (handlerName) {
-              log(`Executing handler: ${ handlerName }`);
-            }
-            await handlerMatch.handler.handle(context, executeNextHandler);
+        if (context && handlerMatch) {
+          context.request.params = handlerMatch.parsedUrl.params;
+          const handlerName = handlerMatch.handler.name;
+          if (handlerName) {
+            log(`Executing handler: ${ handlerName }`);
           }
+          await handlerMatch.handler.handle(context, executeNextHandler);
         }
       };
 
@@ -69,7 +67,7 @@ export function toMiddleware(router: Router, options?: ToMiddlewareOptions): exp
 
     } catch (err) {
       log('ERROR: ', err);
-      if (context.response.hasFlushedHeaders) {
+      if (!context.response.hasFlushedHeaders) {
         context.response.statusCode = httpStatusCodes.INTERNAL_SERVER_ERROR;
         context.response.body = err && err.message;
         context.response.flush();
