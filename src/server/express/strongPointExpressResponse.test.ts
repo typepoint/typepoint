@@ -4,7 +4,7 @@ import * as httpStatusCodes from 'http-status-codes';
 import * as sinon from 'sinon';
 import 'sinon-chai';
 
-import { Response as StrongPointResponse } from '../../server';
+import { Response as StrongPointResponse, SetCookieOptions } from '../../server';
 import { StrongPointExpressResponse } from './strongPointExpressResponse';
 
 import partialMockOf from '../../../tests/infrastructure/mockOf';
@@ -30,6 +30,8 @@ describe('server/express/strongPointExpressResponse', () => {
 
     beforeEach(() => {
       expressResponse = partialMockOf<ExpressResponse>({
+        cookie: sinon.spy(),
+        clearCookie: sinon.spy(),
         flushHeaders: sinon.spy(),
         headersSent: false,
         sendStatus: sinon.spy(),
@@ -105,6 +107,25 @@ describe('server/express/strongPointExpressResponse', () => {
         'some-header-name': 'some-header-value',
         'another-header-name': 'another-header-value'
       });
+    });
+
+    it('should set cookie in express response', () => {
+      const cookieName = 'widgetEnabled';
+      const cookieValue = 'true';
+      const cookieOptions: SetCookieOptions = {
+        maxAge: 1000 * 60 * 60 * 30
+      };
+      response.cookie(cookieName, cookieValue, cookieOptions);
+      expect(expressResponse.cookie).to.have.been.calledWith(cookieName, cookieValue, cookieOptions);
+    });
+
+    it('should clear cookie in express response', () => {
+      const cookieName = 'widgetEnabled';
+      const cookieOptions: SetCookieOptions = {
+        maxAge: 1000 * 60 * 60 * 30
+      };
+      response.clearCookie(cookieName, cookieOptions);
+      expect(expressResponse.clearCookie).to.have.been.calledWith(cookieName, cookieOptions);
     });
   });
 });

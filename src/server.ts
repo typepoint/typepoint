@@ -77,6 +77,18 @@ export interface ResponseHeaders {
   [name: string]: string | string[] | number | undefined;
 }
 
+export interface SetCookieOptions {
+  maxAge?: number;
+  signed?: boolean;
+  expires?: Date | boolean;
+  httpOnly?: boolean;
+  path?: string;
+  domain?: string;
+  secure?: boolean | 'auto';
+  encode?: (val: string) => void;
+  sameSite?: boolean | string;
+}
+
 export interface Response<TResponseBody> {
   statusCode: number | undefined;
 
@@ -87,6 +99,9 @@ export interface Response<TResponseBody> {
 
   flush(): void;
   flushHeaders(): void;
+
+  cookie(name: string, value: string, options?: SetCookieOptions): void;
+  clearCookie(name: string, options?: SetCookieOptions): void;
 
   header(name: string): string | string[] | number | undefined;
   header(name: string, value: string | string[] | number | undefined): void;

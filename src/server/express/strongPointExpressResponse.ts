@@ -1,7 +1,7 @@
 import { Response as ExpressResponse } from 'express';
 import * as httpStatusCodes from 'http-status-codes';
 
-import { HeadersAlreadySent, Response as StrongPointResponse, ResponseHeaders } from '../../server';
+import { HeadersAlreadySent, Response as StrongPointResponse, ResponseHeaders, SetCookieOptions } from '../../server';
 
 export class StrongPointExpressResponse<TResponseBody> implements StrongPointResponse<TResponseBody> {
   public get hasFlushedHeaders(): boolean {
@@ -61,6 +61,14 @@ export class StrongPointExpressResponse<TResponseBody> implements StrongPointRes
       this.response.json(this.body);
     }
     this.innerHasFlushedBody = true;
+  }
+
+  public cookie(name: string, value: string, options: SetCookieOptions): void {
+    this.response.cookie(name, value, options);
+  }
+
+  public clearCookie(name: string, options: SetCookieOptions): void {
+    this.response.clearCookie(name, options);
   }
 
   public header(name: string): string | string[] | number | undefined;
