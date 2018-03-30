@@ -24,7 +24,7 @@ import {
   UpdateTodoHandler, DeleteTodoHandler
 } from './handlers';
 
-describe('e2e/Sample Server', () => {
+describe('api/Sample Server', () => {
   let todos: Todo[];
   let ioc: Container;
   let dataStore: DataStore;
