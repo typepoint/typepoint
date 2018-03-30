@@ -1,7 +1,7 @@
 import { injectable } from 'inversify';
 import * as httpStatusCodes from 'http-status-codes';
 
-import { EndpointHandler } from '../../../../../src/server';
+import { EndpointHandler } from '../../../../src/server';
 
 import { deleteTodo } from '../../definitions';
 import { TodoService } from '../../services/todoService';

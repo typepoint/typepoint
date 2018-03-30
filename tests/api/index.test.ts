@@ -8,10 +8,10 @@ import { ObjectOmit } from 'typelevel-ts';
 import { Container, decorate, inject, injectable } from 'inversify';
 import * as httpStatusCodes from 'http-status-codes';
 
-import StrongPointClient from '../../../src/client';
-import { defineEndpoint, Empty } from '../../../src/shared';
-import { Router, EndpointHandler } from '../../../src/server';
-import { toMiddleware } from '../../../src/server/express';
+import StrongPointClient from '../../src/client';
+import { defineEndpoint, Empty } from '../../src/shared';
+import { Router, EndpointHandler } from '../../src/server';
+import { toMiddleware } from '../../src/server/express';
 
 import { Todo } from './models/todo';
 import { Server } from './server';

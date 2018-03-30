@@ -1,4 +1,4 @@
-import { defineEndpoint, EndpointDefinition } from '../../../../../src/shared';
+import { defineEndpoint, EndpointDefinition } from '../../../../src/shared';
 import { Todo, UpdatableTodoFields } from '../../models/todo';
 import { HasId } from '../../models/hasId';
 

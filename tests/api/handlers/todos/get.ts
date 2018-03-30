@@ -1,6 +1,6 @@
 import { injectable } from 'inversify';
 
-import { EndpointHandler } from '../../../../../src/server';
+import { EndpointHandler } from '../../../../src/server';
 
 import { getTodo } from '../../definitions';
 import { TodoService } from '../../services/todoService';

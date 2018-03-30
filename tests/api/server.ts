@@ -6,10 +6,10 @@ import * as http from 'http';
 import { Container } from 'inversify';
 // import chalk from 'chalk';
 
-import { Router } from '../../../src/server';
-import { toMiddleware } from '../../../src/server/express';
+import { Router } from '../../src/server';
+import { toMiddleware } from '../../src/server/express';
 
-import { Constructor } from '../../../src/shared';
+import { Constructor } from '../../src/shared';
 import { GetTodoHandler, GetTodosHandler, CreateTodoHandler, UpdateTodoHandler, DeleteTodoHandler } from './handlers';
 
 export class Server {
