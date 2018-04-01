@@ -1,5 +1,9 @@
 # Project Objectives
 
+## Project
+- □ Add pre-commit checks
+- □ Add documentation to README
+
 ## Endpoint Definitions
 - ✔ ~~Each endpoint definition should capture the following:~~
   - ✔ ~~Method~~
