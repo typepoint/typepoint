@@ -1,7 +1,7 @@
 import * as express from 'express';
 import * as httpStatusCodes from 'http-status-codes';
 
-import { EndpointContext, EndpointHandler, Request, Response, Router, UnprotectedRouter } from '../server';
+import { EndpointContext, EndpointHandler, Request, Response, Router, UnprotectedRouter, IEndpointHandler } from '../server';
 import { cleanseHttpMethod } from '../shared/http';
 import { combineMiddlewares } from './express/middleware';
 import { StrongPointExpressRequest } from './express/strongPointExpressRequest';
@@ -40,7 +40,10 @@ export function toMiddleware(router: Router, options?: ToMiddlewareOptions): exp
     }
 
     try {
-      const allHandlers = router.getHandlers();
+      const allHandlers: IEndpointHandler[] = [
+        ...router.getMiddlewares(),
+        ...router.getHandlers()
+      ];
 
       const handlerMatchIterator = new HandlerMatchIterator(allHandlers, {
         method: cleanseHttpMethod(req.method),
@@ -51,15 +54,17 @@ export function toMiddleware(router: Router, options?: ToMiddlewareOptions): exp
         const handlerMatch = handlerMatchIterator.getNextMatch();
         if (context && handlerMatch) {
           context.request.params = handlerMatch.parsedUrl.params;
+          const type = handlerMatch.type;
           const handlerName = handlerMatch.handler.name;
           if (handlerName) {
-            log(`Executing handler: ${ handlerName }`);
+            log(`Executing ${ type }: ${ handlerName }`);
           }
           await handlerMatch.handler.handle(context, executeNextHandler);
         }
       };
 
       await executeNextHandler();
+
       if (!context.response.hasFlushedHeaders && !context.response.statusCode) {
         context.response.statusCode = httpStatusCodes.NOT_FOUND;
       }

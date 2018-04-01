@@ -10,7 +10,7 @@ import * as httpStatusCodes from 'http-status-codes';
 
 import StrongPointClient from '../../src/client';
 import { defineEndpoint, Empty } from '../../src/shared';
-import { Router, EndpointHandler } from '../../src/server';
+import { Router, EndpointHandler, EndpointMiddleware } from '../../src/server';
 import { toMiddleware } from '../../src/server/express';
 
 import { Todo } from './models/todo';
@@ -18,7 +18,11 @@ import { Server } from './server';
 import * as getPort from 'get-port';
 import { DataStore } from './db/dataStore';
 import { TodoService } from './services/todoService';
+import { ResponseTimeMiddleware } from './middleware/responseTime';
 import { getTodo, getTodos, createTodo, updateTodo, deleteTodo } from './definitions';
+import { RequestLoggerMiddleware } from './middleware/requestLogger';
+import { LoggerService } from './services/loggerService';
+import partialMockOf from '../../tests/infrastructure/mockOf';
 import {
   GetTodoHandler, GetTodosHandler, CreateTodoHandler,
   UpdateTodoHandler, DeleteTodoHandler
@@ -30,9 +34,11 @@ describe('api/Sample Server', () => {
   let dataStore: DataStore;
   let server: Server;
   let client: StrongPointClient;
+  let loggerService: LoggerService;
 
   before(() => {
     decorate(injectable(), EndpointHandler);
+    decorate(injectable(), EndpointMiddleware);
   });
 
   beforeEach(async function () {
@@ -62,7 +68,16 @@ describe('api/Sample Server', () => {
       // autoBindInjectable: true
     })
 
+    loggerService = partialMockOf<LoggerService>({
+      info: sinon.spy(),
+      warn: sinon.spy(),
+      error: sinon.spy()
+    });
+
     ioc.bind(DataStore).toDynamicValue(() => new DataStore(todos));
+    ioc.bind(LoggerService).toDynamicValue(() => loggerService);
+    ioc.bind(ResponseTimeMiddleware).toSelf();
+    ioc.bind(RequestLoggerMiddleware).toSelf();
     ioc.bind(TodoService).toSelf();
     ioc.bind(CreateTodoHandler).toSelf();
     ioc.bind(DeleteTodoHandler).toSelf();
@@ -88,17 +103,17 @@ describe('api/Sample Server', () => {
   it('should get list of todos', async () => {
     const expectation = clone(todos);
 
-    const actual = await client.fetch(getTodos);
+    const response = await client.fetch(getTodos);
 
-    expect(actual)
+    expect(response)
       .to.have.property('statusCode')
       .that.deep.equals(200);
 
-    expect(actual)
+    expect(response)
       .to.have.property('statusText')
       .that.deep.equals('OK');
 
-    expect(actual)
+    expect(response)
       .to.have.property('body')
       .that.deep.equals(expectation);
   });
@@ -110,21 +125,21 @@ describe('api/Sample Server', () => {
       isCompleted: false
     };
 
-    const actual = await client.fetch(getTodo, {
+    const response = await client.fetch(getTodo, {
       params: {
         id: '1'
       }
     });
 
-    expect(actual)
+    expect(response)
       .to.have.property('statusCode')
       .that.deep.equals(200);
 
-    expect(actual)
+    expect(response)
       .to.have.property('statusText')
       .that.deep.equals('OK');
 
-    expect(actual)
+    expect(response)
       .to.have.property('body')
       .that.deep.equals(expectation);
   });
@@ -239,5 +254,19 @@ describe('api/Sample Server', () => {
     expect(todos).to.have.lengthOf(expectedLength);
 
     expect(todos.some(p => p.id === id)).to.be.false;
+  });
+
+  it('should use middleware to return a x-response-time header', async () => {
+    const response = await client.fetch(getTodos);
+
+    expect(response)
+      .to.have.property('headers')
+      .that.has.property('x-response-time')
+      .that.matches(/^\d+ms$/i);
+  });
+
+  it('should use middleware to log requests', async () => {
+    await client.fetch(getTodos);
+    expect(loggerService.info).to.have.been.calledWith(sinon.match(/^GET\s\/todos\s\-\s\d+ms$/i));
   });
 });

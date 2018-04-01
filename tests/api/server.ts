@@ -10,7 +10,9 @@ import { Router } from '../../src/server';
 import { toMiddleware } from '../../src/server/express';
 
 import { Constructor } from '../../src/shared';
+import { ResponseTimeMiddleware } from './middleware';
 import { GetTodoHandler, GetTodosHandler, CreateTodoHandler, UpdateTodoHandler, DeleteTodoHandler } from './handlers';
+import { RequestLoggerMiddleware } from './middleware/requestLogger';
 
 export class Server {
   public get serverAddress() {
@@ -37,7 +39,11 @@ export class Server {
       ],
       ioc: {
         get: <T>(Class: Constructor<T>) => this.ioc.get(Class)
-      }
+      },
+      middleware: [
+        RequestLoggerMiddleware,
+        ResponseTimeMiddleware,
+      ]
     });
     const middleware = toMiddleware(router, {
       // log: (...args: any[]) => {

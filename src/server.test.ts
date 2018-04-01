@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 
-import { Todo } from '../tests/fixtures/todos';
+import { Todo } from '../tests/api/models/todo';
 import partialMockOf from '../tests/infrastructure/mockOf';
 import { defineHandler, EndpointContext, Request, Response } from './server';
 import { defineEndpoint, Empty } from './shared';
@@ -24,12 +24,13 @@ describe('server', () => {
     });
 
     it('should define a named handler class', () => {
-      const GetTodosHandler = defineHandler(getTodos, function getTodosHandler(context) {
+      const name = 'getTodosHandler';
+      const GetTodosHandler = defineHandler(getTodos, context => {
         context.response.body = todos;
-      });
+      }, name);
 
       const handler = new GetTodosHandler();
-      expect(handler.name).to.equal('getTodosHandler');
+      expect(handler.name).to.equal(name);
     });
 
     it('should define an handler class that can parse matching requests', async () => {

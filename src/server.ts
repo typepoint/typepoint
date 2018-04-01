@@ -114,15 +114,26 @@ export interface EndpointContext<TRequestParams, TRequestBody, TResponseBody> {
 }
 
 export type EndpointHandlerFunction<TEndpointDefinition extends EndpointDefinition<any, any, any>> =
-  (context: EndpointContext<
-    TEndpointDefinition['typeInfo']['request']['params'],
-    TEndpointDefinition['typeInfo']['request']['body'],
-    TEndpointDefinition['typeInfo']['response']['body']
-    >) => Promise<void> | void;
+  (
+    context: EndpointContext<
+      TEndpointDefinition['typeInfo']['request']['params'],
+      TEndpointDefinition['typeInfo']['request']['body'],
+      TEndpointDefinition['typeInfo']['response']['body']
+      >,
+    next: () => Promise<void>
+  ) => Promise<void> | void;
 
-export abstract class EndpointHandler {
+export interface IEndpointHandler {
+  readonly name: string;
+  match?: (request: { method: string, url: string }) => PathHelperParseMatch | undefined;
+  handle(context: EndpointContext<any, any, any>, next: () => Promise<void>): Promise<void> | void;
+}
+
+export abstract class EndpointHandler implements IEndpointHandler {
   // `= undefined as any` is a crappy workaround strictPropertyInitialization in ts 2.7
-  // without having to disable strictPropertyInitialization everywhere
+  // without having to disable strictPropertyInitialization everywhere.
+  // Deliberately don't pass handler function down in constructor as then compiler cannot infer
+  // types for context and next function :(
   private definition: EndpointDefinition<any, any, any> = undefined as any;
   private handler: EndpointHandlerFunction<any> = undefined as any;
   private pathHelper: PathHelper = undefined as any;
@@ -140,8 +151,8 @@ export abstract class EndpointHandler {
     return match;
   }
 
-  public handle(context: EndpointContext<any, any, any>, next: () => Promise<void>) {
-    return this.handler(context);
+  public handle(context: EndpointContext<any, any, any>, next: () => Promise<void>): Promise<void> | void {
+    return this.handler(context, next);
   }
 
   protected define<TEndpointDefinition extends EndpointDefinition<any, any, any>>(
@@ -157,8 +168,9 @@ export type EndpointHandlerClass = Constructor<EndpointHandler>;
 
 export function defineHandler<TEndpointDefinition extends EndpointDefinition<any, any, any>>(
   definition: TEndpointDefinition,
-  handler: EndpointHandlerFunction<TEndpointDefinition>
-): Constructor<EndpointHandler> {
+  handler: EndpointHandlerFunction<TEndpointDefinition>,
+  name?: string
+): EndpointHandlerClass {
   class AnonymousEndpointHandler extends EndpointHandler {
     constructor() {
       super();
@@ -166,11 +178,59 @@ export function defineHandler<TEndpointDefinition extends EndpointDefinition<any
     }
 
     public get name(): string {
-      return handler.name || 'AnonymousEndpointHandler';
+      return name || 'AnonymousEndpointHandler';
     }
   }
 
   return AnonymousEndpointHandler;
+}
+
+export type EndpointMiddlewareHandlerFunction = (
+  context: EndpointContext<any, any, any>, next: () => Promise<void>
+) => Promise<void> | void;
+
+export class EndpointMiddleware implements IEndpointHandler {
+  // `= undefined as any` is a crappy workaround strictPropertyInitialization in ts 2.7
+  // without having to disable strictPropertyInitialization everywhere.
+  // Deliberately don't pass handler function down in constructor as inversify ioc library doesn't like
+  // descendant EndpointMiddleware classes to have less params in constructor than there exist in the
+  // base class's constructor (not sure why? seems dumb but probably a good reason why)
+  private handler: EndpointMiddlewareHandlerFunction = undefined as any;
+
+  // constructor(private readonly handler: EndpointMiddlewareHandlerFunction) {
+  // }
+
+  get name(): string {
+    return this.constructor.name;
+  }
+
+  handle(context: EndpointContext<any, any, any>, next: () => Promise<void>): void | Promise<void> {
+    this.handler(context, next);
+  }
+
+  define(handler: EndpointMiddlewareHandlerFunction) {
+    this.handler = handler;
+  }
+}
+
+export type EndpointMiddlewareClass = Constructor<EndpointMiddleware>;
+
+export function defineMiddleware(
+  handler: EndpointMiddlewareHandlerFunction,
+  name?: string
+): EndpointMiddlewareClass {
+  class AnonymousEndpointMiddleware extends EndpointMiddleware {
+    constructor() {
+      super();
+      this.define(handler);
+    }
+
+    public get name(): string {
+      return name || 'AnonymousEndpointMiddleware';
+    }
+  }
+
+  return AnonymousEndpointMiddleware;
 }
 
 export interface RouterIoc {
@@ -180,6 +240,7 @@ export interface RouterIoc {
 export interface RouterOptions {
   handlers?: EndpointHandlerClass[];
   ioc?: RouterIoc;
+  middleware?: EndpointMiddlewareClass[];
 }
 
 export type RouterHandleMethod = (request: Request<any, any>, response: Response<any>) => Promise<void>;
@@ -189,10 +250,30 @@ export interface UnprotectedRouter {
 }
 
 export class HandlerConstructorError extends Error {
-  constructor(Handler: Constructor<EndpointHandler>, innerError: Error | string | any) {
+  constructor(Handler: EndpointHandlerClass, innerError: Error | string | any) {
     let message = `Error creating handler`;
     if (Handler.name) {
       message += ` ${ Handler.name }`;
+    }
+    if (innerError) {
+      if (typeof innerError === 'string') {
+        message += `: ${ innerError }`;
+      } else if (innerError.message) {
+        message += `: ${ innerError.message }`;
+      }
+      if (innerError.stack) {
+        message += `\n\n${ innerError.stack }`;
+      }
+    }
+    super(message);
+  }
+}
+
+export class MiddlewareConstructorError extends Error {
+  constructor(Middleware: EndpointMiddlewareClass, innerError: Error | string | any) {
+    let message = `Error creating handler`;
+    if (Middleware.name) {
+      message += ` ${ Middleware.name }`;
     }
     if (innerError) {
       if (typeof innerError === 'string') {
@@ -212,6 +293,9 @@ export class Router {
   protected readonly handlerClasses: EndpointHandlerClass[] = [];
   protected handlers: EndpointHandler[] | undefined;
 
+  protected readonly middlewareClasses: EndpointMiddlewareClass[] = [];
+  protected middlewares: EndpointMiddleware[] | undefined;
+
   private readonly ioc: RouterIoc;
 
   constructor(options?: RouterOptions) {
@@ -225,6 +309,11 @@ export class Router {
     if (handlers.length) {
       this.handlerClasses.push(...handlers);
     }
+
+    const middlewares = (options && options.middleware) || [];
+    if (middlewares.length) {
+      this.middlewareClasses.push(...middlewares)
+    }
   }
 
   public use(handler: Constructor<EndpointHandler>, ...handlers: EndpointHandlerClass[]): this {
@@ -233,12 +322,16 @@ export class Router {
     return this;
   }
 
+  // TODO: Consider replacing getHandlers and getMiddlewares with method that returns a consolidated promise-based middleware creator?
+
   public getHandlers(): EndpointHandler[] {
     if (!this.handlers) {
       this.handlers = this.createHandlers();
     }
     return this.handlers;
   }
+
+  // TODO: Add test for creating handlers and middleware not using ioc
 
   private createHandler(Handler: Constructor<EndpointHandler>) {
     try {
@@ -250,6 +343,26 @@ export class Router {
 
   private createHandlers(): EndpointHandler[] {
     const result: EndpointHandler[] = this.handlerClasses.map(Handler => this.createHandler(Handler));
+    return result;
+  }
+
+  public getMiddlewares(): EndpointMiddleware[] {
+    if (!this.middlewares) {
+      this.middlewares = this.createMiddlewares();
+    }
+    return this.middlewares;
+  }
+
+  private createMiddleware(Middleware: Constructor<EndpointMiddleware>) {
+    try {
+      return this.ioc.get(Middleware);
+    } catch (err) {
+      throw new MiddlewareConstructorError(Middleware, err);
+    }
+  }
+
+  private createMiddlewares(): EndpointMiddleware[] {
+    const result: EndpointMiddleware[] = this.middlewareClasses.map(Middleware => this.createMiddleware(Middleware));
     return result;
   }
 }

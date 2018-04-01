@@ -16,6 +16,8 @@ export type IfEmpty<TValue extends Object | Empty, TThen, TElse> = If<TValue[typ
 export interface StrongPointClientResponse<TBody> {
   statusCode: number;
   statusText: string;
+  header(name: string): string | undefined;
+  headers: { [name: string]: string | undefined };
   body: TBody;
 }
 
@@ -101,6 +103,8 @@ class StrongPointClient {
         const result: StrongPointClientResponse<TEndpointDefinition['typeInfo']['response']['body']> = {
           statusCode: response.status,
           statusText: response.statusText,
+          header: name => response.headers[name],
+          headers: response.headers,
           body: response.data
         };
 

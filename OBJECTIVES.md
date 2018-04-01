@@ -24,7 +24,7 @@
 - ✔ ~~Rendering views not required~~
 
 ## Router
-- □ Support for middleware
+- ✔ Support for middleware
 - □ Ability to extend context with extra metadata
 - □ Nested routers?
 - □ Should gracefully handle uncaught server errors
@@ -33,6 +33,7 @@
 ## Client
 - ✔ ~~Ability to call endpoint by providing definition and be forced to provide required params, body, etc~~
 - ✔ ~~Not have to pass params or body in options if they are not required~~
+- □ Fetch failure should return error with response of StrongPointClientResponse
 
 ### Middleware example in Koa
 ```js
