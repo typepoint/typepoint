@@ -10,7 +10,6 @@
     <b>strongly typed</b> RESTful API endpoints
     in TypeScript.
   <p/>
-  <!-- <img src="./img/logo-blue-bg.png" width="400" /> -->
 </center>
 
 ## Install
