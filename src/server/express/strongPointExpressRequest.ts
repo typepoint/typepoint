@@ -4,13 +4,13 @@ import { Request as StrongPointRequest, RequestCookies, RequestHeaders } from '.
 import { cleanseHttpMethod, HttpMethod } from '../../shared/http';
 
 export class StrongPointExpressRequest<TParams, TBody> implements StrongPointRequest<TParams, TBody> {
-  public readonly url: string;
-  public readonly method: HttpMethod;
-  public params: TParams;
-  public readonly body: TBody;
-  public readonly cookies: RequestCookies;
-  public readonly headers: RequestHeaders;
-  public readonly signedCookies: RequestCookies;
+  readonly url: string;
+  readonly method: HttpMethod;
+  params: TParams;
+  readonly body: TBody;
+  readonly cookies: RequestCookies;
+  readonly headers: RequestHeaders;
+  readonly signedCookies: RequestCookies;
 
   constructor(private request: ExpressRequest) {
     this.method = cleanseHttpMethod(request.method);
@@ -22,11 +22,11 @@ export class StrongPointExpressRequest<TParams, TBody> implements StrongPointReq
     this.signedCookies = request.signedCookies;
   }
 
-  public cookie(name: string): string | undefined {
+  cookie(name: string): string | undefined {
     return this.request.cookies[name];
   }
 
-  public header(name: string): string | string[] | undefined {
+  header(name: string): string | string[] | undefined {
     function normaliseHeaderName(headerName: string): string {
       return headerName.toLowerCase().replace(/\s+/gi, '-');
     }
@@ -44,7 +44,7 @@ export class StrongPointExpressRequest<TParams, TBody> implements StrongPointReq
     return result;
   }
 
-  public signedCookie(name: string): string | undefined {
+  signedCookie(name: string): string | undefined {
     return this.request.signedCookies[name];
   }
 }

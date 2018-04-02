@@ -1,7 +1,7 @@
 import { IEndpointHandler } from '../server';
 import { HttpMethod } from '../shared/http';
 import { PathHelperParseMatch } from '../shared/pathHelper';
-import { parseUrl, parseQueryString } from '../shared/url';
+import { parseQueryString, parseUrl } from '../shared/url';
 
 export interface HandlerMatch {
   type: 'handler' | 'middleware';
@@ -17,7 +17,7 @@ export class HandlerMatchIterator {
     private request: { method: HttpMethod, url: string }) {
   }
 
-  public getNextMatch(): HandlerMatch | undefined {
+  getNextMatch(): HandlerMatch | undefined {
     while (this.handlerIndex < this.handlers.length) {
       const handler = this.handlers[this.handlerIndex++];
       if (handler.match) {

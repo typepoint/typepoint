@@ -45,20 +45,20 @@ export class EndpointDefinition<
   // tslint:enable:ban-types
   private pathHelper: PathHelper;
 
-  constructor(public readonly method: HttpMethod, public readonly path: string) {
+  constructor(readonly method: HttpMethod, readonly path: string) {
     this.method = cleanseHttpMethod(method);
     this.pathHelper = new PathHelper(path);
   }
 
-  public get typeInfo(): EndpointDefinitionTypeInfo<TRequestParams, TRequestBody, TResponseBody> {
+  get typeInfo(): EndpointDefinitionTypeInfo<TRequestParams, TRequestBody, TResponseBody> {
     throw new DoNotReferenceEndpointDefinitionTypeInfo();
   }
 
-  public parse(url: string): PathHelperParseMatch | undefined {
+  parse(url: string): PathHelperParseMatch | undefined {
     return this.pathHelper.parse(url);
   }
 
-  public url(options?: EndpointDefinitionUrlOptions<TRequestParams>) {
+  url(options?: EndpointDefinitionUrlOptions<TRequestParams>) {
     const result = this.pathHelper.url(options);
     return result;
   }

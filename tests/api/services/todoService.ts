@@ -1,19 +1,11 @@
+import { inject, injectable } from 'inversify';
+import { DataStore } from '../db/dataStore';
 import { NotFoundError } from '../models/notFound';
 import { Todo, UpdatableTodoFields } from '../models/todo';
-import { DataStore } from '../db/dataStore';
-import { injectable, inject } from 'inversify';
 
 @injectable()
 export class TodoService {
   constructor(private dataStore: DataStore) {
-  }
-
-  private getTodoIndexById(id: string): number {
-    const index = this.dataStore.todos.findIndex(todo => todo.id === id);
-    if (index === -1) {
-      throw new NotFoundError('Todo not found');
-    }
-    return index;
   }
 
   add(todo: UpdatableTodoFields): Todo {
@@ -43,5 +35,13 @@ export class TodoService {
   remove(id: string): void {
     const index = this.getTodoIndexById(id);
     this.dataStore.todos.splice(index, 1);
+  }
+
+  private getTodoIndexById(id: string): number {
+    const index = this.dataStore.todos.findIndex(todo => todo.id === id);
+    if (index === -1) {
+      throw new NotFoundError('Todo not found');
+    }
+    return index;
   }
 }

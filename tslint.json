@@ -20,6 +20,10 @@
     "interface-name": false,
     "object-literal-sort-keys": false,
     "max-classes-per-file": false,
+    "member-access": [
+      true,
+      "no-public"
+    ],
     "no-irregular-whitespace": true,
     "prefer-const": true,
     "quotemark": [

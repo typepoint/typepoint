@@ -1,7 +1,11 @@
 import * as express from 'express';
 import * as httpStatusCodes from 'http-status-codes';
 
-import { EndpointContext, EndpointHandler, Request, Response, Router, UnprotectedRouter, IEndpointHandler } from '../server';
+import {
+  EndpointContext, EndpointHandler,
+  IEndpointHandler, Request, Response,
+  Router, UnprotectedRouter
+} from '../server';
 import { cleanseHttpMethod } from '../shared/http';
 import { combineMiddlewares } from './express/middleware';
 import { StrongPointExpressRequest } from './express/strongPointExpressRequest';

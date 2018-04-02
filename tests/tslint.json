@@ -6,5 +6,5 @@
   "jsRules": {},
   "rules": {
     "no-unused-expression": false
-  },
+  }
 }

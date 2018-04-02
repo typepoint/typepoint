@@ -1,5 +1,5 @@
-import { injectable } from 'inversify';
 import * as httpStatusCodes from 'http-status-codes';
+import { injectable } from 'inversify';
 
 import { EndpointHandler } from '../../../../src/server';
 

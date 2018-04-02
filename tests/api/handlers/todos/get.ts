@@ -2,10 +2,10 @@ import { injectable } from 'inversify';
 
 import { EndpointHandler } from '../../../../src/server';
 
-import { getTodo } from '../../definitions';
-import { TodoService } from '../../services/todoService';
 import * as httpStatusCodes from 'http-status-codes';
+import { getTodo } from '../../definitions';
 import { NotFoundError } from '../../models/notFound';
+import { TodoService } from '../../services/todoService';
 
 @injectable()
 export class GetTodoHandler extends EndpointHandler {

@@ -4,19 +4,19 @@ import * as httpStatusCodes from 'http-status-codes';
 import { HeadersAlreadySent, Response as StrongPointResponse, ResponseHeaders, SetCookieOptions } from '../../server';
 
 export class StrongPointExpressResponse<TResponseBody> implements StrongPointResponse<TResponseBody> {
-  public get hasFlushedHeaders(): boolean {
+  get hasFlushedHeaders(): boolean {
     return this.response.headersSent;
   }
 
-  public get hasFlushed(): boolean {
+  get hasFlushed(): boolean {
     return this.innerHasFlushedBody;
   }
 
-  public get statusCode(): number | undefined {
+  get statusCode(): number | undefined {
     return this.innerStatusCode;
   }
 
-  public set statusCode(value: number | undefined) {
+  set statusCode(value: number | undefined) {
     this.ensureHeadersNotSent();
 
     this.innerStatusCode = value;
@@ -26,11 +26,11 @@ export class StrongPointExpressResponse<TResponseBody> implements StrongPointRes
     }
   }
 
-  public get body(): TResponseBody | undefined {
+  get body(): TResponseBody | undefined {
     return this.innerBody;
   }
 
-  public set body(value: TResponseBody | undefined) {
+  set body(value: TResponseBody | undefined) {
     this.ensureBodyNotSent();
 
     this.innerBody = value;
@@ -48,13 +48,13 @@ export class StrongPointExpressResponse<TResponseBody> implements StrongPointRes
   constructor(private response: ExpressResponse) {
   }
 
-  public flushHeaders() {
+  flushHeaders() {
     if (!this.response.headersSent) {
       this.response.flushHeaders();
     }
   }
 
-  public flush() {
+  flush() {
     if (this.body === undefined) {
       this.response.end();
     } else {
@@ -63,18 +63,18 @@ export class StrongPointExpressResponse<TResponseBody> implements StrongPointRes
     this.innerHasFlushedBody = true;
   }
 
-  public cookie(name: string, value: string, options: SetCookieOptions): void {
+  cookie(name: string, value: string, options: SetCookieOptions): void {
     this.response.cookie(name, value, options);
   }
 
-  public clearCookie(name: string, options: SetCookieOptions): void {
+  clearCookie(name: string, options: SetCookieOptions): void {
     this.response.clearCookie(name, options);
   }
 
-  public header(name: string): string | string[] | number | undefined;
-  public header(name: string, value: string | string[] | number | undefined): void;
+  header(name: string): string | string[] | number | undefined;
+  header(name: string, value: string | string[] | number | undefined): void;
 
-  public header(
+  header(
     name: string,
     value?: string | string[] | number | undefined
   ): string | string[] | number | undefined | void {
@@ -91,7 +91,7 @@ export class StrongPointExpressResponse<TResponseBody> implements StrongPointRes
     }
   }
 
-  public headers(): ResponseHeaders {
+  headers(): ResponseHeaders {
     return this.response.getHeaders();
   }
 

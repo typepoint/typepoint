@@ -138,11 +138,11 @@ export abstract class EndpointHandler implements IEndpointHandler {
   private handler: EndpointHandlerFunction<any> = undefined as any;
   private pathHelper: PathHelper = undefined as any;
 
-  public get name(): string {
+  get name(): string {
     return this.constructor.name;
   }
 
-  public match(request: { method: string, url: string }): PathHelperParseMatch | undefined {
+  match(request: { method: string, url: string }): PathHelperParseMatch | undefined {
     if (request.method !== this.definition.method) {
       return undefined;
     }
@@ -151,7 +151,7 @@ export abstract class EndpointHandler implements IEndpointHandler {
     return match;
   }
 
-  public handle(context: EndpointContext<any, any, any>, next: () => Promise<void>): Promise<void> | void {
+  handle(context: EndpointContext<any, any, any>, next: () => Promise<void>): Promise<void> | void {
     return this.handler(context, next);
   }
 
@@ -177,7 +177,7 @@ export function defineHandler<TEndpointDefinition extends EndpointDefinition<any
       this.define(definition, handler);
     }
 
-    public get name(): string {
+    get name(): string {
       return name || 'AnonymousEndpointHandler';
     }
   }
@@ -225,7 +225,7 @@ export function defineMiddleware(
       this.define(handler);
     }
 
-    public get name(): string {
+    get name(): string {
       return name || 'AnonymousEndpointMiddleware';
     }
   }
@@ -312,23 +312,31 @@ export class Router {
 
     const middlewares = (options && options.middleware) || [];
     if (middlewares.length) {
-      this.middlewareClasses.push(...middlewares)
+      this.middlewareClasses.push(...middlewares);
     }
   }
 
-  public use(handler: Constructor<EndpointHandler>, ...handlers: EndpointHandlerClass[]): this {
+  use(handler: Constructor<EndpointHandler>, ...handlers: EndpointHandlerClass[]): this {
     this.handlerClasses.push(handler, ...handlers);
     this.handlers = undefined;
     return this;
   }
 
+  // tslint:disable-next-line:max-line-length
   // TODO: Consider replacing getHandlers and getMiddlewares with method that returns a consolidated promise-based middleware creator?
 
-  public getHandlers(): EndpointHandler[] {
+  getHandlers(): EndpointHandler[] {
     if (!this.handlers) {
       this.handlers = this.createHandlers();
     }
     return this.handlers;
+  }
+
+  getMiddlewares(): EndpointMiddleware[] {
+    if (!this.middlewares) {
+      this.middlewares = this.createMiddlewares();
+    }
+    return this.middlewares;
   }
 
   // TODO: Add test for creating handlers and middleware not using ioc
@@ -344,13 +352,6 @@ export class Router {
   private createHandlers(): EndpointHandler[] {
     const result: EndpointHandler[] = this.handlerClasses.map(Handler => this.createHandler(Handler));
     return result;
-  }
-
-  public getMiddlewares(): EndpointMiddleware[] {
-    if (!this.middlewares) {
-      this.middlewares = this.createMiddlewares();
-    }
-    return this.middlewares;
   }
 
   private createMiddleware(Middleware: Constructor<EndpointMiddleware>) {

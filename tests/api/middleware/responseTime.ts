@@ -5,8 +5,7 @@ export const ResponseTimeMiddleware = defineMiddleware(async (context, next) => 
   const start = Date.now();
   try {
     await next();
-  }
-  finally {
+  } finally {
     const duration = `${ Date.now() - start }ms`;
     context.response.header('x-response-time', duration);
   }

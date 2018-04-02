@@ -11,5 +11,5 @@
   },
   "rules": {
     "no-unused-expression": false
-  },
+  }
 }

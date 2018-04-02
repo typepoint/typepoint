@@ -1,37 +1,36 @@
-import 'reflect-metadata';
 import { assert, expect } from 'chai';
 import 'chai-as-promised';
-import * as sinon from 'sinon';
-import * as linq from 'linq';
 import * as clone from 'clone';
-import { ObjectOmit } from 'typelevel-ts';
-import { Container, decorate, inject, injectable } from 'inversify';
 import * as httpStatusCodes from 'http-status-codes';
+import { Container, decorate, inject, injectable } from 'inversify';
+import * as linq from 'linq';
+import 'reflect-metadata';
+import * as sinon from 'sinon';
+import { ObjectOmit } from 'typelevel-ts';
 
 import StrongPointClient from '../../src/client';
-import { defineEndpoint, Empty } from '../../src/shared';
-import { Router, EndpointHandler, EndpointMiddleware } from '../../src/server';
+import { EndpointHandler, EndpointMiddleware, Router } from '../../src/server';
 import { toMiddleware } from '../../src/server/express';
+import { defineEndpoint, Empty } from '../../src/shared';
 
+import * as getPort from 'get-port';
+import partialMockOf from '../../tests/infrastructure/mockOf';
+import { DataStore } from './db/dataStore';
+import { createTodo, deleteTodo, getTodo, getTodos, updateTodo } from './definitions';
+import {
+  CreateTodoHandler, DeleteTodoHandler, GetTodoHandler,
+  GetTodosHandler, UpdateTodoHandler
+} from './handlers';
+import { RequestLoggerMiddleware } from './middleware/requestLogger';
+import { ResponseTimeMiddleware } from './middleware/responseTime';
 import { Todo } from './models/todo';
 import { Server } from './server';
-import * as getPort from 'get-port';
-import { DataStore } from './db/dataStore';
-import { TodoService } from './services/todoService';
-import { ResponseTimeMiddleware } from './middleware/responseTime';
-import { getTodo, getTodos, createTodo, updateTodo, deleteTodo } from './definitions';
-import { RequestLoggerMiddleware } from './middleware/requestLogger';
 import { LoggerService } from './services/loggerService';
-import partialMockOf from '../../tests/infrastructure/mockOf';
-import {
-  GetTodoHandler, GetTodosHandler, CreateTodoHandler,
-  UpdateTodoHandler, DeleteTodoHandler
-} from './handlers';
+import { TodoService } from './services/todoService';
 
 describe('api/Sample Server', () => {
   let todos: Todo[];
   let ioc: Container;
-  let dataStore: DataStore;
   let server: Server;
   let client: StrongPointClient;
   let loggerService: LoggerService;
@@ -41,7 +40,7 @@ describe('api/Sample Server', () => {
     decorate(injectable(), EndpointMiddleware);
   });
 
-  beforeEach(async function () {
+  beforeEach(async function() {
     // Allow server some time to spin up
     this.timeout(5000);
 
@@ -66,7 +65,7 @@ describe('api/Sample Server', () => {
     ioc = new Container({
       defaultScope: 'Singleton',
       // autoBindInjectable: true
-    })
+    });
 
     loggerService = partialMockOf<LoggerService>({
       info: sinon.spy(),
@@ -95,7 +94,7 @@ describe('api/Sample Server', () => {
     });
   });
 
-  afterEach(async function () {
+  afterEach(async function() {
     this.timeout(5000);
     await server.stop();
   });
@@ -150,7 +149,7 @@ describe('api/Sample Server', () => {
         id: '999'
       }
     }).then(() => {
-      assert.fail('Expected fetch to return a promise rejection')
+      assert.fail('Expected fetch to return a promise rejection');
     }, err => {
       expect(err)
         .to.have.property('response')

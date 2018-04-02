@@ -5,6 +5,7 @@
   "editor.formatOnSave": true,
   "editor.formatOnPaste": true,
   "typescript.format.insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces": true,
+  "typescript.format.insertSpaceAfterFunctionKeywordForAnonymousFunctions": false,
   "files.exclude": {
     "**/.git": true,
     "**/.svn": true,

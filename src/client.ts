@@ -14,11 +14,11 @@ declare global {
 export type IfEmpty<TValue extends Object | Empty, TThen, TElse> = If<TValue[typeof IsEmptyFieldName], TThen, TElse>;
 
 export interface StrongPointClientResponse<TBody> {
+  body: TBody;
   statusCode: number;
   statusText: string;
-  header(name: string): string | undefined;
   headers: { [name: string]: string | undefined };
-  body: TBody;
+  header(name: string): string | undefined;
 }
 
 export interface StrongPointClientOptions {
@@ -67,17 +67,17 @@ class StrongPointClient {
     this.server = (options && options.server) || '';
   }
 
-  public fetch<TEndpointDefinition extends EndpointDefinitionWithNoParamsOrBody>(
+  fetch<TEndpointDefinition extends EndpointDefinitionWithNoParamsOrBody>(
     definition: TEndpointDefinition,
     options?: StrongPointClientFetchOptions<TEndpointDefinition>
   ): Promise<StrongPointClientResponse<TEndpointDefinition['typeInfo']['response']['body']>>;
 
-  public fetch<TEndpointDefinition extends EndpointDefinition<any, any, any>>(
+  fetch<TEndpointDefinition extends EndpointDefinition<any, any, any>>(
     definition: TEndpointDefinition,
     options: StrongPointClientFetchOptions<TEndpointDefinition>
   ): Promise<StrongPointClientResponse<TEndpointDefinition['typeInfo']['response']['body']>>;
 
-  public fetch<TEndpointDefinition extends EndpointDefinition<any, any, any>>(
+  fetch<TEndpointDefinition extends EndpointDefinition<any, any, any>>(
   ): Promise<StrongPointClientResponse<TEndpointDefinition['typeInfo']['response']['body']>> {
     const endpoint: TEndpointDefinition = arguments[0];
     const options: StrongPointClientFetchOptions<TEndpointDefinition> | undefined = (

@@ -27,7 +27,7 @@ export interface GetUrlOptions {
 }
 
 export class PathHelper {
-  public static parsePathPattern(pathPattern: string): ParsedPathPattern {
+  static parsePathPattern(pathPattern: string): ParsedPathPattern {
     const parsedUrl = parseUrl(pathPattern);
 
     const parameters = this.getParameterNamesFromPathPattern(parsedUrl.path);
@@ -121,13 +121,13 @@ export class PathHelper {
   private readonly parsedPathPattern = PathHelper.parsePathPattern(this.pathPattern);
 
   // tslint:disable-next-line:member-ordering
-  public readonly parse = PathHelper.generateParseFunction(this.parsedPathPattern);
+  readonly parse = PathHelper.generateParseFunction(this.parsedPathPattern);
 
-  constructor(public readonly pathPattern: string) {
+  constructor(readonly pathPattern: string) {
     PathHelper.checkForQueryString(pathPattern);
   }
 
-  public url(options?: GetUrlOptions): string {
+  url(options?: GetUrlOptions): string {
     const params = (options && options.params) || {};
     const server = (options && options.server) || '';
 

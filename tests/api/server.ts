@@ -1,21 +1,21 @@
-import 'reflect-metadata';
-import * as getPort from 'get-port';
-import * as express from 'express';
 import * as bodyParser from 'body-parser';
+import * as express from 'express';
+import * as getPort from 'get-port';
 import * as http from 'http';
 import { Container } from 'inversify';
+import 'reflect-metadata';
 // import chalk from 'chalk';
 
 import { Router } from '../../src/server';
 import { toMiddleware } from '../../src/server/express';
 
 import { Constructor } from '../../src/shared';
+import { CreateTodoHandler, DeleteTodoHandler, GetTodoHandler, GetTodosHandler, UpdateTodoHandler } from './handlers';
 import { ResponseTimeMiddleware } from './middleware';
-import { GetTodoHandler, GetTodosHandler, CreateTodoHandler, UpdateTodoHandler, DeleteTodoHandler } from './handlers';
 import { RequestLoggerMiddleware } from './middleware/requestLogger';
 
 export class Server {
-  public get serverAddress() {
+  get serverAddress() {
     return `http://localhost:${ this.port }`;
   }
 
@@ -69,7 +69,7 @@ export class Server {
     return new Promise(resolve => {
       if (!this.server) {
         return resolve();
-      };
+      }
 
       this.server.close(() => resolve());
     });

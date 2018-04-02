@@ -1,5 +1,5 @@
-import { injectable } from 'inversify';
 import chalk from 'chalk';
+import { injectable } from 'inversify';
 
 import { EndpointContext, EndpointMiddleware } from '../../../src/server';
 import { LoggerService } from '../services/loggerService';
@@ -12,14 +12,14 @@ export class RequestLoggerMiddleware extends EndpointMiddleware {
       let error: any;
       try {
         await next();
-      }
-      catch (err) {
+      } catch (err) {
         error = err;
-      }
-      finally {
+      } finally {
         const responseTime = context.response.header('x-response-time');
         const errorMessage = error ? chalk.red(` - ${ error.message || error }`) : '';
-        this.loggerService.info(`${ context.request.method } ${ context.request.url } - ${ responseTime }${ errorMessage }`);
+        this.loggerService.info(
+          `${ context.request.method } ${ context.request.url } - ${ responseTime }${ errorMessage }`
+        );
       }
     });
   }
