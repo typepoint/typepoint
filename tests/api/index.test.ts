@@ -11,7 +11,7 @@ import { ObjectOmit } from 'typelevel-ts';
 import StrongPointClient from '../../src/client';
 import { EndpointHandler, EndpointMiddleware, Router } from '../../src/server';
 import { toMiddleware } from '../../src/server/express';
-import { defineEndpoint, Empty } from '../../src/shared';
+import { Empty } from '../../src/shared';
 
 import * as getPort from 'get-port';
 import partialMockOf from '../../tests/infrastructure/mockOf';

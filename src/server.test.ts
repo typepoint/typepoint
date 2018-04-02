@@ -3,16 +3,21 @@ import { expect } from 'chai';
 import { Todo } from '../tests/api/models/todo';
 import partialMockOf from '../tests/infrastructure/mockOf';
 import { defineHandler, EndpointContext, Request, Response } from './server';
-import { defineEndpoint, Empty } from './shared';
+import { Empty, EndpointDefinition } from './shared';
 
 describe('server', () => {
   describe('defineHandler', () => {
-    const getTodos = defineEndpoint<Empty, Empty, Todo[]>('/todos');
-    const todos: Todo[] = [{
-      id: '1',
-      title: 'Write todo app',
-      isCompleted: false
-    }];
+    let getTodos: EndpointDefinition<Empty, Empty, Todo[]>;
+    let todos: Todo[];
+
+    beforeEach(() => {
+      getTodos = new EndpointDefinition<Empty, Empty, Todo[]>('/todos');
+      todos = [{
+        id: '1',
+        title: 'Write todo app',
+        isCompleted: false
+      }];
+    });
 
     it('should define an anonymous handler class', () => {
       const GetTodosHandler = defineHandler(getTodos, context => {

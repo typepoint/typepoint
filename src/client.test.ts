@@ -6,17 +6,17 @@ import { Product } from '../tests/fixtures';
 import * as fixtures from '../tests/fixtures';
 import partialMockOf from '../tests/infrastructure/mockOf';
 import StrongPointClient from './client';
-import { defineEndpoint, Empty, EndpointDefinition } from './shared';
+import { Empty, EndpointDefinition } from './shared';
 
 describe('client', () => {
   describe('StrongPointClient', () => {
     let products: Product[];
-    let getProducts: EndpointDefinition<Empty, Empty, Product>;
+    let getProducts: EndpointDefinition<Empty, Empty, Product[]>;
     let axiosMock: typeof axios;
 
     beforeEach(() => {
       products = fixtures.getProducts();
-      getProducts = defineEndpoint('/products');
+      getProducts = new EndpointDefinition<Empty, Empty, Product[]>('/products');
 
       axiosMock = partialMockOf<typeof axios>({
         request: sinon.stub().returns(Promise.resolve({
