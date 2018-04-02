@@ -29,7 +29,7 @@ interface Todo {
 }
 ```
 
-### First you **define** your endpoint in a shared place
+First you **define** your endpoint in a shared place
 
 `shared/endpoints/todos/get.ts`
 
@@ -40,7 +40,7 @@ import { defineEndpoint, Empty } from 'strongpoint/shared';
 const GetTodo = defineEndpoint<{ id: string }, Empty, Todo>('/todos/:id');
 ```
 
-### Now you've defined your endpoint, lets define a **handler** for it
+Now you've defined your endpoint, lets define a **handler** for it
 
 `server/handlers/todos/get.ts`
 
@@ -62,6 +62,8 @@ export const GetTodoHandler = defineHandler(GetTodo, context => {
   }
 });
 ```
+
+Now we just need to tie it all together by exporting our router as middleware that our express app can use.
 
 `server/app.ts`
 
@@ -89,7 +91,8 @@ app.listen(3000, () => {
 })
 ```
 
-### Then on the client side you can call your endpoint like so
+Then on the client side you can call your endpoint like so
+
 `client/app.ts`
 
 ```typescript
