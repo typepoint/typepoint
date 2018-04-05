@@ -1,7 +1,7 @@
 # Project Objectives
 
 ## Project
-- □ Add pre-commit checks
+- ✔ Add pre-commit checks
 - □ Add documentation to README
 
 ## Endpoint Definitions
