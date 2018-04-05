@@ -16,8 +16,8 @@
     "build:server": "tsc -p ./src/tsconfig.server.json",
     "build:tests": "tsc -p ./tsconfig.tests.json",
     "lint": "tslint -p ./",
-    "test": "npm run clean:tests --silent && npm run build:tests --silent && npm run test-run --silent",
-    "test-run": "mocha -r ./tests-output/tests/infrastructure/testSetup.js './tests-output/**/*.test.js' --recursive",
+    "pretest": "npm run clean:tests --silent && npm run build:tests --silent",
+    "test": "mocha -r ./tests-output/tests/infrastructure/testSetup.js './tests-output/**/*.test.js' --recursive",
     "test:coverage": "nyc npm test",
     "prepublishOnly": "npm run lint --silent && npm run build --silent && npm run test --silent"
   },
