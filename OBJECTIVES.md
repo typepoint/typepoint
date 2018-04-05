@@ -12,7 +12,7 @@
   - ✔ ~~Request Body Type~~
   - ✔ ~~Response Body Type~~
   - ✔ Define endpoint using classes
-  - □ Way to specify arrays
+  - ✔ Way to specify arrays
   - □ Validation of request input
   - □ Coercion of request input to correct types
   - ↓ Allow easy decoration for permissions
