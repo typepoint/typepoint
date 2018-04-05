@@ -35,22 +35,22 @@ export type FetchParamsOptions<TRequestParams extends Object> = IfEmpty<TRequest
 export type FetchBodyOptions<TRequestBody extends Object> = IfEmpty<TRequestBody, {}, { body: TRequestBody }>;
 
 export type StrongPointClientFetchOptions<TEndpointDefinition extends EndpointDefinition<any, any, any>> = (
-  FetchParamsOptions<TEndpointDefinition['typeInfo']['request']['params']> &
-  FetchBodyOptions<TEndpointDefinition['typeInfo']['request']['body']>
+  FetchParamsOptions<ReturnType<TEndpointDefinition['typeInfo']>['request']['params']> &
+  FetchBodyOptions<ReturnType<TEndpointDefinition['typeInfo']>['request']['body']>
 );
 
 export type RequestWithEmptyParamsAndBody<TEndpointDefinition extends EndpointDefinition<any, any, any>> = (
   (
     definition: TEndpointDefinition,
     options: StrongPointClientFetchOptions<TEndpointDefinition>
-  ) => Promise<StrongPointClientResponse<TEndpointDefinition['typeInfo']['response']['body']>>
+  ) => Promise<StrongPointClientResponse<ReturnType<TEndpointDefinition['typeInfo']>['response']['body']>>
 );
 
 export type RequestWithParamsOrBody<TEndpointDefinition extends EndpointDefinition<any, any, any>> = (
   (
     definition: TEndpointDefinition,
     options: StrongPointClientFetchOptions<TEndpointDefinition>
-  ) => Promise<StrongPointClientResponse<TEndpointDefinition['typeInfo']['response']['body']>>
+  ) => Promise<StrongPointClientResponse<ReturnType<TEndpointDefinition['typeInfo']>['response']['body']>>
 );
 
 export type RequestFunction<TEndpointDefinition extends EndpointDefinition<any, any, any>> = (
@@ -70,15 +70,15 @@ class StrongPointClient {
   fetch<TEndpointDefinition extends EndpointDefinitionWithNoParamsOrBody>(
     definition: TEndpointDefinition,
     options?: StrongPointClientFetchOptions<TEndpointDefinition>
-  ): Promise<StrongPointClientResponse<TEndpointDefinition['typeInfo']['response']['body']>>;
+  ): Promise<StrongPointClientResponse<ReturnType<TEndpointDefinition['typeInfo']>['response']['body']>>;
 
   fetch<TEndpointDefinition extends EndpointDefinition<any, any, any>>(
     definition: TEndpointDefinition,
     options: StrongPointClientFetchOptions<TEndpointDefinition>
-  ): Promise<StrongPointClientResponse<TEndpointDefinition['typeInfo']['response']['body']>>;
+  ): Promise<StrongPointClientResponse<ReturnType<TEndpointDefinition['typeInfo']>['response']['body']>>;
 
   fetch<TEndpointDefinition extends EndpointDefinition<any, any, any>>(
-  ): Promise<StrongPointClientResponse<TEndpointDefinition['typeInfo']['response']['body']>> {
+  ): Promise<StrongPointClientResponse<ReturnType<TEndpointDefinition['typeInfo']>['response']['body']>> {
     const endpoint: TEndpointDefinition = arguments[0];
     const options: StrongPointClientFetchOptions<TEndpointDefinition> | undefined = (
       arguments.length > 1 ? arguments[1] : undefined
@@ -100,7 +100,7 @@ class StrongPointClient {
 
     return this.axios.request(requestOptions)
       .then(response => {
-        const result: StrongPointClientResponse<TEndpointDefinition['typeInfo']['response']['body']> = {
+        const result: StrongPointClientResponse<ReturnType<TEndpointDefinition['typeInfo']>['response']['body']> = {
           statusCode: response.status,
           statusText: response.statusText,
           header: name => response.headers[name],

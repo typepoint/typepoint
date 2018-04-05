@@ -116,9 +116,9 @@ export interface EndpointContext<TRequestParams, TRequestBody, TResponseBody> {
 export type EndpointHandlerFunction<TEndpointDefinition extends EndpointDefinition<any, any, any>> =
   (
     context: EndpointContext<
-      TEndpointDefinition['typeInfo']['request']['params'],
-      TEndpointDefinition['typeInfo']['request']['body'],
-      TEndpointDefinition['typeInfo']['response']['body']
+      ReturnType<TEndpointDefinition['typeInfo']>['request']['params'],
+      ReturnType<TEndpointDefinition['typeInfo']>['request']['body'],
+      ReturnType<TEndpointDefinition['typeInfo']>['response']['body']
       >,
     next: () => Promise<void>
   ) => Promise<void> | void;

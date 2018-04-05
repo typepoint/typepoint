@@ -1,3 +1,5 @@
+import { If } from 'typelevel-ts';
+
 import { argumentsToArray } from './shared/functions';
 import { cleanseHttpMethod, HttpMethod, HttpMethods } from './shared/http';
 import { PathHelper, PathHelperParseMatch } from './shared/pathHelper';
@@ -12,19 +14,52 @@ export class Empty {
   [IsEmptyFieldName]: 'T';
 }
 
-export class DoNotReferenceEndpointDefinitionTypeInfo extends Error {
-  constructor() {
-    super('Do not evaluate definition.typeInfo. It is reserved for internal use only.');
+export interface ArrayOfTypeInfo<T> {
+  element: T;
+}
+
+export class ArrayOfClassInfo<T> {
+  constructor(readonly element: Constructor<T>) {
   }
 }
 
+export class DoNotReferenceTypeInfo extends Error {
+  constructor(name: string) {
+    super(`Do not evaluate ${ name }.typeInfo(). It is reserved for internal use only.`);
+  }
+}
+
+export class ArrayOf<T> {
+  readonly classInfo?: ArrayOfClassInfo<T>;
+
+  constructor(Class: Constructor<T>) {
+    this.classInfo = new ArrayOfClassInfo(Class);
+  }
+
+  typeInfo(): ArrayOfTypeInfo<T> {
+    throw new DoNotReferenceTypeInfo('ArrayOf');
+  }
+}
+
+export function arrayOf<T>(Class: Constructor<T>): Constructor<ArrayOf<T>> {
+  class AnonymousArrayOf extends ArrayOf<T> {
+    constructor() {
+      super(Class);
+    }
+  }
+
+  return AnonymousArrayOf;
+}
+
+export type NormalisedArrayOf<T> = T extends ArrayOf<any> ? Array<ReturnType<T['typeInfo']>['element']> : T;
+
 export interface EndpointDefinitionRequestTypeInfo<TParams, TBody> {
-  params: TParams;
-  body: TBody;
+  params: NormalisedArrayOf<TParams>;
+  body: NormalisedArrayOf<TBody>;
 }
 
 export interface EndpointDefinitionResponseTypeInfo<TBody> {
-  body: TBody;
+  body: NormalisedArrayOf<TBody>;
 }
 
 export interface EndpointDefinitionTypeInfo<TRequestParams, TRequestBody, TResponseBody> {
@@ -202,8 +237,8 @@ export class EndpointDefinition<
     }
   }
 
-  get typeInfo(): EndpointDefinitionTypeInfo<TRequestParams, TRequestBody, TResponseBody> {
-    throw new DoNotReferenceEndpointDefinitionTypeInfo();
+  typeInfo(): EndpointDefinitionTypeInfo<TRequestParams, TRequestBody, TResponseBody> {
+    throw new DoNotReferenceTypeInfo('EndpointDefinition');
   }
 
   parse(url: string): PathHelperParseMatch | undefined {
