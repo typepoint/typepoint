@@ -16,6 +16,12 @@
 ```sh
 npm install strongpoint --save
 ```
+
+StrongPoint requires at least TypeScript v2.8.
+```sh
+npm install typescript --save-dev
+```
+
 ## Usage
 Let's say you need an endpoint which returns a Todo.
 
