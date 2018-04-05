@@ -3,6 +3,7 @@
 ## Project
 - ✔ Add pre-commit checks
 - □ Add documentation to README
+- □ Package so that paths are optimal for consuming before publishing
 
 ## Endpoint Definitions
 - ✔ Each endpoint definition should capture the following:
