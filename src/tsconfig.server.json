@@ -10,5 +10,8 @@
   "include": [
     "./server/**/*.ts",
     "./server/typings/**/*.ts"
+  ],
+  "exclude": [
+    "./server/**/*.test.ts"
   ]
 }
