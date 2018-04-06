@@ -62,3 +62,4 @@ jspm_packages/
 # Build artifacts
 dist
 tests-output
+package
