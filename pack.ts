@@ -1,7 +1,7 @@
 import * as fs from 'fs-extra';
 import * as path from 'path';
 
-const packagePath = path.join(__dirname, 'package');
+const packagePath = path.join(__dirname, 'dist');
 
 function copyFileToPackage(fileName: string, destinationSubDirectoryPath: string = ''): void {
   const destinationDirectoryPath = (
@@ -16,12 +16,6 @@ function copyFileToPackage(fileName: string, destinationSubDirectoryPath: string
   fs.copyFileSync(sourceFileName, destinationFileName);
 }
 
-function copyDirectoryContentsToPackage(sourceDirectoryPath: string, destinationDirectoryPath: string = '') {
-  sourceDirectoryPath = path.join(__dirname, sourceDirectoryPath);
-  destinationDirectoryPath = destinationDirectoryPath ? path.join(packagePath, destinationDirectoryPath) : packagePath;
-  fs.copySync(sourceDirectoryPath, destinationDirectoryPath);
-}
-
 function updateFile(fileName: string, replacer: (content: string) => string) {
   const fullFileName = path.join(packagePath, fileName);
   let content = fs.readFileSync(fullFileName, { encoding: 'utf8' });
@@ -30,21 +24,21 @@ function updateFile(fileName: string, replacer: (content: string) => string) {
 }
 
 function run() {
-  if (fs.existsSync(packagePath)) {
-    fs.emptyDirSync(packagePath);
-  }
-
   copyFileToPackage('package.json');
-
   copyFileToPackage('README.md');
-
-  copyFileToPackage('.npmignore');
-
-  copyDirectoryContentsToPackage('dist');
 
   updateFile('package.json', content => {
     const packageObj = JSON.parse(content);
-    packageObj.private = false;
+    const fieldsToRemove = [
+      'devDependencies',
+      'nyc',
+      'precommit',
+      'private',
+      'scripts'
+    ];
+    for (const fieldToRemove of fieldsToRemove) {
+      delete packageObj[fieldToRemove];
+    }
     return JSON.stringify(packageObj, null, '  ');
   });
 }

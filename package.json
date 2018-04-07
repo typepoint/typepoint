@@ -5,23 +5,25 @@
   "main": "index.js",
   "private": true,
   "pre-commit": {
-    "run": "prepublishOnly"
+    "run": "check"
   },
   "scripts": {
-    "clean": "npm run clean:dist && npm run clean:tests --silent",
+    "check": "npm run lint && npm run build && npm run test",
+    "clean": "npm run clean:dist && npm run clean:tests",
     "clean:dist": "rimraf ./dist",
     "clean:tests": "rimraf ./tests-output",
-    "build": "npm run clean:dist --silent && npm run build:entry --silent && npm run build:server --silent && npm run build:client --silent",
+    "prebuild": "npm run clean:dist",
+    "build": "npm run build:entry && npm run build:server && npm run build:client",
     "build:client": "tsc -p ./src/tsconfig.client.json",
     "build:entry": "tsc -p ./src/tsconfig.entry.json",
     "build:server": "tsc -p ./src/tsconfig.server.json",
     "build:tests": "tsc -p ./tsconfig.tests.json",
     "lint": "tslint -p ./",
-    "package": "ts-node ./package.ts",
-    "pretest": "npm run clean:tests --silent && npm run build:tests --silent",
+    "preship": "npm run check",
+    "ship": "ts-node ./pack.ts",
+    "pretest": "npm run clean:tests && npm run build:tests",
     "test": "mocha -r ./tests-output/tests/infrastructure/testSetup.js './tests-output/**/*.test.js' --recursive",
-    "test:coverage": "nyc npm test",
-    "prepublishOnly": "npm run lint --silent && npm run build --silent && npm run test --silent"
+    "test:coverage": "nyc npm test"
   },
   "types": "./index.d.ts",
   "repository": {
