@@ -7,7 +7,6 @@ import { StrongPointExpressRequest } from './strongPointExpressRequest';
 
 import partialMockOf from '../../../tests/infrastructure/mockOf';
 import { Todo } from '../../../tests/api/models/todo';
-import { getTodos } from '../../../tests/fixtures/todos';
 import { ObjectOmit } from 'typelevel-ts';
 
 describe('server/express/strongPointExpressRequest', () => {
