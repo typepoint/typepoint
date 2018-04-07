@@ -2,8 +2,8 @@
 
 ## Project
 - ✔ Add pre-commit checks
+- ✔ Package so that paths are optimal for consuming before publishing
 - □ Add documentation to README
-- □ Package so that paths are optimal for consuming before publishing
 - □ Add proper code coverage
 - □ Update package.json with correct github repo details
 
