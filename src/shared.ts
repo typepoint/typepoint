@@ -258,21 +258,3 @@ export class EndpointDefinition<
     return result;
   }
 }
-
-// export function defineEndpoint<TRequestParams, TRequestBody, TResponseBody>(
-//   path: string
-// ): EndpointDefinition<TRequestParams, TRequestBody, TResponseBody>;
-
-// export function defineEndpoint<TRequestParams, TRequestBody, TResponseBody>(
-//   method: HttpMethod,
-//   path: string
-// ): EndpointDefinition<TRequestParams, TRequestBody, TResponseBody>;
-
-// export function defineEndpoint<TRequestParams, TRequestBody, TResponseBody>(
-//   // tslint:disable-next-line:unified-signatures
-//   options: EndpointDefinitionOptions<TRequestParams, TRequestBody, TResponseBody>
-// ): EndpointDefinition<TRequestParams, TRequestBody, TResponseBody>;
-
-// export function defineEndpoint<TRequestParams, TRequestBody, TResponseBody>() {
-//   return new EndpointDefinition<TRequestParams, TRequestBody, TResponseBody>(arguments);
-// }

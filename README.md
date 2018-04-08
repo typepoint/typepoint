@@ -40,10 +40,10 @@ First you **define** your endpoint in a shared place
 `shared/endpoints/todos/get.ts`
 
 ```typescript
-import { defineEndpoint, Empty } from 'strongpoint/shared';
+import { Empty, EndpointDefinition } from 'strongpoint/shared';
 
 // Define this endpoint's request params, request body, and response body as well as the path
-const GetTodo = defineEndpoint<{ id: string }, Empty, Todo>('/todos/:id');
+export const GetTodo = new EndpointDefinition<{ id: string }, Empty, Todo>('/todos/:id');
 ```
 
 Now you've defined your endpoint, lets define a **handler** for it
