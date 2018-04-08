@@ -56,7 +56,7 @@ export interface Request<TRequestParams, TRequestBody> {
   readonly method: HttpMethod;
   readonly url: string;
   params: TRequestParams;
-  readonly body: TRequestBody;
+  body: TRequestBody;
   readonly cookies: RequestCookies;
   readonly headers: RequestHeaders;
   readonly signedCookies: RequestCookies;
@@ -125,16 +125,37 @@ export type EndpointHandlerFunction<TEndpointDefinition extends EndpointDefiniti
 
 export interface IEndpointHandler {
   readonly name: string;
+  readonly definition?: EndpointDefinition<any, any, any>;
   match?: (request: { method: string, url: string }) => PathHelperParseMatch | undefined;
   handle(context: EndpointContext<any, any, any>, next: () => Promise<void>): Promise<void> | void;
 }
 
+export class CannotRedefineHandlerDefinition extends Error {
+  constructor() {
+    super('EndpointHandler.definition should only be set in define method during handler construction');
+  }
+}
+
 export abstract class EndpointHandler implements IEndpointHandler {
+  get definition(): EndpointDefinition<any, any, any> {
+    return this._definition;
+  }
+
+  set definition(value: EndpointDefinition<any, any, any>) {
+    if (!this._isDefining) {
+      throw new CannotRedefineHandlerDefinition();
+    }
+    this._definition = value;
+  }
+
   // `= undefined as any` is a crappy workaround strictPropertyInitialization in ts 2.7
   // without having to disable strictPropertyInitialization everywhere.
   // Deliberately don't pass handler function down in constructor as then compiler cannot infer
   // types for context and next function :(
-  private definition: EndpointDefinition<any, any, any> = undefined as any;
+  // tslint:disable:variable-name
+  private _definition: EndpointDefinition<any, any, any> = undefined as any;
+  private _isDefining: boolean = false;
+  // tslint:enable:variable-name
   private handler: EndpointHandlerFunction<any> = undefined as any;
   private pathHelper: PathHelper = undefined as any;
 
@@ -159,8 +180,13 @@ export abstract class EndpointHandler implements IEndpointHandler {
     definition: TEndpointDefinition,
     handler: EndpointHandlerFunction<TEndpointDefinition>
   ) {
-    this.definition = definition;
-    this.handler = handler;
+    this._isDefining = true;
+    try {
+      this.definition = definition;
+      this.handler = handler;
+    } finally {
+      this._isDefining = false;
+    }
   }
 }
 
@@ -237,10 +263,19 @@ export interface RouterIoc {
   get<T>(Class: Constructor<T>): T;
 }
 
+export type ObjectWithStringProps<T> = { [K in keyof T]: string };
+
+// tslint:disable-next-line:ban-types
+export type ValidateAndTransformFunction = <T extends Object>(
+  input: ObjectWithStringProps<T>,
+  Class?: Constructor<T>
+) => T;
+
 export interface RouterOptions {
   handlers?: EndpointHandlerClass[];
   ioc?: RouterIoc;
   middleware?: EndpointMiddlewareClass[];
+  validateAndTransform?: ValidateAndTransformFunction;
 }
 
 export type RouterHandleMethod = (request: Request<any, any>, response: Response<any>) => Promise<void>;
@@ -290,6 +325,8 @@ export class MiddlewareConstructorError extends Error {
 }
 
 export class Router {
+  readonly validateAndTransform: ValidateAndTransformFunction | undefined;
+
   protected readonly handlerClasses: EndpointHandlerClass[] = [];
   protected handlers: EndpointHandler[] | undefined;
 
@@ -305,6 +342,8 @@ export class Router {
       }
     };
 
+    this.validateAndTransform = options && options.validateAndTransform;
+
     const handlers = (options && options.handlers) || [];
     if (handlers.length) {
       this.handlerClasses.push(...handlers);
@@ -316,9 +355,11 @@ export class Router {
     }
   }
 
-  use(handler: Constructor<EndpointHandler>, ...handlers: EndpointHandlerClass[]): this {
-    this.handlerClasses.push(handler, ...handlers);
-    this.handlers = undefined;
+  use(...handlers: EndpointHandlerClass[]): this {
+    if (handlers.length) {
+      this.handlerClasses.push(...handlers);
+      this.handlers = undefined;
+    }
     return this;
   }
 

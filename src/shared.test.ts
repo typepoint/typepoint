@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 
-import { Empty, EndpointDefinition, ArrayOf, arrayOf } from './shared';
+import { Empty, EndpointDefinition, ArrayOf, arrayOf, isArrayOf } from './shared';
 import { Product } from '../tests/fixtures/products';
 
 describe('shared', () => {
@@ -140,6 +140,23 @@ describe('shared', () => {
       const ArrayOfUser = arrayOf(User);
       const arrayOfUser = new ArrayOfUser();
       expect(() => arrayOfUser.typeInfo()).to.throw('Do not evaluate ArrayOf.typeInfo(). It is reserved for internal use only.');
+    });
+  });
+
+  describe('isArrayOfClass', () => {
+    class User {
+      id: string = ''
+      name: string = '';
+    }
+
+    it('should return true for arrayOf results', () => {
+      const ArrayOfUser = arrayOf(User);
+      expect(isArrayOf(ArrayOfUser)).to.be.true;
+    });
+
+    it('should return false for anything else', () => {
+      const ArrayOfUser = User;
+      expect(isArrayOf(ArrayOfUser)).to.be.false;
     });
   });
 });

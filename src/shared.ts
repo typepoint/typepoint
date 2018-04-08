@@ -29,7 +29,9 @@ export class DoNotReferenceTypeInfo extends Error {
   }
 }
 
-export class ArrayOf<T> {
+export abstract class ArrayOf<T> {
+  static isArrayOf: true = true;
+
   readonly classInfo?: ArrayOfClassInfo<T>;
 
   constructor(Class: Constructor<T>) {
@@ -43,12 +45,18 @@ export class ArrayOf<T> {
 
 export function arrayOf<T>(Class: Constructor<T>): Constructor<ArrayOf<T>> {
   class AnonymousArrayOf extends ArrayOf<T> {
+    static isArrayOf: true = true;
+
     constructor() {
       super(Class);
     }
   }
 
   return AnonymousArrayOf;
+}
+
+export function isArrayOf<T>(Class: Constructor<any>): Class is Constructor<ArrayOf<any>> {
+  return !!(Class && (Class as any).isArrayOf);
 }
 
 export type NormalisedArrayOf<T> = T extends ArrayOf<any> ? Array<ReturnType<T['typeInfo']>['element']> : T;

@@ -5,7 +5,7 @@
 - ✔ Package so that paths are optimal for consuming before publishing
 - □ Add documentation to README
 - □ Add proper code coverage
-- □ Update package.json with correct github repo details
+- □ Update package.json with correct github repository details
 
 ## Endpoint Definitions
 - ✔ Each endpoint definition should capture the following:
@@ -16,9 +16,9 @@
   - ✔ Response Body Type
   - ✔ Define endpoint using classes
   - ✔ Way to specify arrays
-  - □ Validation of request input
-  - □ Coercion of request input to correct types
-  - ↓ Allow easy decoration for permissions
+  - ✔ Validation of request input
+  - ✔ Coercion of request input to correct types
+  - □ Allow decoration based authorization
 
 ## Endpoint Handlers
 - ✔ Ability to have services you need injected for testability

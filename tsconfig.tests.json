@@ -11,12 +11,7 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "outDir": "tests-output",
-    "target": "es5",
-    "types": [
-      "mocha",
-      "node",
-      "reflect-metadata"
-    ]
+    "target": "es5"
   },
   "include": [
     "./tests/infrastructure/testSetup.ts",

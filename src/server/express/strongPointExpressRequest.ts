@@ -7,7 +7,7 @@ export class StrongPointExpressRequest<TParams, TBody> implements StrongPointReq
   readonly url: string;
   readonly method: HttpMethod;
   params: TParams;
-  readonly body: TBody;
+  body: TBody;
   readonly cookies: RequestCookies;
   readonly headers: RequestHeaders;
   readonly signedCookies: RequestCookies;

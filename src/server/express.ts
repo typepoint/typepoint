@@ -1,3 +1,6 @@
+// TODO: Move this into separate package e.g. strongpoint-express
+
+import * as clone from 'clone';
 import * as express from 'express';
 import * as httpStatusCodes from 'http-status-codes';
 
@@ -29,6 +32,8 @@ export function toMiddleware(router: Router, options?: ToMiddlewareOptions): exp
   ) => {
     let context: EndpointContext<any, any, any> | undefined;
 
+    const originalRequestBody = clone(req.body);
+
     try {
       const request = new StrongPointExpressRequest(req);
       const response = new StrongPointExpressResponse(res);
@@ -58,6 +63,18 @@ export function toMiddleware(router: Router, options?: ToMiddlewareOptions): exp
         const handlerMatch = handlerMatchIterator.getNextMatch();
         if (context && handlerMatch) {
           context.request.params = handlerMatch.parsedUrl.params;
+
+          if (router.validateAndTransform) {
+            const definition = handlerMatch.handler.definition;
+            const classInfo = definition && definition.classInfo;
+
+            const requestParamsClass = classInfo && classInfo.request.params;
+            context.request.params = router.validateAndTransform(context.request.params, requestParamsClass);
+
+            const requestBodyClass = classInfo && classInfo.request.body;
+            context.request.body = router.validateAndTransform(originalRequestBody, requestBodyClass);
+          }
+
           const type = handlerMatch.type;
           const handlerName = handlerMatch.handler.name;
           if (handlerName) {
