@@ -6,6 +6,8 @@
 - □ Add documentation to README
 - □ Add proper code coverage
 - □ Update package.json with correct github repository details
+- □ Split express middleware into separate repository and package
+- □ Split joi validation into separate repository and package
 
 ## Endpoint Definitions
 - ✔ Each endpoint definition should capture the following:
