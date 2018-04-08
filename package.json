@@ -22,7 +22,7 @@
     "prepack": "npm run check",
     "pack": "ts-node ./pack.ts",
     "preship": "npm run pack",
-    "ship": "echo PUBLISHING DISABLED FOR NOW",
+    "ship": "cd ./dist && npm publish",
     "pretest": "npm run clean:tests && npm run build:tests",
     "test": "mocha -r ./tests-output/tests/infrastructure/testSetup.js './tests-output/**/*.test.js' --recursive",
     "test:coverage": "nyc npm test"
