@@ -1,6 +1,6 @@
 {
   "name": "strongpoint",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "Library for defining, serving and consuming strongly typed endpoints in TypeScript",
   "main": "index.js",
   "private": true,
