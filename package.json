@@ -30,7 +30,7 @@
   "types": "./index.d.ts",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/codeandcats/strongpoint.git"
+    "url": "git+https://github.com/strongpoint-ts/strongpoint.git"
   },
   "keywords": [
     "strongpoint",
@@ -50,9 +50,9 @@
   "author": "Ben <codeandcats@gmail.com>",
   "license": "UNLICENSED",
   "bugs": {
-    "url": "https://github.com/codeandcats/strongpoint/issues"
+    "url": "https://github.com/strongpoint-ts/strongpoint/issues"
   },
-  "homepage": "https://github.com/codeandcats/strongpoint#readme",
+  "homepage": "https://github.com/strongpoint-ts/strongpoint#readme",
   "nyc": {
     "all": true,
     "exclude": [
