@@ -122,4 +122,6 @@ client.fetch(GetTodo, {
 });
 ```
 
-Issues and contributions are welcome! 😸
+Got an problem or suggestion? Submit an [issue](https://github.com/strongpoint-ts/strongpoint/issues)!
+
+Want to contribute? Fork the [repository](https://github.com/strongpoint-ts/strongpoint) and submit a pull request! 😸
