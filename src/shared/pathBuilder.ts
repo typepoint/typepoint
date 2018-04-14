@@ -27,12 +27,12 @@ export class PathBuilder<TRequestParams> {
 
 export type PathBuildingFunction<TRequestParams> = (path: PathBuilder<TRequestParams>) => PathBuilder<TRequestParams>;
 
-export function createPath<TRequestParams>(build: PathBuildingFunction<TRequestParams>): PathBuilder<TRequestParams> {
+export function createPath<TRequestParams>(build: PathBuildingFunction<TRequestParams>): string {
   class ConstructablePathBuilder extends PathBuilder<TRequestParams> {
     constructor() {
       super();
     }
   }
   const pathBuilder = build(new ConstructablePathBuilder());
-  return pathBuilder;
+  return pathBuilder.toString();
 }

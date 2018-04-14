@@ -10,14 +10,14 @@ describe('shared/pathBuilder', () => {
     }
 
     it('should generate an empty path by default', () => {
-      const result = createPath(path => path).toString();
+      const result = createPath(path => path);
       expect(result).to.equal('/');
     });
 
     it('should generate a path with a literal', () => {
       const result = createPath<Empty>(path => path
         .literal('todos')
-      ).toString();
+      );
 
       expect(result).to.equal('/todos');
     });
@@ -25,7 +25,7 @@ describe('shared/pathBuilder', () => {
     it('should generate a path with a param', () => {
       const result = createPath<ById>(path => path
         .param('id')
-      ).toString();
+      );
 
       expect(result).to.equal('/:id');
     });
@@ -34,7 +34,7 @@ describe('shared/pathBuilder', () => {
       const result = createPath<ById>(path => path
         .literal('todos')
         .param('id')
-      ).toString();
+      );
 
       expect(result).to.equal('/todos/:id');
     });
@@ -44,7 +44,7 @@ describe('shared/pathBuilder', () => {
         .literal('todos')
         .param('id')
         .literal('tags')
-      ).toString();
+      );
 
       expect(result).to.equal('/todos/:id/tags');
     });
@@ -60,7 +60,7 @@ describe('shared/pathBuilder', () => {
         .param('todoId')
         .literal('tags')
         .param('tagId')
-      ).toString();
+      );
 
       expect(result).to.equal('/todos/:todoId/tags/:tagId');
     });

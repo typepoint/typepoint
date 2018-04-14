@@ -213,7 +213,7 @@ export class EndpointDefinition<
           const options: EndpointDefinitionOptions<TRequestParams, TRequestBody, TResponseBody> = arguments[0];
 
           this.method = cleanseHttpMethod(options.method || DEFAULT_METHOD);
-          this.path = createPath(options.path).toString();
+          this.path = createPath(options.path);
           this.pathHelper = new PathHelper(this.path);
 
           if (isClassBasedEndpointDefinitionOptions(options)) {
@@ -225,7 +225,7 @@ export class EndpointDefinition<
           }
         } else if (typeof arguments[0] === 'function') {
           this.method = DEFAULT_METHOD;
-          this.path = createPath(arguments[0]).toString();
+          this.path = createPath(arguments[0]);
           this.pathHelper = new PathHelper(this.path);
         } else {
           throw new EndpointDefinitionInvalidConstructorArgs(arguments);
@@ -235,7 +235,7 @@ export class EndpointDefinition<
 
       case 2: {
         this.method = cleanseHttpMethod(arguments[0]);
-        this.path = createPath(arguments[1]).toString();
+        this.path = createPath(arguments[1]);
         this.pathHelper = new PathHelper(this.path);
         break;
       }
