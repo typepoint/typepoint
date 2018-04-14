@@ -16,7 +16,7 @@ describe('client', () => {
 
     beforeEach(() => {
       products = fixtures.getProducts();
-      getProducts = new EndpointDefinition<Empty, Empty, Product[]>('/products');
+      getProducts = new EndpointDefinition<Empty, Empty, Product[]>(path => path.literal('products'));
 
       axiosMock = partialMockOf<typeof axios>({
         request: sinon.stub().returns(Promise.resolve({

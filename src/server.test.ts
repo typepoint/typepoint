@@ -11,7 +11,7 @@ describe('server', () => {
     let todos: Todo[];
 
     beforeEach(() => {
-      getTodos = new EndpointDefinition<Empty, Empty, Todo[]>('/todos');
+      getTodos = new EndpointDefinition<Empty, Empty, Todo[]>(path => path.literal('todos'));
       todos = [{
         id: '1',
         title: 'Write todo app',
