@@ -43,7 +43,9 @@ First you **define** your endpoint in a shared place
 import { Empty, EndpointDefinition } from 'strongpoint/shared';
 
 // Define this endpoint's request params, request body, and response body as well as the path
-export const GetTodo = new EndpointDefinition<{ id: string }, Empty, Todo>('/todos/:id');
+export const GetTodo = new EndpointDefinition<{ id: string }, Empty, Todo>(
+  path => path.literal('todos').param('id')
+);
 ```
 
 Now you've defined your endpoint, lets define a **handler** for it
