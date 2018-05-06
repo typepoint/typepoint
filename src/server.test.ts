@@ -1,8 +1,9 @@
 import { expect } from 'chai';
+import * as sinon from 'sinon';
 
 import { Todo } from '../tests/api/models/todo';
 import partialMockOf from '../tests/infrastructure/mockOf';
-import { defineHandler, EndpointContext, Request, Response } from './server';
+import { defineHandler, EndpointContext, Request, Response, NotFoundMiddleware, EndpointMiddleware } from './server';
 import { Empty, EndpointDefinition } from './shared';
 
 describe('server', () => {
@@ -79,7 +80,7 @@ describe('server', () => {
       expect(match).to.equal(undefined);
     });
 
-    it('should define an handler class that can handle requests', async () => {
+    it('should define a handler class that can handle requests', async () => {
       const GetTodosHandler = defineHandler(getTodos, ctx => {
         ctx.response.body = todos;
       });
@@ -96,6 +97,34 @@ describe('server', () => {
         .to.have.property('response')
         .to.have.property('body')
         .that.deep.equals(todos);
+    });
+  });
+
+  describe('NotFoundMiddleware', () => {
+    let middleware: EndpointMiddleware;
+    let context: EndpointContext<any, any, any>;
+
+    beforeEach(() => {
+      middleware = new NotFoundMiddleware();
+      context = partialMockOf<EndpointContext<any, any, any>>({
+        response: partialMockOf<Response<any>>({
+          statusCode: undefined
+        })
+      });
+    });
+
+    it('should respond with 404 if request was not handled', async () => {
+      const next = async () => { };
+      await middleware.handle(context, next);
+      expect(context.response.statusCode).to.equal(404);
+    });
+
+    it('should not respond with 404 if request was handled', async () => {
+      const next = async () => {
+        context.response.statusCode = 204;
+      };
+      await middleware.handle(context, next);
+      expect(context.response.statusCode).to.equal(204);
     });
   });
 });

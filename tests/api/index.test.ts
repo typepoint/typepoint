@@ -1,6 +1,8 @@
+import axios from 'axios';
 import { assert, expect } from 'chai';
 import 'chai-as-promised';
 import * as clone from 'clone';
+import * as getPort from 'get-port';
 import * as httpStatusCodes from 'http-status-codes';
 import { Container, decorate, inject, injectable } from 'inversify';
 import * as linq from 'linq';
@@ -9,11 +11,10 @@ import * as sinon from 'sinon';
 import { ObjectOmit } from 'typelevel-ts';
 
 import StrongPointClient from '../../src/client';
-import { EndpointHandler, EndpointMiddleware, Router } from '../../src/server';
+import { EndpointHandler, EndpointMiddleware, NotFoundMiddleware, Router } from '../../src/server';
 import { toMiddleware } from '../../src/server/express';
 import { Empty } from '../../src/shared';
 
-import * as getPort from 'get-port';
 import partialMockOf from '../../tests/infrastructure/mockOf';
 import { DataStore } from './db/dataStore';
 import { createTodo, deleteTodo, getTodo, getTodos, updateTodo } from './definitions';
@@ -38,6 +39,7 @@ describe('api/Sample Server', () => {
   before(() => {
     decorate(injectable(), EndpointHandler);
     decorate(injectable(), EndpointMiddleware);
+    decorate(injectable(), NotFoundMiddleware);
   });
 
   beforeEach(async function() {
@@ -73,6 +75,7 @@ describe('api/Sample Server', () => {
       error: sinon.spy()
     });
 
+    ioc.bind(NotFoundMiddleware).toSelf();
     ioc.bind(DataStore).toDynamicValue(() => new DataStore(todos));
     ioc.bind(LoggerService).toDynamicValue(() => loggerService);
     ioc.bind(ResponseTimeMiddleware).toSelf();
@@ -267,5 +270,15 @@ describe('api/Sample Server', () => {
   it('should use middleware to log requests', async () => {
     await client.fetch(getTodos);
     expect(loggerService.info).to.have.been.calledWith(sinon.match(/^GET\s\/todos\s\-\s\d+ms$/i));
+  });
+
+  it('should return a 404', async () => {
+    const res = await axios.get(
+      `${ server.serverAddress }/some-route/that-does-not-exist`,
+      {
+        validateStatus: () => true
+      }
+    );
+    expect(res.status).to.equal(404);
   });
 });

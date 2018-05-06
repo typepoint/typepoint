@@ -4,9 +4,8 @@ import * as getPort from 'get-port';
 import * as http from 'http';
 import { Container } from 'inversify';
 import 'reflect-metadata';
-// import chalk from 'chalk';
 
-import { Router } from '../../src/server';
+import { NotFoundMiddleware, Router } from '../../src/server';
 import { toMiddleware } from '../../src/server/express';
 
 import { Constructor } from '../../src/shared';
@@ -43,14 +42,11 @@ export class Server {
       middleware: [
         RequestLoggerMiddleware,
         ResponseTimeMiddleware,
+        NotFoundMiddleware
       ]
     });
     const middleware = toMiddleware(router, {
-      // log: (...args: any[]) => {
-      //   const firstArg = `${ args[0] }`;
-      //   const color = (firstArg.toLowerCase().indexOf('error') === 0) ? chalk.red : chalk.cyan;
-      //   console.log(...args.map(arg => color(`${ arg }`)));
-      // }
+      // log: (...args: any[]) => console.log(...args);
     });
 
     const app = express();

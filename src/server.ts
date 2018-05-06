@@ -1,3 +1,4 @@
+import * as httpStatusCodes from 'http-status-codes';
 import { warnIfWindowDetected } from './server/clientDetection';
 import { EndpointDefinition } from './shared';
 import { Constructor } from './shared';
@@ -406,6 +407,19 @@ export class Router {
   private createMiddlewares(): EndpointMiddleware[] {
     const result: EndpointMiddleware[] = this.middlewareClasses.map(Middleware => this.createMiddleware(Middleware));
     return result;
+  }
+}
+
+export class NotFoundMiddleware extends EndpointMiddleware {
+  constructor() {
+    super();
+    this.define(async (context, next) => {
+      await next();
+
+      if (!context.response.hasFlushedHeaders && !context.response.statusCode) {
+        context.response.statusCode = httpStatusCodes.NOT_FOUND;
+      }
+    });
   }
 }
 

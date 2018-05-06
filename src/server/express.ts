@@ -86,10 +86,10 @@ export function toMiddleware(router: Router, options?: ToMiddlewareOptions): exp
 
       await executeNextHandler();
 
-      if (!context.response.hasFlushedHeaders && !context.response.statusCode) {
-        context.response.statusCode = httpStatusCodes.NOT_FOUND;
+      if (context.response.statusCode) {
+        context.response.flush();
+        res.end();
       }
-      context.response.flush();
 
     } catch (err) {
       log('ERROR: ', err);
@@ -97,9 +97,8 @@ export function toMiddleware(router: Router, options?: ToMiddlewareOptions): exp
         context.response.statusCode = httpStatusCodes.INTERNAL_SERVER_ERROR;
         context.response.body = err && err.message;
         context.response.flush();
+        res.end();
       }
-    } finally {
-      res.end();
     }
   };
 
