@@ -7,32 +7,29 @@ describe('shared', () => {
   describe('EndpointDefinition', () => {
     it('should return an endpoint definition with the specified method and path', () => {
       const method = 'POST';
-      const path = '/products';
-      const addProduct = new EndpointDefinition<Empty, Product, Product>(method, path);
+      const addProduct = new EndpointDefinition<Empty, Product, Product>(method, path => path.literal('products'));
 
       expect(addProduct).to.not.be.null;
       expect(addProduct).to.have.property('method', method);
-      expect(addProduct).to.have.property('path', path);
+      expect(addProduct).to.have.property('path', '/products');
     });
 
     it('should default a GET method if method is not specified', () => {
-      const path = '/products';
-      const getProducts = new EndpointDefinition<Empty, Empty, Product[]>(path);
+      const getProducts = new EndpointDefinition<Empty, Empty, Product[]>(path => path.literal('products'));
 
       expect(getProducts).to.not.be.null;
       expect(getProducts).to.have.property('method', 'GET');
-      expect(getProducts).to.have.property('path', path);
+      expect(getProducts).to.have.property('path', '/products');
     });
 
     it('should error if method is not supported', () => {
       const method = 'SQUANCH';
-      const path = '/products';
-      expect(() => new EndpointDefinition<Empty, Empty, Product[]>(method as any, path)).to.throw('Unsupported HTTP method: SQUANCH');
+      expect(() => new EndpointDefinition<Empty, Empty, Product[]>(method as any, path => path.literal('products'))).to.throw('Unsupported HTTP method: SQUANCH');
     });
 
     it('should error when trying to reference typeInfo', () => {
       const path = '/products';
-      const getProducts = new EndpointDefinition<Empty, Empty, Product[]>(path);
+      const getProducts = new EndpointDefinition<Empty, Empty, Product[]>(path => path.literal('products'));
       expect(() => getProducts.typeInfo()).to.throw(
         'Do not evaluate EndpointDefinition.typeInfo(). It is reserved for internal use only.'
       );
@@ -55,10 +52,9 @@ describe('shared', () => {
       }
 
       const method = 'GET';
-      const path = '/clients/:id';
       const getClient = new EndpointDefinition<GetClientRequestParams, Empty, Client>({
         method,
-        path,
+        path: path => path.literal('clients').param('id'),
         requestParams: GetClientRequestParams,
         requestBody: Empty,
         responseBody: Client
@@ -66,7 +62,7 @@ describe('shared', () => {
 
       expect(getClient).to.not.be.null;
       expect(getClient).to.have.property('method', method);
-      expect(getClient).to.have.property('path', path);
+      expect(getClient).to.have.property('path', '/clients/:id');
       expect(getClient.classInfo).to.be.an('object');
       expect(getClient.classInfo)
         .to.have.property('request')
@@ -96,9 +92,8 @@ describe('shared', () => {
 
       const arrayOfClient = arrayOf(Client);
 
-      const path = '/clients';
       const getClients = new EndpointDefinition({
-        path,
+        path: path => path.literal('clients'),
         requestParams: GetClientsParams,
         requestBody: Empty,
         responseBody: arrayOfClient
@@ -106,7 +101,7 @@ describe('shared', () => {
 
       expect(getClients).to.not.be.null;
       expect(getClients).to.have.property('method', 'GET');
-      expect(getClients).to.have.property('path', path);
+      expect(getClients).to.have.property('path', '/clients');
       expect(getClients.classInfo).to.be.an('object');
       expect(getClients.classInfo)
         .to.have.property('request')
@@ -159,4 +154,5 @@ describe('shared', () => {
       expect(isArrayOf(ArrayOfUser)).to.be.false;
     });
   });
+
 });

@@ -2,6 +2,7 @@ import { If } from 'typelevel-ts';
 
 import { argumentsToArray } from './shared/functions';
 import { cleanseHttpMethod, HttpMethod, HttpMethods } from './shared/http';
+import { createPath, PathBuildingFunction } from './shared/pathBuilder';
 import { PathHelper, PathHelperParseMatch } from './shared/pathHelper';
 
 export interface Constructor<T> {
@@ -89,7 +90,7 @@ export interface BaseEndpointDefinitionOptions<
   > {
 
   method?: string;
-  path: string;
+  path: PathBuildingFunction<TRequestParams>;
 
 }
 
@@ -198,8 +199,8 @@ export class EndpointDefinition<
   // tslint:enable:ban-types
   private pathHelper: PathHelper;
 
-  constructor(path: string);
-  constructor(method: HttpMethod, path: string);
+  constructor(buildPath: PathBuildingFunction<TRequestParams>);
+  constructor(method: HttpMethod, buildPath: PathBuildingFunction<TRequestParams>);
   // tslint:disable-next-line:unified-signatures
   constructor(options: EndpointDefinitionOptions<TRequestParams, TRequestBody, TResponseBody>);
 
@@ -212,7 +213,7 @@ export class EndpointDefinition<
           const options: EndpointDefinitionOptions<TRequestParams, TRequestBody, TResponseBody> = arguments[0];
 
           this.method = cleanseHttpMethod(options.method || DEFAULT_METHOD);
-          this.path = options.path;
+          this.path = createPath(options.path);
           this.pathHelper = new PathHelper(this.path);
 
           if (isClassBasedEndpointDefinitionOptions(options)) {
@@ -222,9 +223,9 @@ export class EndpointDefinition<
               options.responseBody
             );
           }
-        } else if (typeof arguments[0] === 'string') {
+        } else if (typeof arguments[0] === 'function') {
           this.method = DEFAULT_METHOD;
-          this.path = arguments[0];
+          this.path = createPath(arguments[0]);
           this.pathHelper = new PathHelper(this.path);
         } else {
           throw new EndpointDefinitionInvalidConstructorArgs(arguments);
@@ -234,7 +235,7 @@ export class EndpointDefinition<
 
       case 2: {
         this.method = cleanseHttpMethod(arguments[0]);
-        this.path = arguments[1];
+        this.path = createPath(arguments[1]);
         this.pathHelper = new PathHelper(this.path);
         break;
       }
