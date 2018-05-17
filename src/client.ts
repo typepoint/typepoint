@@ -1,4 +1,4 @@
-import axios, { AxiosRequestConfig } from 'axios';
+import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 import { If } from 'typelevel-ts';
 
 // import './shared';
@@ -23,7 +23,7 @@ export interface StrongPointClientResponse<TBody> {
 
 export interface StrongPointClientOptions {
   server?: string;
-  axios?: typeof axios;
+  axios?: AxiosInstance;
 }
 
 export type EndpointDefinitionWithNoParamsOrBody = EndpointDefinition<Empty, Empty, any>;
@@ -59,11 +59,11 @@ export type RequestFunction<TEndpointDefinition extends EndpointDefinition<any, 
 );
 
 class StrongPointClient {
-  private readonly axios: typeof axios;
+  protected readonly axios: AxiosInstance;
   private readonly server: string;
 
   constructor(options?: StrongPointClientOptions) {
-    this.axios = (options && options.axios) || axios;
+    this.axios = (options && options.axios) || axios.create();
     this.server = (options && options.server) || '';
   }
 
