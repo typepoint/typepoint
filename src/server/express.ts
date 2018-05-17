@@ -89,6 +89,8 @@ export function toMiddleware(router: Router, options?: ToMiddlewareOptions): exp
       if (context.response.statusCode) {
         context.response.flush();
         res.end();
+      } else {
+        next();
       }
 
     } catch (err) {
