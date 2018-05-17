@@ -10,7 +10,7 @@ import 'reflect-metadata';
 import * as sinon from 'sinon';
 import { ObjectOmit } from 'typelevel-ts';
 
-import StrongPointClient from '../../src/client';
+import { StrongPointClient } from '../../src/client';
 import { EndpointHandler, EndpointMiddleware, NotFoundMiddleware, Router } from '../../src/server';
 import { toMiddleware } from '../../src/server/express';
 import { Empty } from '../../src/shared';

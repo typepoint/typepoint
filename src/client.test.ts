@@ -5,7 +5,7 @@ import * as sinon from 'sinon';
 import { Product } from '../tests/fixtures';
 import * as fixtures from '../tests/fixtures';
 import partialMockOf from '../tests/infrastructure/mockOf';
-import StrongPointClient from './client';
+import { StrongPointClient } from './client';
 import { Empty, EndpointDefinition } from './shared';
 
 describe('client', () => {

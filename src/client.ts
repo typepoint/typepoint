@@ -58,7 +58,7 @@ export type RequestFunction<TEndpointDefinition extends EndpointDefinition<any, 
   RequestWithParamsOrBody<TEndpointDefinition>
 );
 
-class StrongPointClient {
+export class StrongPointClient {
   protected readonly axios: AxiosInstance;
   private readonly server: string;
 
@@ -112,5 +112,3 @@ class StrongPointClient {
       });
   }
 }
-
-export default StrongPointClient;
