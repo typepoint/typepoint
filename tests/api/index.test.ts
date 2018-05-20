@@ -230,6 +230,52 @@ describe('api/Sample Server', () => {
       .that.deep.equals(expectation);
   });
 
+  it('should not update todo when todo is invalid', async () => {
+    const valuesToUpdate = {
+      title: '',
+      isCompleted: false
+    };
+
+    let error: any;
+    try {
+      await client.fetch(updateTodo, {
+        params: { id: '1' },
+        body: valuesToUpdate
+      });
+    } catch (err) {
+      error = err;
+    }
+
+    if (!error) {
+      assert.fail(undefined, undefined, 'Expected fetch to reject with a validation error');
+    }
+
+    expect(error)
+      .to.have.property('response')
+      .that.has.property('status', 400);
+
+    expect(error)
+      .to.have.property('response')
+      .that.has.property('data')
+      .that.has.property('name', 'ValidationError');
+
+    expect(error)
+      .to.have.property('response')
+      .that.has.property('data')
+      .that.has.property('details')
+      .that.has.property('0')
+      .that.has.property('path', 'title');
+
+    expect(error)
+      .to.have.property('response')
+      .that.has.property('data')
+      .that.has.property('details')
+      .that.has.property('0')
+      .that.contains({
+        message: '"title" is not allowed to be empty'
+      });
+  });
+
   it('should delete todo', async () => {
     const id = '2';
 

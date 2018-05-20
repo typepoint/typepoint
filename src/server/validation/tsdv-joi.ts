@@ -2,21 +2,30 @@
 
 import * as joi from 'tsdv-joi';
 
-import { ValidationResult } from 'tsdv-joi/dist/ValidationResult';
-import { ObjectWithStringProps, ValidateAndTransformFunction } from '../../server';
+import { ValidationResult } from 'tsdv-joi/ValidationResult';
+import { ObjectWithStringProps, ValidateAndTransformFunction, ValidateAndTransformFunctionResult } from '../../server';
 import { Constructor, isArrayOf } from '../../shared';
 
 export const validateAndTransform: ValidateAndTransformFunction =
   // tslint:disable-next-line:ban-types
-  <T extends Object>(input: ObjectWithStringProps<T>, Class?: Constructor<T>): T => {
+  <T extends Object>(
+    input: ObjectWithStringProps<T>,
+    Class?: Constructor<T>
+  ): ValidateAndTransformFunctionResult<T> => {
     if (Class) {
       const validator = new joi.Validator();
 
-      const checkValidationResult = (validationResult: ValidationResult<any>): T => {
+      const checkValidationResult = (
+        validationResult: ValidationResult<any>
+      ): ValidateAndTransformFunctionResult<T> => {
         if (validationResult.error) {
-          throw validationResult.error;
+          return {
+            validationError: validationResult.error
+          };
         }
-        return validationResult.value;
+        return {
+          value: validationResult.value
+        };
       };
 
       if (isArrayOf(Class)) {
@@ -32,5 +41,7 @@ export const validateAndTransform: ValidateAndTransformFunction =
       }
     }
 
-    return input as any as T;
+    return {
+      value: input as any as T
+    };
   };

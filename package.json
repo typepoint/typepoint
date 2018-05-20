@@ -118,7 +118,7 @@
     "http-status-codes": "1.3.0",
     "joi": "10.6.0",
     "reflect-metadata": "0.1.12",
-    "tsdv-joi": "0.0.8",
+    "tsdv-joi": "0.0.10",
     "typed-tuple": "1.0.1",
     "typelevel-ts": "0.2.3"
   }

@@ -266,11 +266,16 @@ export interface RouterIoc {
 
 export type ObjectWithStringProps<T> = { [K in keyof T]: string };
 
+export interface ValidateAndTransformFunctionResult<TValue> {
+  value?: TValue;
+  validationError?: Error | string | any;
+}
+
 // tslint:disable-next-line:ban-types
 export type ValidateAndTransformFunction = <T extends Object>(
   input: ObjectWithStringProps<T>,
   Class?: Constructor<T>
-) => T;
+) => ValidateAndTransformFunctionResult<T>;
 
 export interface RouterOptions {
   handlers?: EndpointHandlerClass[];

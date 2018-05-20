@@ -69,10 +69,25 @@ export function toMiddleware(router: Router, options?: ToMiddlewareOptions): exp
             const classInfo = definition && definition.classInfo;
 
             const requestParamsClass = classInfo && classInfo.request.params;
-            context.request.params = router.validateAndTransform(context.request.params, requestParamsClass);
+            if (requestParamsClass) {
+              const validationResult = router.validateAndTransform(context.request.params, requestParamsClass);
+              if (validationResult.validationError) {
+                context.response.statusCode = httpStatusCodes.BAD_REQUEST;
+                context.response.body = validationResult.validationError;
+                return;
+              }
+              context.request.params = validationResult.value;
+            }
 
             const requestBodyClass = classInfo && classInfo.request.body;
-            context.request.body = router.validateAndTransform(originalRequestBody, requestBodyClass);
+            if (requestBodyClass) {
+              const validationResult = router.validateAndTransform(originalRequestBody, requestBodyClass);
+              if (validationResult.validationError) {
+                context.response.statusCode = httpStatusCodes.BAD_REQUEST;
+                context.response.body = validationResult.validationError;
+                return;
+              }
+            }
           }
 
           const type = handlerMatch.type;

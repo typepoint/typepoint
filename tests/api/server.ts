@@ -7,7 +7,7 @@ import 'reflect-metadata';
 
 import { NotFoundMiddleware, Router } from '../../src/server';
 import { toMiddleware } from '../../src/server/express';
-
+import { validateAndTransform } from '../../src/server/validation/tsdv-joi';
 import { Constructor } from '../../src/shared';
 import { CreateTodoHandler, DeleteTodoHandler, GetTodoHandler, GetTodosHandler, UpdateTodoHandler } from './handlers';
 import { ResponseTimeMiddleware } from './middleware';
@@ -43,7 +43,8 @@ export class Server {
         RequestLoggerMiddleware,
         ResponseTimeMiddleware,
         NotFoundMiddleware
-      ]
+      ],
+      validateAndTransform
     });
     const middleware = toMiddleware(router, {
       // log: (...args: any[]) => console.log(...args);
