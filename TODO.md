@@ -5,7 +5,7 @@
 - ✔ Package so that paths are optimal for consuming before publishing
 - □ Add documentation to README
 - □ Add proper code coverage
-- □ Update package.json with correct github repository details
+- ✔ Update package.json with correct github repository details
 - □ Split express middleware into separate repository and package
 - □ Split joi validation into separate repository and package
 
@@ -30,18 +30,18 @@
 - ✔ Ability to not handle route in a handler
 - ✔ Read request headers
 - ✔ Write response headers
-- □ Read request cookies
-- □ Write response cookies
+- ✔ Read request cookies
+- ✔ Write response cookies
 - ✔ Rendering views not required
 
 ## Router
 - ✔ Support for middleware
 - □ Ability to extend context with extra metadata
 - □ Nested routers?
-- □ Should gracefully handle uncaught server errors
-- □ Should allow providing your own error handler
+- ✔ Should gracefully handle uncaught server errors
+- ✔ Should allow providing your own error handler
 
 ## Client
 - ✔ Ability to call endpoint by providing definition and be forced to provide required params, body, etc
 - ✔ Not have to pass params or body in options if they are not required
-- □ Fetch failure should return error with response of StrongPointClientResponse
+- ✔ Fetch failure should return error with response of StrongPointClientResponse
