@@ -124,6 +124,11 @@ client.fetch(GetTodo, {
 });
 ```
 
+## Note about breaking changes
+Currently StrongPoint is _pre_ v1.0.0, thus breaking changes may be introduced in minor versions instead of major versions. Patch versions will continue to just include bug fixes and other non breaking changes. Once StrongPoint has reached 1.0.0 it will follow strict semantic versioning.
+
+-------------------------------------------------------
+
 Got an problem or suggestion? Submit an [issue](https://github.com/strongpoint-ts/strongpoint/issues)!
 
 Want to contribute? Fork the [repository](https://github.com/strongpoint-ts/strongpoint) and submit a pull request! 😸
