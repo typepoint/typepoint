@@ -58,6 +58,21 @@ export type RequestFunction<TEndpointDefinition extends EndpointDefinition<any, 
   RequestWithParamsOrBody<TEndpointDefinition>
 );
 
+export class StrongPointClientResponseError extends Error {
+
+  statusCode: number;
+  statusText: string;
+
+  constructor(
+    message: string,
+    public response: StrongPointClientResponse<any>
+  ) {
+    super(message);
+    this.statusCode = response.statusCode;
+    this.statusText = response.statusText;
+  }
+}
+
 export class StrongPointClient {
   protected readonly axios: AxiosInstance;
   private readonly server: string;
@@ -99,16 +114,33 @@ export class StrongPointClient {
     }
 
     return this.axios.request(requestOptions)
-      .then(response => {
-        const result: StrongPointClientResponse<ReturnType<TEndpointDefinition['typeInfo']>['response']['body']> = {
-          statusCode: response.status,
-          statusText: response.statusText,
-          header: name => response.headers[name],
-          headers: response.headers,
-          body: response.data
+      .then(res => {
+        const response: StrongPointClientResponse<ReturnType<TEndpointDefinition['typeInfo']>['response']['body']> = {
+          statusCode: res.status,
+          statusText: res.statusText,
+          header: name => res.headers[name],
+          headers: res.headers,
+          body: res.data
         };
 
-        return result;
+        return response;
+      }, err => {
+        const res = err.response;
+
+        const response: StrongPointClientResponse<ReturnType<TEndpointDefinition['typeInfo']>['response']['body']> = {
+          statusCode: res.status,
+          statusText: res.statusText,
+          header: name => res.headers[name],
+          headers: res.headers,
+          body: res.data
+        };
+
+        const error = new StrongPointClientResponseError(
+          err.message || `${ err }`,
+          response
+        );
+
+        throw error;
       });
   }
 }

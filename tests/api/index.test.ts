@@ -156,7 +156,7 @@ describe('api/Sample Server', () => {
     }, err => {
       expect(err)
         .to.have.property('response')
-        .to.have.property('status', httpStatusCodes.NOT_FOUND);
+        .to.have.property('statusCode', httpStatusCodes.NOT_FOUND);
 
       expect(err)
         .to.have.property('response')
@@ -164,7 +164,7 @@ describe('api/Sample Server', () => {
 
       expect(err)
         .to.have.property('response')
-        .to.not.have.property('body');
+        .to.have.property('body', '');
     });
   });
 
@@ -247,28 +247,28 @@ describe('api/Sample Server', () => {
     }
 
     if (!error) {
-      assert.fail(undefined, undefined, 'Expected fetch to reject with a validation error');
+      assert.fail('Expected fetch to reject with a validation error');
     }
 
     expect(error)
       .to.have.property('response')
-      .that.has.property('status', 400);
+      .that.has.property('statusCode', 400);
 
     expect(error)
       .to.have.property('response')
-      .that.has.property('data')
+      .that.has.property('body')
       .that.has.property('name', 'ValidationError');
 
     expect(error)
       .to.have.property('response')
-      .that.has.property('data')
+      .that.has.property('body')
       .that.has.property('details')
       .that.has.property('0')
       .that.has.property('path', 'title');
 
     expect(error)
       .to.have.property('response')
-      .that.has.property('data')
+      .that.has.property('body')
       .that.has.property('details')
       .that.has.property('0')
       .that.contains({
