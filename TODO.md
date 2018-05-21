@@ -37,9 +37,9 @@
 ## Router
 - ✔ Support for middleware
 - ✔ Ability to extend context with extra metadata
-- □ Nested routers?
 - ✔ Should gracefully handle uncaught server errors
 - ✔ Should allow providing your own error handler
+- □ Should not get warning in console regarding unhandled promise when middleware or handler throws
 
 ## Client
 - ✔ Ability to call endpoint by providing definition and be forced to provide required params, body, etc
