@@ -109,7 +109,15 @@ export interface Response<TResponseBody> {
   headers(): ResponseHeaders;
 }
 
+// Use Interface Merging to add your own custom fields to the `EndpointContextCustomMetadata` declaration
+// and implement and use your own middleware to actually add the fields to `context.meta`
+
+// tslint:disable-next-line:no-empty-interface
+export interface EndpointContextCustomMetadata {
+}
+
 export interface EndpointContext<TRequestParams, TRequestBody, TResponseBody> {
+  meta: EndpointContextCustomMetadata;
   request: Request<TRequestParams, TRequestBody>;
   response: Response<TResponseBody>;
 }

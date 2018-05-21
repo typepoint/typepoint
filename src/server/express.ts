@@ -9,6 +9,7 @@ import {
   IEndpointHandler, Request, Response,
   Router, UnprotectedRouter
 } from '../server';
+import { EndpointContextCustomMetadata } from '../server';
 import { cleanseHttpMethod } from '../shared/http';
 import { combineMiddlewares } from './express/middleware';
 import { StrongPointExpressRequest } from './express/strongPointExpressRequest';
@@ -35,9 +36,10 @@ export function toMiddleware(router: Router, options?: ToMiddlewareOptions): exp
     const originalRequestBody = clone(req.body);
 
     try {
+      const meta: EndpointContextCustomMetadata = {};
       const request = new StrongPointExpressRequest(req);
       const response = new StrongPointExpressResponse(res);
-      context = { request, response };
+      context = { meta, request, response };
     } catch (err) {
       log('Error constructing context: ', err);
       res.statusCode = httpStatusCodes.INTERNAL_SERVER_ERROR;

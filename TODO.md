@@ -36,7 +36,7 @@
 
 ## Router
 - ✔ Support for middleware
-- □ Ability to extend context with extra metadata
+- ✔ Ability to extend context with extra metadata
 - □ Nested routers?
 - ✔ Should gracefully handle uncaught server errors
 - ✔ Should allow providing your own error handler
