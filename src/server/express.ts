@@ -107,7 +107,7 @@ export function toMiddleware(router: Router, options?: ToMiddlewareOptions): exp
         context.response.flush();
         res.end();
       } else {
-        next();
+        await next();
       }
 
     } catch (err) {
