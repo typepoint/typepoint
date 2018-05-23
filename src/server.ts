@@ -183,8 +183,8 @@ export abstract class EndpointHandler implements IEndpointHandler {
     return match;
   }
 
-  handle(context: EndpointContext<any, any, any>, next: () => Promise<void>): Promise<void> | void {
-    return this.handler(context, next);
+  async handle(context: EndpointContext<any, any, any>, next: () => Promise<void>): Promise<void> {
+    return await this.handler(context, next);
   }
 
   protected define<TEndpointDefinition extends EndpointDefinition<any, any, any>>(
