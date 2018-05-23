@@ -90,9 +90,11 @@ export interface SetCookieOptions {
   sameSite?: boolean | string;
 }
 
+export type ResponseContentType = 'application/json' | string;
+
 export interface Response<TResponseBody> {
   statusCode: number | undefined;
-
+  contentType: ResponseContentType;
   body: TResponseBody | undefined;
 
   readonly hasFlushedHeaders: boolean;

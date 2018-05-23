@@ -1,9 +1,13 @@
 import { Response as ExpressResponse } from 'express';
 import * as httpStatusCodes from 'http-status-codes';
 
-import { HeadersAlreadySent, Response as StrongPointResponse, ResponseHeaders, SetCookieOptions } from '../../server';
+import {
+  HeadersAlreadySent, Response as StrongPointResponse,
+  ResponseContentType, ResponseHeaders, SetCookieOptions
+} from '../../server';
 
 export class StrongPointExpressResponse<TResponseBody> implements StrongPointResponse<TResponseBody> {
+
   get hasFlushedHeaders(): boolean {
     return this.response.headersSent;
   }
@@ -26,6 +30,20 @@ export class StrongPointExpressResponse<TResponseBody> implements StrongPointRes
     }
   }
 
+  get contentType(): ResponseContentType {
+    return this.innerContentType;
+  }
+
+  set contentType(value: ResponseContentType) {
+    this.ensureHeadersNotSent();
+
+    this.innerContentType = value;
+
+    if (value) {
+      this.response.contentType(value);
+    }
+  }
+
   get body(): TResponseBody | undefined {
     return this.innerBody;
   }
@@ -44,6 +62,7 @@ export class StrongPointExpressResponse<TResponseBody> implements StrongPointRes
   private innerStatusText: string | undefined;
   private innerBody: TResponseBody | undefined;
   private innerHasFlushedBody: boolean = false;
+  private innerContentType: ResponseContentType = 'application/json';
 
   constructor(private response: ExpressResponse) {
   }
@@ -58,7 +77,11 @@ export class StrongPointExpressResponse<TResponseBody> implements StrongPointRes
     if (this.body === undefined) {
       this.response.end();
     } else {
-      this.response.json(this.body);
+      if ((this.contentType || '').toLowerCase() === 'application/json') {
+        this.response.json(this.body);
+      } else {
+        this.response.send(this.body);
+      }
     }
     this.innerHasFlushedBody = true;
   }

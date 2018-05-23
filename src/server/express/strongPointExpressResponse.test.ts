@@ -30,10 +30,12 @@ describe('server/express/strongPointExpressResponse', () => {
 
     beforeEach(() => {
       expressResponse = partialMockOf<ExpressResponse>({
-        cookie: sinon.spy(),
         clearCookie: sinon.spy(),
+        cookie: sinon.spy(),
+        contentType: sinon.spy(),
         flushHeaders: sinon.spy(),
         headersSent: false,
+        json: sinon.spy(),
         sendStatus: sinon.spy(),
         send: sinon.spy(),
         getHeader: sinon.stub().returns('some header value'),
@@ -72,6 +74,25 @@ describe('server/express/strongPointExpressResponse', () => {
         }
       };
       expect(response.statusCode).to.equal(httpStatusCodes.NOT_FOUND);
+    });
+
+    it(`should have a contentType of 'application/json' by default`, () => {
+      expect(response.contentType).to.equal('application/json');
+    });
+
+    it(`should send body as json when content-type is 'application/json'`, () => {
+      response.body = { body: products[0] };
+      response.flush();
+      expect(expressResponse.json).to.have.been.calledWith({ body: products[0] });
+    });
+
+    it(`should not send body as json when content-type is not 'application/json'`, () => {
+      const html = '<html><body>Hello World</body></html>';
+      response.contentType = 'text/html';
+      response.body = html as any;
+      response.flush();
+      expect(expressResponse.json).to.not.have.been.called;
+      expect(expressResponse.send).to.have.been.called;
     });
 
     it('should send headers when flushHeaders is called for first time', () => {
