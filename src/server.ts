@@ -241,11 +241,11 @@ export class EndpointMiddleware implements IEndpointHandler {
     return this.constructor.name;
   }
 
-  handle(context: EndpointContext<any, any, any>, next: () => Promise<void>): void | Promise<void> {
-    this.handler(context, next);
+  async handle(context: EndpointContext<any, any, any>, next: () => Promise<void>): Promise<void> {
+    await this.handler(context, next);
   }
 
-  define(handler: EndpointMiddlewareHandlerFunction) {
+  protected define(handler: EndpointMiddlewareHandlerFunction) {
     this.handler = handler;
   }
 }
