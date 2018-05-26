@@ -5,14 +5,16 @@ import * as express from 'express';
 import * as httpStatusCodes from 'http-status-codes';
 
 import { ValidationResult } from 'tsdv-joi/ValidationResult';
+import { EndpointContextCustomMetadata } from '../server';
 import {
   EndpointContext, EndpointHandler,
   IEndpointHandler, Request, Response,
   Router, UnprotectedRouter
 } from '../server';
-import { EndpointContextCustomMetadata } from '../server';
 import { EndpointDefinitionClassInfo } from '../shared';
 import { cleanseHttpMethod } from '../shared/http';
+import { Logger } from '../shared/logger';
+import { NoopLogger } from '../shared/logger';
 import { combineMiddlewares } from './express/middleware';
 import { StrongPointExpressRequest } from './express/strongPointExpressRequest';
 import { StrongPointExpressResponse } from './express/strongPointExpressResponse';
@@ -20,7 +22,7 @@ import { HandlerMatch, HandlerMatchIterator } from './middlewareHelper';
 
 export interface ToMiddlewareOptions {
   expressMiddlewares?: express.RequestHandler[];
-  log?: (...args: any[]) => void;
+  logger?: Logger;
 }
 
 interface ValidateAndTransformOptions {
@@ -116,10 +118,7 @@ function trySendInternalServerError(res: express.Response, err: Error | string |
 
 export function toMiddleware(router: Router, options?: ToMiddlewareOptions): express.RequestHandler {
 
-  // tslint:disable-next-line:no-empty
-  const noop = () => { };
-
-  const log = (options && options.log) || noop;
+  const logger = (options && options.logger) || new NoopLogger();
 
   const handlersMiddleware: express.RequestHandler = async (
     req: express.Request, res: express.Response, next: express.NextFunction
@@ -134,7 +133,7 @@ export function toMiddleware(router: Router, options?: ToMiddlewareOptions): exp
       const response = new StrongPointExpressResponse(res);
       context = { meta, request, response };
     } catch (err) {
-      log('Error constructing context: ', err);
+      logger.error('Error constructing context: ', err);
       trySendInternalServerError(res, err);
     }
 
@@ -153,7 +152,7 @@ export function toMiddleware(router: Router, options?: ToMiddlewareOptions): exp
         url: req.url
       });
 
-      const executeNextHandler = async () => {
+      const executeNextHandler = async (): Promise<void> => {
         const handlerMatch = handlerMatchIterator.getNextMatch();
         if (context && handlerMatch) {
           context.request.params = handlerMatch.parsedUrl.params;
@@ -163,7 +162,7 @@ export function toMiddleware(router: Router, options?: ToMiddlewareOptions): exp
           }
 
           if (handlerMatch.handler.name) {
-            log(`Executing ${ handlerMatch.type }: ${ handlerMatch.handler.name }`);
+            logger.debug(`Executing ${ handlerMatch.type }: ${ handlerMatch.handler.name }`);
           }
 
           await handlerMatch.handler.handle(context, executeNextHandler);
@@ -180,7 +179,7 @@ export function toMiddleware(router: Router, options?: ToMiddlewareOptions): exp
       }
 
     } catch (err) {
-      log('ERROR: ', err);
+      logger.error(err);
       trySendInternalServerError(res, err);
     }
   };
