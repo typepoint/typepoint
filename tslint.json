@@ -24,6 +24,7 @@
       true,
       "no-public"
     ],
+    "no-floating-promises": true,
     "no-irregular-whitespace": true,
     "prefer-const": true,
     "quotemark": [
