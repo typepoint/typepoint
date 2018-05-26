@@ -90,7 +90,7 @@ describe('api/Sample Server', () => {
     const port = await getPort();
 
     server = new Server(port, ioc);
-    server.start();
+    await server.start();
 
     client = new StrongPointClient({
       server: server.serverAddress
