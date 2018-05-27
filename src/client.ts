@@ -2,7 +2,7 @@ import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 import { If } from 'typelevel-ts';
 
 // import './shared';
-import { Empty, EndpointDefinition, IsEmptyFieldName } from './shared';
+import { Empty, EndpointDefinition, IsEmptyFieldName, NormalisedArrayOf } from './shared';
 
 declare global {
   interface Object {
@@ -14,7 +14,7 @@ declare global {
 export type IfEmpty<TValue extends Object | Empty, TThen, TElse> = If<TValue[typeof IsEmptyFieldName], TThen, TElse>;
 
 export interface StrongPointClientResponse<TBody> {
-  body: TBody;
+  body: NormalisedArrayOf<TBody>;
   statusCode: number;
   statusText: string;
   headers: { [name: string]: string | undefined };
