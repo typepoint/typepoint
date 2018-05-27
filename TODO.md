@@ -22,6 +22,7 @@
   - ✔ Validation of request input
   - ✔ Coercion of request input to correct types
   - □ Allow decoration based authorization
+  - □ Add pattern matching in path params e.g. path => path.literal('todo').number('id')
 
 ## Endpoint Handlers
 - ✔ Ability to have services you need injected for testability
