@@ -1,3 +1,4 @@
+export { GetCompletedTodosHandler } from './todos';
 export { GetTodoHandler } from './todos';
 export { GetTodosHandler } from './todos';
 export { CreateTodoHandler } from './todos';

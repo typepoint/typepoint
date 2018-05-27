@@ -6,7 +6,6 @@ import { getTodos } from '../../definitions';
 import { TodoService } from '../../services/todoService';
 
 @injectable()
-
 export class GetTodosHandler extends EndpointHandler {
   constructor(private todoService: TodoService) {
     super();

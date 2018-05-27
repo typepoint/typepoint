@@ -9,7 +9,10 @@ import { NotFoundMiddleware, Router } from '../../src/server';
 import { toMiddleware } from '../../src/server/express';
 import { validateAndTransform } from '../../src/server/validation/tsdv-joi';
 import { Constructor } from '../../src/shared';
-import { CreateTodoHandler, DeleteTodoHandler, GetTodoHandler, GetTodosHandler, UpdateTodoHandler } from './handlers';
+import {
+  CreateTodoHandler, DeleteTodoHandler, GetCompletedTodosHandler,
+  GetTodoHandler, GetTodosHandler, UpdateTodoHandler
+} from './handlers';
 import { ResponseTimeMiddleware } from './middleware';
 import { RequestLoggerMiddleware } from './middleware/requestLogger';
 
@@ -30,6 +33,7 @@ export class Server {
 
     const router = new Router({
       handlers: [
+        GetCompletedTodosHandler,
         GetTodoHandler,
         GetTodosHandler,
         CreateTodoHandler,
@@ -46,8 +50,11 @@ export class Server {
       ],
       validateAndTransform
     });
+
+    const log = console.log.bind(console);
+
     const middleware = toMiddleware(router, {
-      // log: (...args: any[]) => console.log(...args);
+      // logger: { log, info: log, warn: log, error: log, debug: log }
     });
 
     const app = express();

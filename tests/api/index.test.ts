@@ -17,11 +17,12 @@ import { Empty } from '../../src/shared';
 
 import partialMockOf from '../../tests/infrastructure/mockOf';
 import { DataStore } from './db/dataStore';
-import { createTodo, deleteTodo, getTodo, getTodos, updateTodo } from './definitions';
+import { createTodo, deleteTodo, getCompletedTodos, getTodo, getTodos, updateTodo } from './definitions';
 import {
   CreateTodoHandler, DeleteTodoHandler, GetTodoHandler,
   GetTodosHandler, UpdateTodoHandler
 } from './handlers';
+import { GetCompletedTodosHandler } from './handlers/todos/listCompleted';
 import { RequestLoggerMiddleware } from './middleware/requestLogger';
 import { ResponseTimeMiddleware } from './middleware/responseTime';
 import { Todo } from './models/todo';
@@ -83,6 +84,7 @@ describe('api/Sample Server', () => {
     ioc.bind(TodoService).toSelf();
     ioc.bind(CreateTodoHandler).toSelf();
     ioc.bind(DeleteTodoHandler).toSelf();
+    ioc.bind(GetCompletedTodosHandler).toSelf();
     ioc.bind(GetTodoHandler).toSelf();
     ioc.bind(GetTodosHandler).toSelf();
     ioc.bind(UpdateTodoHandler).toSelf();
@@ -106,6 +108,23 @@ describe('api/Sample Server', () => {
     const expectation = clone(todos);
 
     const response = await client.fetch(getTodos);
+
+    expect(response)
+      .to.have.property('statusCode')
+      .that.deep.equals(200);
+
+    expect(response)
+      .to.have.property('statusText')
+      .that.deep.equals('OK');
+
+    expect(response)
+      .to.have.property('body')
+      .that.deep.equals(expectation);
+  });
+
+  it('should get list of completed todos', async () => {
+    const expectation = clone(todos).filter(todo => todo.isCompleted);
+    const response = await client.fetch(getCompletedTodos);
 
     expect(response)
       .to.have.property('statusCode')

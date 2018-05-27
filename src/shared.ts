@@ -105,7 +105,6 @@ export interface ClassBasedEndpointDefinitionOptions<
   requestParams: Constructor<TRequestParams>;
   requestBody: Constructor<TRequestBody>;
   responseBody: Constructor<TResponseBody>;
-
 }
 
 export type EndpointDefinitionOptions<
