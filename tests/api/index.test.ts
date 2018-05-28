@@ -10,7 +10,7 @@ import 'reflect-metadata';
 import * as sinon from 'sinon';
 import { ObjectOmit } from 'typelevel-ts';
 
-import { StrongPointClient } from '../../src/client';
+import { TypePointClient } from '../../src/client';
 import { EndpointHandler, EndpointMiddleware, NotFoundMiddleware, Router } from '../../src/server';
 import { toMiddleware } from '../../src/server/express';
 import { Empty } from '../../src/shared';
@@ -34,7 +34,7 @@ describe('api/Sample Server', () => {
   let todos: Todo[];
   let ioc: Container;
   let server: Server;
-  let client: StrongPointClient;
+  let client: TypePointClient;
   let loggerService: LoggerService;
 
   before(() => {
@@ -94,7 +94,7 @@ describe('api/Sample Server', () => {
     server = new Server(port, ioc);
     await server.start();
 
-    client = new StrongPointClient({
+    client = new TypePointClient({
       server: server.serverAddress
     });
   });

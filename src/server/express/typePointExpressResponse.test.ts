@@ -4,8 +4,8 @@ import * as httpStatusCodes from 'http-status-codes';
 import * as sinon from 'sinon';
 import 'sinon-chai';
 
-import { Response as StrongPointResponse, SetCookieOptions } from '../../server';
-import { StrongPointExpressResponse } from './strongPointExpressResponse';
+import { Response as TypePointResponse, SetCookieOptions } from '../../server';
+import { TypePointExpressResponse } from './typePointExpressResponse';
 
 import partialMockOf from '../../../tests/infrastructure/mockOf';
 import { Product } from '../../../tests/fixtures';
@@ -22,10 +22,10 @@ type ResponseBody<TBody> = (
   }
 );
 
-describe('server/express/strongPointExpressResponse', () => {
-  describe('StrongPointExpressResponse', () => {
+describe('server/express/typePointExpressResponse', () => {
+  describe('TypePointExpressResponse', () => {
     let expressResponse: ExpressResponse;
-    let response: StrongPointResponse<ResponseBody<Product>>;
+    let response: TypePointResponse<ResponseBody<Product>>;
     let products: Product[];
 
     beforeEach(() => {
@@ -47,12 +47,12 @@ describe('server/express/strongPointExpressResponse', () => {
         removeHeader: sinon.spy()
       });
 
-      response = new StrongPointExpressResponse(expressResponse);
+      response = new TypePointExpressResponse(expressResponse);
 
       products = fixtures.getProducts();
     });
 
-    it('should create a StrongPoint response from an Express response', () => {
+    it('should create a TypePoint response from an Express response', () => {
       expect(response).to.not.be.undefined;
     });
 

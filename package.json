@@ -1,6 +1,6 @@
 {
-  "name": "strongpoint",
-  "version": "0.7.1",
+  "name": "@typepoint/core",
+  "version": "0.8.0",
   "description": "Library for defining, serving and consuming strongly typed endpoints in TypeScript",
   "main": "index.js",
   "private": true,
@@ -30,9 +30,13 @@
   "types": "./index.d.ts",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/strongpoint-ts/strongpoint.git"
+    "url": "git+https://github.com/typepoint/typepoint.git"
   },
   "keywords": [
+    "typepoint",
+    "type-point",
+    "typedpoint",
+    "typed-point",
     "strongpoint",
     "strong-point",
     "strongly",
@@ -50,9 +54,9 @@
   "author": "Ben <codeandcats@gmail.com>",
   "license": "UNLICENSED",
   "bugs": {
-    "url": "https://github.com/strongpoint-ts/strongpoint/issues"
+    "url": "https://github.com/typepoint/typepoint/issues"
   },
-  "homepage": "https://github.com/strongpoint-ts/strongpoint#readme",
+  "homepage": "https://github.com/typepoint/typepoint#readme",
   "nyc": {
     "all": true,
     "exclude": [

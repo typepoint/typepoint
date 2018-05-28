@@ -1,4 +1,4 @@
-// TODO: Move this into separate package e.g. strongpoint-express
+// TODO: Move this into separate package e.g. @typepoint/express
 
 import * as clone from 'clone';
 import * as express from 'express';
@@ -16,8 +16,8 @@ import { cleanseHttpMethod } from '../shared/http';
 import { Logger } from '../shared/logger';
 import { NoopLogger } from '../shared/logger';
 import { combineMiddlewares } from './express/middleware';
-import { StrongPointExpressRequest } from './express/strongPointExpressRequest';
-import { StrongPointExpressResponse } from './express/strongPointExpressResponse';
+import { TypePointExpressRequest } from './express/typePointExpressRequest';
+import { TypePointExpressResponse } from './express/typePointExpressResponse';
 import { HandlerMatch, HandlerMatchIterator } from './middlewareHelper';
 
 export interface ToMiddlewareOptions {
@@ -129,8 +129,8 @@ export function toMiddleware(router: Router, options?: ToMiddlewareOptions): exp
 
     try {
       const meta: EndpointContextCustomMetadata = {};
-      const request = new StrongPointExpressRequest(req);
-      const response = new StrongPointExpressResponse(res);
+      const request = new TypePointExpressRequest(req);
+      const response = new TypePointExpressResponse(res);
       context = { meta, request, response };
     } catch (err) {
       logger.error('Error constructing context: ', err);

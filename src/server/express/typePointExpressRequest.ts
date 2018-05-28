@@ -1,9 +1,9 @@
 import { Request as ExpressRequest } from 'express';
 
-import { Request as StrongPointRequest, RequestCookies, RequestHeaders } from '../../server';
+import { Request as TypePointRequest, RequestCookies, RequestHeaders } from '../../server';
 import { cleanseHttpMethod, HttpMethod } from '../../shared/http';
 
-export class StrongPointExpressRequest<TParams, TBody> implements StrongPointRequest<TParams, TBody> {
+export class TypePointExpressRequest<TParams, TBody> implements TypePointRequest<TParams, TBody> {
   readonly url: string;
   readonly method: HttpMethod;
   params: TParams;

@@ -2,11 +2,11 @@ import { Response as ExpressResponse } from 'express';
 import * as httpStatusCodes from 'http-status-codes';
 
 import {
-  HeadersAlreadySent, Response as StrongPointResponse,
+  HeadersAlreadySent, Response as TypePointResponse,
   ResponseContentType, ResponseHeaders, SetCookieOptions
 } from '../../server';
 
-export class StrongPointExpressResponse<TResponseBody> implements StrongPointResponse<TResponseBody> {
+export class TypePointExpressResponse<TResponseBody> implements TypePointResponse<TResponseBody> {
 
   get hasFlushedHeaders(): boolean {
     return this.response.headersSent;

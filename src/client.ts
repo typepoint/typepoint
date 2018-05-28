@@ -13,7 +13,7 @@ declare global {
 // tslint:disable-next-line:ban-types
 export type IfEmpty<TValue extends Object | Empty, TThen, TElse> = If<TValue[typeof IsEmptyFieldName], TThen, TElse>;
 
-export interface StrongPointClientResponse<TBody> {
+export interface TypePointClientResponse<TBody> {
   body: NormalisedArrayOf<TBody>;
   statusCode: number;
   statusText: string;
@@ -21,7 +21,7 @@ export interface StrongPointClientResponse<TBody> {
   header(name: string): string | undefined;
 }
 
-export interface StrongPointClientOptions {
+export interface TypePointClientOptions {
   server?: string;
   axios?: AxiosInstance;
 }
@@ -34,7 +34,7 @@ export type FetchParamsOptions<TRequestParams extends Object> = IfEmpty<TRequest
 // tslint:disable-next-line:ban-types
 export type FetchBodyOptions<TRequestBody extends Object> = IfEmpty<TRequestBody, {}, { body: TRequestBody }>;
 
-export type StrongPointClientFetchOptions<TEndpointDefinition extends EndpointDefinition<any, any, any>> = (
+export type TypePointClientFetchOptions<TEndpointDefinition extends EndpointDefinition<any, any, any>> = (
   FetchParamsOptions<ReturnType<TEndpointDefinition['typeInfo']>['request']['params']> &
   FetchBodyOptions<ReturnType<TEndpointDefinition['typeInfo']>['request']['body']>
 );
@@ -42,15 +42,15 @@ export type StrongPointClientFetchOptions<TEndpointDefinition extends EndpointDe
 export type RequestWithEmptyParamsAndBody<TEndpointDefinition extends EndpointDefinition<any, any, any>> = (
   (
     definition: TEndpointDefinition,
-    options: StrongPointClientFetchOptions<TEndpointDefinition>
-  ) => Promise<StrongPointClientResponse<ReturnType<TEndpointDefinition['typeInfo']>['response']['body']>>
+    options: TypePointClientFetchOptions<TEndpointDefinition>
+  ) => Promise<TypePointClientResponse<ReturnType<TEndpointDefinition['typeInfo']>['response']['body']>>
 );
 
 export type RequestWithParamsOrBody<TEndpointDefinition extends EndpointDefinition<any, any, any>> = (
   (
     definition: TEndpointDefinition,
-    options: StrongPointClientFetchOptions<TEndpointDefinition>
-  ) => Promise<StrongPointClientResponse<ReturnType<TEndpointDefinition['typeInfo']>['response']['body']>>
+    options: TypePointClientFetchOptions<TEndpointDefinition>
+  ) => Promise<TypePointClientResponse<ReturnType<TEndpointDefinition['typeInfo']>['response']['body']>>
 );
 
 export type RequestFunction<TEndpointDefinition extends EndpointDefinition<any, any, any>> = (
@@ -58,14 +58,14 @@ export type RequestFunction<TEndpointDefinition extends EndpointDefinition<any, 
   RequestWithParamsOrBody<TEndpointDefinition>
 );
 
-export class StrongPointClientResponseError extends Error {
+export class TypePointClientResponseError extends Error {
 
   statusCode: number;
   statusText: string;
 
   constructor(
     message: string,
-    public response: StrongPointClientResponse<any>
+    public response: TypePointClientResponse<any>
   ) {
     super(message);
     this.statusCode = response.statusCode;
@@ -73,29 +73,29 @@ export class StrongPointClientResponseError extends Error {
   }
 }
 
-export class StrongPointClient {
+export class TypePointClient {
   protected readonly axios: AxiosInstance;
   private readonly server: string;
 
-  constructor(options?: StrongPointClientOptions) {
+  constructor(options?: TypePointClientOptions) {
     this.axios = (options && options.axios) || axios.create();
     this.server = (options && options.server) || '';
   }
 
   fetch<TEndpointDefinition extends EndpointDefinitionWithNoParamsOrBody>(
     definition: TEndpointDefinition,
-    options?: StrongPointClientFetchOptions<TEndpointDefinition>
-  ): Promise<StrongPointClientResponse<ReturnType<TEndpointDefinition['typeInfo']>['response']['body']>>;
+    options?: TypePointClientFetchOptions<TEndpointDefinition>
+  ): Promise<TypePointClientResponse<ReturnType<TEndpointDefinition['typeInfo']>['response']['body']>>;
 
   fetch<TEndpointDefinition extends EndpointDefinition<any, any, any>>(
     definition: TEndpointDefinition,
-    options: StrongPointClientFetchOptions<TEndpointDefinition>
-  ): Promise<StrongPointClientResponse<ReturnType<TEndpointDefinition['typeInfo']>['response']['body']>>;
+    options: TypePointClientFetchOptions<TEndpointDefinition>
+  ): Promise<TypePointClientResponse<ReturnType<TEndpointDefinition['typeInfo']>['response']['body']>>;
 
   fetch<TEndpointDefinition extends EndpointDefinition<any, any, any>>(
-  ): Promise<StrongPointClientResponse<ReturnType<TEndpointDefinition['typeInfo']>['response']['body']>> {
+  ): Promise<TypePointClientResponse<ReturnType<TEndpointDefinition['typeInfo']>['response']['body']>> {
     const endpoint: TEndpointDefinition = arguments[0];
-    const options: StrongPointClientFetchOptions<TEndpointDefinition> | undefined = (
+    const options: TypePointClientFetchOptions<TEndpointDefinition> | undefined = (
       arguments.length > 1 ? arguments[1] : undefined
     );
 
@@ -115,7 +115,7 @@ export class StrongPointClient {
 
     return this.axios.request(requestOptions)
       .then(res => {
-        const response: StrongPointClientResponse<ReturnType<TEndpointDefinition['typeInfo']>['response']['body']> = {
+        const response: TypePointClientResponse<ReturnType<TEndpointDefinition['typeInfo']>['response']['body']> = {
           statusCode: res.status,
           statusText: res.statusText,
           header: name => res.headers[name],
@@ -127,7 +127,7 @@ export class StrongPointClient {
       }, err => {
         const res = err.response;
 
-        const response: StrongPointClientResponse<ReturnType<TEndpointDefinition['typeInfo']>['response']['body']> = {
+        const response: TypePointClientResponse<ReturnType<TEndpointDefinition['typeInfo']>['response']['body']> = {
           statusCode: res.status,
           statusText: res.statusText,
           header: name => res.headers[name],
@@ -135,7 +135,7 @@ export class StrongPointClient {
           body: res.data
         };
 
-        const error = new StrongPointClientResponseError(
+        const error = new TypePointClientResponseError(
           err.message || `${ err }`,
           response
         );

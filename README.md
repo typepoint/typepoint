@@ -1,12 +1,10 @@
-# StrongPoint
+# TypePoint
 
 <center>
-  <img src="./img/logo-blue-bg.png" width="400" />
+  <img src="./img/logo-blue-bg-wide.jpg" width="400" />
   <p>
-    Library for
-    <i>defining</i>,
-    <i>consuming</i>
-    <i>and/or serving</i>
+    Library for easily
+    <i>defining, enforcing, consuming, and/or serving</i>
     <b>strongly typed</b> RESTful API endpoints
     in TypeScript.
   <p/>
@@ -14,10 +12,10 @@
 
 ## Install
 ```sh
-npm install strongpoint --save
+npm install @typepoint/core --save
 ```
 
-StrongPoint requires at least TypeScript v2.8.
+TypePoint requires at least TypeScript v2.8.
 ```sh
 npm install typescript --save-dev
 ```
@@ -40,7 +38,7 @@ First you **define** your endpoint in a shared place
 `shared/endpoints/todos/get.ts`
 
 ```typescript
-import { Empty, EndpointDefinition } from 'strongpoint/shared';
+import { Empty, EndpointDefinition } from 'typepoint/shared';
 
 // Define this endpoint's request params, request body, and response body as well as the path
 export const GetTodo = new EndpointDefinition<{ id: string }, Empty, Todo>(
@@ -53,7 +51,7 @@ Now you've defined your endpoint, lets define a **handler** for it
 `server/handlers/todos/get.ts`
 
 ```typescript
-import { defineHandler } from 'strongpoint/server';
+import { defineHandler } from 'typepoint/server';
 
 import { GetTodo } from '../shared/endpoints/todos/get.ts';
 import { todoService } from './todoService';
@@ -77,8 +75,8 @@ Now we just need to tie it all together by exporting our router as middleware th
 
 ```typescript
 import * as express from 'express';
-import { Router } from 'strongpoint/server';
-import { toMiddleware } from 'strongpoint/server/express';
+import { Router } from 'typepoint/server';
+import { toMiddleware } from 'typepoint/server/express';
 
 import { GetTodoHandler } from './handlers/todos/get.ts';
 
@@ -104,11 +102,11 @@ Then on the client side you can call your endpoint like so
 `client/app.ts`
 
 ```typescript
-import { StrongPointClient } from 'strongpoint/client';
+import { TypePointClient } from 'typepoint/client';
 
 import { GetTodo } from '../shared/endpoints/todos/get';
 
-const client = new StrongPointClient({
+const client = new TypePointClient({
   // location of your endpoints
   server: 'https://www.example.com/api'
 });
@@ -125,10 +123,10 @@ client.fetch(GetTodo, {
 ```
 
 ## Note about breaking changes
-Currently StrongPoint is _pre_ v1.0.0, thus breaking changes may be introduced in minor versions instead of major versions. Patch versions will continue to just include bug fixes and other non breaking changes. Once StrongPoint has reached 1.0.0 it will follow strict semantic versioning.
+Currently TypePoint is _pre_ v1.0.0, thus breaking changes may be introduced in minor versions instead of major versions. Patch versions will continue to just include bug fixes and other non breaking changes. Once TypePoint has reached 1.0.0 it will follow strict semantic versioning.
 
 -------------------------------------------------------
 
-Got an problem or suggestion? Submit an [issue](https://github.com/strongpoint-ts/strongpoint/issues)!
+Got an problem or suggestion? Submit an [issue](https://github.com/typepoint/typepoint/issues)!
 
-Want to contribute? Fork the [repository](https://github.com/strongpoint-ts/strongpoint) and submit a pull request! 😸
+Want to contribute? Fork the [repository](https://github.com/typepoint/typepoint) and submit a pull request! 😸

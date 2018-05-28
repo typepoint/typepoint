@@ -5,11 +5,11 @@ import * as sinon from 'sinon';
 import { Product } from '../tests/fixtures';
 import * as fixtures from '../tests/fixtures';
 import partialMockOf from '../tests/infrastructure/mockOf';
-import { StrongPointClient } from './client';
+import { TypePointClient } from './client';
 import { Empty, EndpointDefinition } from './shared';
 
 describe('client', () => {
-  describe('StrongPointClient', () => {
+  describe('TypePointClient', () => {
     let products: Product[];
     let getProducts: EndpointDefinition<Empty, Empty, Product[]>;
     let axiosMock: typeof axios;
@@ -28,7 +28,7 @@ describe('client', () => {
     });
 
     it('should make requests through axios', async () => {
-      const client = new StrongPointClient({
+      const client = new TypePointClient({
         axios: axiosMock
       });
 

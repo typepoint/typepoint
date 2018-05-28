@@ -6,7 +6,7 @@ import { BasicConsole, warnIfWindowDetected } from './clientDetection';
 describe('server/clientDetection', () => {
   describe('warnIfWindowDetected', () => {
     let console: BasicConsole;
-    const warning = `It appears you've referenced 'strongpoint/server' in your client side code (window detected)`;
+    const warning = `It appears you've referenced '@typepoint/core/server' in your client side code (window detected)`;
 
     it('should warn in console when window is present', () => {
       console = {

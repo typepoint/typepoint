@@ -1,4 +1,4 @@
-// TODO: Move this into separate package e.g. strongpoint-tsdv-joi
+// TODO: Move this into separate package? e.g. @typepoint/tsdv-joi
 
 import * as joi from 'tsdv-joi';
 

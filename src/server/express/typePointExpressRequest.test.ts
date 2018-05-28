@@ -2,19 +2,19 @@ import { expect } from 'chai';
 import { Request as ExpressRequest } from 'express';
 import * as sinon from 'sinon';
 
-import { Request as StrongPointRequest, RequestCookies } from '../../server';
-import { StrongPointExpressRequest } from './strongPointExpressRequest';
+import { Request as TypePointRequest, RequestCookies } from '../../server';
+import { TypePointExpressRequest } from './typePointExpressRequest';
 
 import partialMockOf from '../../../tests/infrastructure/mockOf';
 import { Todo } from '../../../tests/api/models/todo';
 import { ObjectOmit } from 'typelevel-ts';
 
-describe('server/express/strongPointExpressRequest', () => {
+describe('server/express/typePointExpressRequest', () => {
 
-  describe('StrongPointExpressRequest', () => {
+  describe('TypePointExpressRequest', () => {
 
     describe('for an express get request', () => {
-      let request: StrongPointExpressRequest<any, any>;
+      let request: TypePointExpressRequest<any, any>;
 
       beforeEach(() => {
         const expressRequest = partialMockOf<ExpressRequest>({
@@ -25,7 +25,7 @@ describe('server/express/strongPointExpressRequest', () => {
           }
         });
 
-        request = new StrongPointExpressRequest(expressRequest);
+        request = new TypePointExpressRequest(expressRequest);
       });
 
       it('should have correct method', () => {
@@ -48,7 +48,7 @@ describe('server/express/strongPointExpressRequest', () => {
     });
 
     describe('for an express put request', () => {
-      let request: StrongPointExpressRequest<any, any>;
+      let request: TypePointExpressRequest<any, any>;
 
       beforeEach(() => {
         const expressRequest = partialMockOf<ExpressRequest>({
@@ -63,7 +63,7 @@ describe('server/express/strongPointExpressRequest', () => {
           }
         });
 
-        request = new StrongPointExpressRequest(expressRequest);
+        request = new TypePointExpressRequest(expressRequest);
       });
 
       it('should have correct method', () => {
@@ -83,7 +83,7 @@ describe('server/express/strongPointExpressRequest', () => {
     });
 
     describe('for a request with headers', () => {
-      let request: StrongPointExpressRequest<any, any>;
+      let request: TypePointExpressRequest<any, any>;
 
       beforeEach(() => {
         const expressRequest = partialMockOf<ExpressRequest>({
@@ -96,7 +96,7 @@ describe('server/express/strongPointExpressRequest', () => {
           }
         });
 
-        request = new StrongPointExpressRequest(expressRequest);
+        request = new TypePointExpressRequest(expressRequest);
       });
 
       it('should return a specific header', () => {
@@ -112,7 +112,7 @@ describe('server/express/strongPointExpressRequest', () => {
     });
 
     describe('for a request with cookies', () => {
-      let request: StrongPointExpressRequest<any, any>;
+      let request: TypePointExpressRequest<any, any>;
       let widgetEnabled: string;
       let sessionId: string;
       let cookies: RequestCookies;
@@ -133,7 +133,7 @@ describe('server/express/strongPointExpressRequest', () => {
           cookies,
           signedCookies
         });
-        request = new StrongPointExpressRequest(expressRequest);
+        request = new TypePointExpressRequest(expressRequest);
       });
 
       it('should return a specific cookie', () => {

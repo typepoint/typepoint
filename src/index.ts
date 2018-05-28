@@ -1,4 +1,5 @@
 throw new Error(
-  `Do not import from/require 'strongpoint' directly. ` +
-  `Instead import from/require 'strongpoint/client', 'strongpoint/shared' or 'strongpoint/server'`
+  `Do not import from/require '@typepoint/core' directly. ` +
+  `Instead import from/require '@typepoint/core/client', ` +
+  `'@typepoint/core/shared' or '@typepoint/core/server'`
 );
