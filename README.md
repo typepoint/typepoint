@@ -1,5 +1,3 @@
-# TypePoint
-
 <p align="center">
   <img src="https://raw.githubusercontent.com/typepoint/core/master/img/logo-no-bg-wide.png" width="400" />
   <p align="center">
