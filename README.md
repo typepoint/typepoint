@@ -1,14 +1,14 @@
 # TypePoint
 
-<center>
+<p align="center">
   <img src="https://raw.githubusercontent.com/typepoint/core/master/img/logo-blue-bg-wide.jpg" width="400" />
-  <p>
+  <p align="center">
     Library for easily
     <i>defining, enforcing, consuming, and/or serving</i>
     <b>strongly typed</b> RESTful API endpoints
     in TypeScript.
-  <p/>
-</center>
+  </p>
+</p>
 
 ## Install
 ```sh
