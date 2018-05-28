@@ -1,7 +1,7 @@
 # TypePoint
 
 <center>
-  <img src="./img/logo-blue-bg-wide.jpg" width="400" />
+  <img src="https://raw.githubusercontent.com/typepoint/core/master/img/logo-blue-bg-wide.jpg" width="400" />
   <p>
     Library for easily
     <i>defining, enforcing, consuming, and/or serving</i>
