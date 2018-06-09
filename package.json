@@ -24,7 +24,7 @@
     "preship": "npm run pack",
     "ship": "cd ./dist && npm publish --access public",
     "pretest": "npm run clean:tests && npm run build:tests",
-    "test": "mocha -r ./tests-output/tests/infrastructure/testSetup.js \"./tests-output/**/*.test.js\" --recursive",
+    "test": "mocha -r ./tests-output/tests/infrastructure/testSetup.js \"./tests-output/**/*.test.js\" --recursive --require=source-map-support/register",
     "test:coverage": "nyc npm test"
   },
   "types": "./index.d.ts",
@@ -60,19 +60,11 @@
   "nyc": {
     "all": true,
     "exclude": [
-      "**/*.js",
-      "**/*.d.ts",
-      "**/*.test.ts",
-      "coverage",
-      "node_modules"
+      "dist/",
+      "**/*.test.js",
+      "tests-output/tests"
     ],
-    "extension": [
-      ".ts",
-      ".tsx"
-    ],
-    "include": [
-      "**/*.ts"
-    ],
+    "produce-source-map": true,
     "recursive": true,
     "require": [
       "ts-node/register",
