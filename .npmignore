@@ -15,3 +15,4 @@ client.js.map
 **/*.test.ts
 **/*.test.map
 tests/**/*.*
+tests-output/
