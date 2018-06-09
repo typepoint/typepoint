@@ -66,6 +66,10 @@
     ],
     "produce-source-map": true,
     "recursive": true,
+    "reporter": [
+        "html",
+        "text"
+    ],
     "require": [
       "ts-node/register",
       "source-map-support/register"

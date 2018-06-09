@@ -27,3 +27,7 @@ jobs:
       - run: npm run lint
       - run: npm run build
       - run: npm run test:coverage
+
+      - store_artifacts:
+          path: coverage
+          prefix: coverage
