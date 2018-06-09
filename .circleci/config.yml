@@ -28,6 +28,9 @@ jobs:
       - run: npm run build
       - run: npm run test:coverage
 
+      - store_test_results:
+          path: tests-output/reports
+
       - store_artifacts:
           path: coverage
           prefix: coverage
