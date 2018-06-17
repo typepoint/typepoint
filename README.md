@@ -8,7 +8,7 @@
   </p>
 </p>
 
-[![CircleCI](https://circleci.com/gh/typepoint/core.svg?style=svg)](https://circleci.com/gh/typepoint/core)
+[![CircleCI](https://circleci.com/gh/typepoint/core.svg?style=shield)](https://circleci.com/gh/typepoint/core)
 
 ## Install
 ```sh
