@@ -6,8 +6,6 @@ import { Request as TypePointRequest, RequestCookies } from '../../server';
 import { TypePointExpressRequest } from './typePointExpressRequest';
 
 import partialMockOf from '../../../tests/infrastructure/mockOf';
-import { Todo } from '../../../tests/api/models/todo';
-import { ObjectOmit } from 'typelevel-ts';
 
 describe('server/express/typePointExpressRequest', () => {
 

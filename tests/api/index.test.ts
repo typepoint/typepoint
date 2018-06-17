@@ -4,16 +4,12 @@ import 'chai-as-promised';
 import * as clone from 'clone';
 import * as getPort from 'get-port';
 import * as httpStatusCodes from 'http-status-codes';
-import { Container, decorate, inject, injectable } from 'inversify';
-import * as linq from 'linq';
+import { Container, decorate, injectable } from 'inversify';
 import 'reflect-metadata';
 import * as sinon from 'sinon';
-import { ObjectOmit } from 'typelevel-ts';
 
 import { TypePointClient } from '../../src/client';
-import { EndpointHandler, EndpointMiddleware, NotFoundMiddleware, Router } from '../../src/server';
-import { toMiddleware } from '../../src/server/express';
-import { Empty } from '../../src/shared';
+import { EndpointHandler, EndpointMiddleware, NotFoundMiddleware } from '../../src/server';
 
 import partialMockOf from '../../tests/infrastructure/mockOf';
 import { DataStore } from './db/dataStore';

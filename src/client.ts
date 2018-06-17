@@ -1,7 +1,5 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
-import { If } from 'typelevel-ts';
 
-// import './shared';
 import { Empty, EndpointDefinition, IsEmptyFieldName, NormalisedArrayOf } from './shared';
 
 declare global {
@@ -9,9 +7,6 @@ declare global {
     [IsEmptyFieldName]: 'F';
   }
 }
-
-// tslint:disable-next-line:ban-types
-export type IfEmpty<TValue extends Object | Empty, TThen, TElse> = If<TValue[typeof IsEmptyFieldName], TThen, TElse>;
 
 export interface TypePointClientResponse<TBody> {
   body: NormalisedArrayOf<TBody>;
@@ -29,10 +24,14 @@ export interface TypePointClientOptions {
 export type EndpointDefinitionWithNoParamsOrBody = EndpointDefinition<Empty, Empty, any>;
 
 // tslint:disable-next-line:ban-types
-export type FetchParamsOptions<TRequestParams extends Object> = IfEmpty<TRequestParams, {}, { params: TRequestParams }>;
+export type FetchParamsOptions<TRequestParams extends Object> = (
+  TRequestParams extends Empty ? {} : { params: TRequestParams }
+);
 
 // tslint:disable-next-line:ban-types
-export type FetchBodyOptions<TRequestBody extends Object> = IfEmpty<TRequestBody, {}, { body: TRequestBody }>;
+export type FetchBodyOptions<TRequestBody extends Object> = (
+  TRequestBody extends Empty ? {} : { body: TRequestBody }
+);
 
 export type TypePointClientFetchOptions<TEndpointDefinition extends EndpointDefinition<any, any, any>> = (
   FetchParamsOptions<ReturnType<TEndpointDefinition['typeInfo']>['request']['params']> &
@@ -101,7 +100,7 @@ export class TypePointClient {
 
     const url = endpoint.url({
       server: this.server,
-      params: options && options.params
+      params: options && (options as { params: any }).params
     });
 
     const requestOptions: AxiosRequestConfig = {
@@ -109,8 +108,8 @@ export class TypePointClient {
       url
     };
 
-    if (options && options.body) {
-      requestOptions.data = options.body;
+    if (options && (options as { body: any }).body) {
+      requestOptions.data = (options as { body: any }).body;
     }
 
     return this.axios.request(requestOptions)

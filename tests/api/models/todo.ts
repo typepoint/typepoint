@@ -1,5 +1,3 @@
-import { ObjectOmit } from 'typelevel-ts';
-
 import { HasId } from './hasId';
 
 export class Todo implements HasId {
@@ -8,4 +6,6 @@ export class Todo implements HasId {
   isCompleted: boolean = false;
 }
 
-export type UpdatableTodoFields = ObjectOmit<Todo, 'id'>;
+type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
+
+export type UpdatableTodoFields = Omit<Todo, 'id'>;

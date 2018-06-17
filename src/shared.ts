@@ -1,5 +1,3 @@
-import { If } from 'typelevel-ts';
-
 import { argumentsToArray } from './shared/functions';
 import { cleanseHttpMethod, HttpMethod, HttpMethods } from './shared/http';
 import { createPath, PathBuildingFunction } from './shared/pathBuilder';

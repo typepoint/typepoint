@@ -8,7 +8,7 @@
 - ✔ Update package.json with correct github repository details
 - □ Split express middleware into separate repository and package
 - □ Split joi validation into separate repository and package
-- □ Remove typelevel-ts now we have official support for conditional types
+- ✔ Remove typelevel-ts now we have official support for conditional types
 
 ## Endpoint Definitions
 - ✔ Each endpoint definition should capture the following:
