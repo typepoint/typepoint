@@ -59,16 +59,16 @@ export type RequestFunction<TEndpointDefinition extends EndpointDefinition<any, 
 
 export class TypePointClientResponseError extends Error {
 
-  statusCode: number;
-  statusText: string;
+  statusCode: number | undefined;
+  statusText: string | undefined;
 
   constructor(
     message: string,
-    public response: TypePointClientResponse<any>
+    public response: TypePointClientResponse<any> | undefined
   ) {
     super(message);
-    this.statusCode = response.statusCode;
-    this.statusText = response.statusText;
+    this.statusCode = response ? response.statusCode : undefined;
+    this.statusText = response ? response.statusText : undefined;
   }
 }
 
@@ -126,13 +126,18 @@ export class TypePointClient {
       }, err => {
         const res = err.response;
 
-        const response: TypePointClientResponse<ReturnType<TEndpointDefinition['typeInfo']>['response']['body']> = {
-          statusCode: res.status,
-          statusText: res.statusText,
-          header: name => res.headers[name],
-          headers: res.headers,
-          body: res.data
-        };
+        const response: (
+          TypePointClientResponse<ReturnType<TEndpointDefinition['typeInfo']>['response']['body']> |
+          undefined
+        ) = (
+            res ? {
+              statusCode: res.status,
+              statusText: res.statusText,
+              header: name => res.headers[name],
+              headers: res.headers,
+              body: res.data
+            } : undefined
+          );
 
         const error = new TypePointClientResponseError(
           err.message || `${ err }`,
