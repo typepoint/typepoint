@@ -38,7 +38,7 @@ First you **define** your endpoint in a shared place
 `shared/endpoints/todos/get.ts`
 
 ```typescript
-import { Empty, EndpointDefinition } from 'typepoint/shared';
+import { Empty, EndpointDefinition } from '@typepoint/core/shared';
 
 // Define this endpoint's request params, request body, and response body as well as the path
 export const GetTodo = new EndpointDefinition<{ id: string }, Empty, Todo>(
@@ -51,7 +51,7 @@ Now you've defined your endpoint, lets define a **handler** for it
 `server/handlers/todos/get.ts`
 
 ```typescript
-import { defineHandler } from 'typepoint/server';
+import { defineHandler } from '@typepoint/core/server';
 
 import { GetTodo } from '../shared/endpoints/todos/get.ts';
 import { todoService } from './todoService';
@@ -75,8 +75,8 @@ Now we just need to tie it all together by exporting our router as middleware th
 
 ```typescript
 import * as express from 'express';
-import { Router } from 'typepoint/server';
-import { toMiddleware } from 'typepoint/server/express';
+import { Router } from '@typepoint/core/server';
+import { toMiddleware } from '@typepoint/core/server/express';
 
 import { GetTodoHandler } from './handlers/todos/get.ts';
 
@@ -102,7 +102,7 @@ Then on the client side you can call your endpoint like so
 `client/app.ts`
 
 ```typescript
-import { TypePointClient } from 'typepoint/client';
+import { TypePointClient } from '@typepoint/core/client';
 
 import { GetTodo } from '../shared/endpoints/todos/get';
 
