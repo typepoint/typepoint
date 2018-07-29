@@ -256,3 +256,12 @@ export class EndpointDefinition<
     return result;
   }
 }
+
+export type GetEndpointDefinitionRequestParams<TEndpointDefinition extends EndpointDefinition<any, any, any>> =
+  ReturnType<TEndpointDefinition['typeInfo']>['request']['params'];
+
+export type GetEndpointDefinitionRequestBody<TEndpointDefinition extends EndpointDefinition<any, any, any>> =
+  ReturnType<TEndpointDefinition['typeInfo']>['request']['body'];
+
+export type GetEndpointDefinitionResponseBody<TEndpointDefinition extends EndpointDefinition<any, any, any>> =
+  ReturnType<TEndpointDefinition['typeInfo']>['response']['body'];
