@@ -53,7 +53,7 @@ Now you've defined your endpoint, lets define a **handler** for it
 ```typescript
 import { defineHandler } from '@typepoint/core/server';
 
-import { GetTodo } from '../shared/endpoints/todos/get.ts';
+import { GetTodo } from '../shared/endpoints/todos/get';
 import { todoService } from './todoService';
 
 export const GetTodoHandler = defineHandler(GetTodo, context => {
@@ -78,7 +78,7 @@ import * as express from 'express';
 import { Router } from '@typepoint/core/server';
 import { toMiddleware } from '@typepoint/core/server/express';
 
-import { GetTodoHandler } from './handlers/todos/get.ts';
+import { GetTodoHandler } from './handlers/todos/get';
 
 const app = express();
 
