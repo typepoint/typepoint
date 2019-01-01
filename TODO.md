@@ -4,7 +4,9 @@
 - ✔ Add pre-commit checks
 - ✔ Package so that paths are optimal for consuming before publishing
 - □ Add documentation to README
-- □ Add proper code coverage
+- □ Add proper 100% code coverage
+- □ Setup Greenkeeper
+- □ Setup Commitizen (or similar) and start using conventional commits
 - ✔ Update package.json with correct github repository details
 - □ Split express middleware into separate repository and package
 - □ Split joi validation into separate repository and package
