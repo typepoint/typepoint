@@ -53,6 +53,10 @@
   ],
   "author": "Ben <codeandcats@gmail.com>",
   "license": "SEE LICENSE IN LICENSE",
+  "contributors": [
+    "Ben <codeandcats@gmail.com>",
+    "Laurence Dougal Myers (https://github.com/laurence-myers)"
+  ],
   "bugs": {
     "url": "https://github.com/typepoint/typepoint/issues"
   },
