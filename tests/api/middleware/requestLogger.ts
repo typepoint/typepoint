@@ -1,6 +1,5 @@
 import chalk from 'chalk';
 import { injectable } from 'inversify';
-
 import { EndpointContext, EndpointMiddleware } from '../../../src/server';
 import { LoggerService } from '../services/loggerService';
 

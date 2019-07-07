@@ -1,7 +1,4 @@
-import { expect } from 'chai';
 import * as express from 'express';
-import * as sinon from 'sinon';
-
 import { Router, EndpointMiddleware, EndpointContext, defineMiddleware } from '../server';
 import partialMockOf from '../../tests/infrastructure/mockOf';
 import { toMiddleware } from './express';
@@ -79,8 +76,8 @@ describe('server/express', () => {
         ];
 
         router = partialMockOf<Router>({
-          getMiddlewares: sinon.stub().returns(middlewares),
-          getHandlers: sinon.stub().returns([])
+          getMiddlewares: jest.fn().mockReturnValue(middlewares),
+          getHandlers: jest.fn().mockReturnValue([])
         });
 
         logger = new TestLogger();
@@ -89,7 +86,7 @@ describe('server/express', () => {
       });
 
       it('should return a function', () => {
-        expect(expressMiddleware).to.be.a('function');
+        expect(expressMiddleware).toBeInstanceOf(Function);
       });
 
       describe('when called', () => {
@@ -124,7 +121,7 @@ describe('server/express', () => {
             'DEBUG Before next()\n' +
             'DEBUG After next()\n' +
             'DEBUG After next()\n';
-          expect(logger.toString()).to.equal(expectedLog);
+          expect(logger.toString()).toBe(expectedLog);
         });
       });
     });

@@ -1,7 +1,6 @@
 import { Required } from 'tsdv-joi/constraints/any';
 import { BooleanSchema } from 'tsdv-joi/constraints/boolean';
 import { Min, StringSchema } from 'tsdv-joi/constraints/string';
-
 import { EndpointDefinition } from '../../../../src/shared';
 import { HasId } from '../../models/hasId';
 import { Todo, UpdatableTodoFields } from '../../models/todo';
@@ -9,11 +8,13 @@ import { Todo, UpdatableTodoFields } from '../../models/todo';
 export class UpdateTodoRequestParams {
   @Required()
   @Min(1)
-  id: string = '';
+  @StringSchema()
+  id!: string;
 }
 
 export class UpdateTodoRequestBody implements UpdatableTodoFields {
   @Required()
+  @StringSchema()
   title: string = '';
 
   @Required()

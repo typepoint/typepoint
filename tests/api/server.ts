@@ -51,7 +51,8 @@ export class Server {
       validateAndTransform
     });
 
-    const log = console.log.bind(console);
+    // tslint:disable-next-line: no-console
+    // const log = console.log.bind(console);
 
     const middleware = toMiddleware(router, {
       // logger: { log, info: log, warn: log, error: log, debug: log }

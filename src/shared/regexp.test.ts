@@ -1,5 +1,3 @@
-import { expect } from 'chai';
-
 import { escapeRegExp } from './regexp';
 import { TestCase } from '../../tests/infrastructure/testCase';
 
@@ -21,7 +19,7 @@ describe('shared/regexp', () => {
 
       for (const testCase of testCases) {
         const actual = escapeRegExp(testCase.input);
-        expect(actual).to.equal(testCase.expected);
+        expect(actual).toBe(testCase.expected);
       }
     });
   });

@@ -1,22 +1,8 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "declaration": false,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "lib": [
-      "dom",
-      "es2015"
-    ],
-    "module": "commonjs",
-    "moduleResolution": "node",
-    "outDir": "tests-output",
-    "target": "es5"
+    "noEmit": true
   },
-  "include": [
-    "./tests/infrastructure/testSetup.ts",
-    "**/*.test.ts",
-    "src/server/typings/**/*.ts",
-    "src/index.ts"
-  ]
 }

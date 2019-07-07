@@ -1,5 +1,3 @@
-import { expect } from 'chai';
-
 import { TestCase } from '../../tests/infrastructure/testCase';
 import { PathHelper } from './pathHelper';
 
@@ -113,7 +111,7 @@ describe('shared/pathHelper', () => {
 
       for (const testCase of testCases) {
         const actual = PathHelper.parsePathPattern(testCase.input);
-        expect(actual).to.eql(testCase.expected);
+        expect(actual).toEqual(testCase.expected);
       }
     });
   });
@@ -231,7 +229,7 @@ describe('shared/pathHelper', () => {
         const url = helper.url({
           params: testCase.input.params
         });
-        expect(url).to.equal(testCase.expected);
+        expect(url).toBe(testCase.expected);
       }
     });
 
@@ -314,7 +312,7 @@ describe('shared/pathHelper', () => {
           server,
           params: testCase.input.params
         });
-        expect(url).to.equal(testCase.expected);
+        expect(url).toBe(testCase.expected);
       }
     });
 
@@ -347,7 +345,7 @@ describe('shared/pathHelper', () => {
 
       for (const testCase of testCases) {
         const action = createTestAction(testCase);
-        expect(action).to.throw(testCase.expected);
+        expect(action).toThrow(testCase.expected);
       }
     });
 
@@ -373,7 +371,7 @@ describe('shared/pathHelper', () => {
 
       for (const testCase of testCases) {
         const action = createTestAction(testCase);
-        expect(action).to.throw(testCase.expected);
+        expect(action).toThrow(testCase.expected);
       }
     });
   });
@@ -557,9 +555,9 @@ describe('shared/pathHelper', () => {
         const helper = new PathHelper(testCase.input.pattern);
         const result = helper.parse(testCase.input.path);
         if (testCase.expected === undefined) {
-          expect(result).to.be.undefined;
+          expect(result).toBeUndefined();
         } else {
-          expect(result).to.deep.equal(testCase.expected);
+          expect(result).toEqual(testCase.expected);
         }
       }
     });

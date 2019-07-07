@@ -1,6 +1,3 @@
-import { expect } from 'chai';
-import * as sinon from 'sinon';
-
 import { BasicConsole, warnIfWindowDetected } from './clientDetection';
 
 describe('server/clientDetection', () => {
@@ -10,28 +7,28 @@ describe('server/clientDetection', () => {
 
     it('should warn in console when window is present', () => {
       console = {
-        warn: sinon.spy(),
-        log: sinon.spy(),
+        warn: jest.fn(),
+        log: jest.fn(),
       };
       warnIfWindowDetected({}, console);
-      expect(console.warn).to.have.been.calledWith(warning);
-      expect(console.log).not.to.have.been.called;
+      expect(console.warn).toHaveBeenCalledWith(warning);
+      expect(console.log).not.toHaveBeenCalled();
     });
 
     it('should use console.log when console.warn is not available', () => {
-      console = { log: sinon.spy() };
+      console = { log: jest.fn() };
       warnIfWindowDetected({}, console);
-      expect(console.log).to.have.been.calledWith(warning);
+      expect(console.log).toHaveBeenCalledWith(warning);
     });
 
     it('should not warn in console when window is not present', () => {
       console = {
-        warn: sinon.spy(),
-        log: sinon.spy(),
+        warn: jest.fn(),
+        log: jest.fn(),
       };
       warnIfWindowDetected(undefined, console);
-      expect(console.warn).not.to.have.been.called;
-      expect(console.log).not.to.have.been.called;
+      expect(console.warn).not.toHaveBeenCalled();
+      expect(console.log).not.toHaveBeenCalled();
     });
   });
 });

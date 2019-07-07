@@ -1,7 +1,4 @@
-import { expect } from 'chai';
 import { Request as ExpressRequest } from 'express';
-import * as sinon from 'sinon';
-
 import { Request as TypePointRequest, RequestCookies } from '../../server';
 import { TypePointExpressRequest } from './typePointExpressRequest';
 
@@ -27,21 +24,21 @@ describe('server/express/typePointExpressRequest', () => {
       });
 
       it('should have correct method', () => {
-        expect(request).to.have.property('method', 'GET');
+        expect(request).toHaveProperty('method', 'GET');
       });
 
       it('should have correct url', () => {
-        expect(request).to.have.property('url', '/todos/1?format=html');
+        expect(request).toHaveProperty('url', '/todos/1?format=html');
       });
 
       it('should have correct params', () => {
-        expect(request).to.have.property('params').that.deep.equals({
+        expect(request).toHaveProperty('params', {
           format: 'html'
         });
       });
 
       it('should have an empty body', () => {
-        expect(request).to.have.property('body').that.equals(undefined);
+        expect(request).toHaveProperty('body', undefined);
       });
     });
 
@@ -65,15 +62,15 @@ describe('server/express/typePointExpressRequest', () => {
       });
 
       it('should have correct method', () => {
-        expect(request).to.have.property('method', 'PUT');
+        expect(request).toHaveProperty('method', 'PUT');
       });
 
       it('should have correct url', () => {
-        expect(request).to.have.property('url', '/todos/1');
+        expect(request).toHaveProperty('url', '/todos/1');
       });
 
       it('should have correct body', () => {
-        expect(request).to.have.property('body').that.deep.equals({
+        expect(request).toHaveProperty('body', {
           title: 'Convert the internet to TypeScript',
           isCompleted: false
         });
@@ -87,7 +84,7 @@ describe('server/express/typePointExpressRequest', () => {
         const expressRequest = partialMockOf<ExpressRequest>({
           url: '/todos',
           method: 'get',
-          header: sinon.stub().returns('en-AU,en'),
+          header: jest.fn().mockReturnValue('en-AU,en'),
           headers: {
             'Accept-Language': 'en-AU,en',
             'Referer': 'https://www.example.com'
@@ -98,11 +95,11 @@ describe('server/express/typePointExpressRequest', () => {
       });
 
       it('should return a specific header', () => {
-        expect(request.header('Accept-Language')).to.equal('en-AU,en');
+        expect(request.header('Accept-Language')).toBe('en-AU,en');
       });
 
       it('should return all headers', () => {
-        expect(request.headers).to.deep.equal({
+        expect(request.headers).toEqual({
           'Accept-Language': 'en-AU,en',
           'Referer': 'https://www.example.com'
         });
@@ -135,27 +132,27 @@ describe('server/express/typePointExpressRequest', () => {
       });
 
       it('should return a specific cookie', () => {
-        expect(request.cookie('widgetEnabled')).to.equal(widgetEnabled);
+        expect(request.cookie('widgetEnabled')).toBe(widgetEnabled);
       });
 
       it('should return undefined for a missing cookie', () => {
-        expect(request.cookie('Oceanic Flight 815')).to.equal(undefined);
+        expect(request.cookie('Oceanic Flight 815')).toBe(undefined);
       });
 
       it('should return all cookies', () => {
-        expect(request.cookies).to.deep.equal(cookies);
+        expect(request.cookies).toEqual(cookies);
       });
 
       it('should return a specific signed cookie', () => {
-        expect(request.signedCookie('sessionId')).to.equal(sessionId);
+        expect(request.signedCookie('sessionId')).toBe(sessionId);
       });
 
       it('should return undefined for a missing signed cookie', () => {
-        expect(request.signedCookie('widgetEnabled')).to.equal(undefined);
+        expect(request.signedCookie('widgetEnabled')).toBe(undefined);
       });
 
       it('should return all signed cookies', () => {
-        expect(request.signedCookies).to.deep.equal(signedCookies);
+        expect(request.signedCookies).toEqual(signedCookies);
       });
     });
 

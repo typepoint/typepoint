@@ -1,7 +1,4 @@
 import axios from 'axios';
-import { expect } from 'chai';
-import * as sinon from 'sinon';
-
 import { Product } from '../tests/fixtures';
 import * as fixtures from '../tests/fixtures';
 import partialMockOf from '../tests/infrastructure/mockOf';
@@ -39,7 +36,7 @@ describe('client', () => {
     describe('for successful requests', () => {
       beforeEach(async () => {
         axiosMock = partialMockOf<typeof axios>({
-          request: sinon.stub().resolves({
+          request: jest.fn().mockResolvedValue({
             status: 200,
             statusText: 'OK',
             data: fixtures.getProducts()
@@ -50,21 +47,20 @@ describe('client', () => {
       });
 
       it('should make requests through axios', async () => {
-        expect(axiosMock.request).to.have.been.calledWith({
+        expect(axiosMock.request).toHaveBeenCalledWith({
           method: 'GET',
           url: '/products'
         });
-        expect(response).to.have.property('body').deep.equals(products);
-        expect(response).to.have.property('statusCode').deep.equals(200);
-        expect(response).to.have.property('statusText').deep.equals('OK');
-        expect(response).to.have.property('body').deep.equals(products);
+        expect(response).toHaveProperty('body', products);
+        expect(response).toHaveProperty('statusCode', 200);
+        expect(response).toHaveProperty('statusText', 'OK');
       });
     });
 
     describe('when response is an error', () => {
       beforeEach(async () => {
         axiosMock = partialMockOf<typeof axios>({
-          request: sinon.stub().rejects({
+          request: jest.fn().mockRejectedValue({
             response: {
               status: 404,
               statusText: 'NOT FOUND',
@@ -77,10 +73,10 @@ describe('client', () => {
       });
 
       it('should include the response in the rejected error', () => {
-        expect(response).to.be.undefined;
-        expect(error).to.exist;
-        expect(error).to.have.property('response');
-        expect(error && error.response).to.contain({
+        expect(response).toBeUndefined();
+        expect(error).toBeDefined();
+        expect(error).toHaveProperty('response');
+        expect(error && error.response).toMatchObject({
           statusCode: 404,
           statusText: 'NOT FOUND',
           body: 'Nope'
@@ -91,7 +87,7 @@ describe('client', () => {
     describe('when there is no response (e.g. no network connection)', () => {
       beforeEach(async () => {
         axiosMock = partialMockOf<typeof axios>({
-          request: sinon.stub().rejects({
+          request: jest.fn().mockRejectedValue({
             message: 'Jen dropped the internet!'
           })
         });
@@ -100,9 +96,9 @@ describe('client', () => {
       });
 
       it('should not include a response in the rejected error', () => {
-        expect(response).to.be.undefined;
-        expect(error).to.exist;
-        expect(error).to.have.property('response', undefined);
+        expect(response).toBeUndefined();
+        expect(error).toBeDefined();
+        expect(error).toHaveProperty('response', undefined);
       });
     });
   });

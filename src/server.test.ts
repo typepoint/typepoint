@@ -1,6 +1,3 @@
-import { expect } from 'chai';
-import * as sinon from 'sinon';
-
 import { Todo } from '../tests/api/models/todo';
 import partialMockOf from '../tests/infrastructure/mockOf';
 import { defineHandler, EndpointContext, Request, Response, NotFoundMiddleware, EndpointMiddleware, defineMiddleware } from './server';
@@ -26,7 +23,7 @@ describe('server', () => {
       });
 
       const getTodosHandler = new GetTodosHandler();
-      expect(getTodosHandler.name).to.equal('AnonymousEndpointHandler');
+      expect(getTodosHandler.name).toBe('AnonymousEndpointHandler');
     });
 
     it('should define a named handler class', () => {
@@ -36,7 +33,7 @@ describe('server', () => {
       }, name);
 
       const handler = new GetTodosHandler();
-      expect(handler.name).to.equal(name);
+      expect(handler.name).toBe(name);
     });
 
     it('should define an handler class that can parse matching requests', async () => {
@@ -54,7 +51,7 @@ describe('server', () => {
       });
       const match = getTodosHandler.match(request);
 
-      expect(match).to.deep.equal({
+      expect(match).toEqual({
         prePath: '',
         path: '/todos',
         postPath: '',
@@ -77,7 +74,7 @@ describe('server', () => {
       });
       const match = getTodosHandler.match(request);
 
-      expect(match).to.equal(undefined);
+      expect(match).toBe(undefined);
     });
 
     it('should define a handler class that can handle requests', async () => {
@@ -93,10 +90,7 @@ describe('server', () => {
       const getTodosHandler = new GetTodosHandler();
       await getTodosHandler.handle(context, () => Promise.resolve());
 
-      expect(context)
-        .to.have.property('response')
-        .to.have.property('body')
-        .that.deep.equals(todos);
+      expect(context).toHaveProperty(['response', 'body'], todos);
     });
   });
 
@@ -116,7 +110,7 @@ describe('server', () => {
     it('should respond with 404 if request was not handled', async () => {
       const next = async () => { };
       await middleware.handle(context, next);
-      expect(context.response.statusCode).to.equal(404);
+      expect(context.response.statusCode).toBe(404);
     });
 
     it('should not respond with 404 if request was handled', async () => {
@@ -124,7 +118,7 @@ describe('server', () => {
         context.response.statusCode = 204;
       };
       await middleware.handle(context, next);
-      expect(context.response.statusCode).to.equal(204);
+      expect(context.response.statusCode).toBe(204);
     });
   });
 
@@ -132,13 +126,13 @@ describe('server', () => {
     describe('when called with a name', () => {
       const XyzMiddlewareClass = defineMiddleware((context, next) => { }, 'XyzMiddleware');
       const xyz = new XyzMiddlewareClass();
-      expect(xyz).to.have.property('name', 'XyzMiddleware');
+      expect(xyz).toHaveProperty('name', 'XyzMiddleware');
     });
 
     describe('when called without a name', () => {
       const AnonMiddlewareClass = defineMiddleware((context, next) => { });
       const anon = new AnonMiddlewareClass();
-      expect(anon).to.have.property('name', 'AnonymousEndpointMiddleware');
+      expect(anon).toHaveProperty('name', 'AnonymousEndpointMiddleware');
     });
 
     describe('when called', () => {
@@ -162,11 +156,11 @@ describe('server', () => {
       });
 
       it('should return an EndpointMiddleware class', () => {
-        expect(ExampleEndpointMiddleware).to.be.a('function');
-        expect(ExampleEndpointMiddleware).to.have.property('name', 'AnonymousEndpointMiddleware');
+        expect(ExampleEndpointMiddleware).toBeInstanceOf(Function);
+        expect(ExampleEndpointMiddleware).toHaveProperty('name', 'AnonymousEndpointMiddleware');
 
         const exampleEndpointMiddleware = new ExampleEndpointMiddleware();
-        expect(exampleEndpointMiddleware).to.be.an.instanceof(EndpointMiddleware);
+        expect(exampleEndpointMiddleware).toBeInstanceOf(EndpointMiddleware);
       });
 
       describe('when creating an instance of result', () => {
@@ -180,14 +174,14 @@ describe('server', () => {
         describe('and calling handle', () => {
           beforeEach(async () => {
             context = partialMockOf<EndpointContext<any, any, any>>({});
-            const next = sinon.spy();
+            const next = jest.fn();
             addToLog('Before calling middleware');
             await exampleEndpointMiddleware.handle(context, next);
             addToLog('After calling middleware');
           });
 
           it('should wait until handler function has finished', () => {
-            expect(log).to.equal(
+            expect(log).toBe(
               'Before calling middleware\n' +
               'ExampleEndpointMiddleware: start\n' +
               'ExampleEndpointMiddleware: finish\n' +

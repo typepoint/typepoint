@@ -1,5 +1,3 @@
-import { expect } from 'chai';
-
 import { Empty } from '../shared';
 import { createPath } from './pathBuilder';
 
@@ -11,7 +9,7 @@ describe('shared/pathBuilder', () => {
 
     it('should generate an empty path by default', () => {
       const result = createPath(path => path);
-      expect(result).to.equal('/');
+      expect(result).toBe('/');
     });
 
     it('should generate a path with a literal', () => {
@@ -19,7 +17,7 @@ describe('shared/pathBuilder', () => {
         .literal('todos')
       );
 
-      expect(result).to.equal('/todos');
+      expect(result).toBe('/todos');
     });
 
     it('should generate a path with a param', () => {
@@ -27,7 +25,7 @@ describe('shared/pathBuilder', () => {
         .param('id')
       );
 
-      expect(result).to.equal('/:id');
+      expect(result).toBe('/:id');
     });
 
     it('should generate a path with a literal and param', () => {
@@ -36,7 +34,7 @@ describe('shared/pathBuilder', () => {
         .param('id')
       );
 
-      expect(result).to.equal('/todos/:id');
+      expect(result).toBe('/todos/:id');
     });
 
     it('should generate a path with a literal, param and literal', () => {
@@ -46,7 +44,7 @@ describe('shared/pathBuilder', () => {
         .literal('tags')
       );
 
-      expect(result).to.equal('/todos/:id/tags');
+      expect(result).toBe('/todos/:id/tags');
     });
 
     it('should generate a path with a literal, param, literal and param', () => {
@@ -62,7 +60,7 @@ describe('shared/pathBuilder', () => {
         .param('tagId')
       );
 
-      expect(result).to.equal('/todos/:todoId/tags/:tagId');
+      expect(result).toBe('/todos/:todoId/tags/:tagId');
     });
   });
 });

@@ -12,8 +12,6 @@
     "**/.hg": true,
     "**/CVS": true,
     "**/.DS_Store": true,
-    "dist": true,
-    "tests-output": true,
   },
   "tslint.autoFixOnSave": true,
   "typescript.tsdk": "node_modules/typescript/lib"

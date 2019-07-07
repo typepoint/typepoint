@@ -1,6 +1,4 @@
-import { expect } from 'chai';
 import { AnyConstraints, NumberConstraints, ObjectConstraints, StringConstraints, BooleanConstraints } from 'tsdv-joi';
-
 import { validateAndTransform } from './tsdv-joi';
 import { ObjectWithStringProps } from '../../server';
 
@@ -10,10 +8,12 @@ describe('server/validation/tsdv-joi', () => {
       class Todo {
         @AnyConstraints.Optional()
         @NumberConstraints.Integer()
+        @NumberConstraints.NumberSchema()
         id?: number;
 
         @AnyConstraints.Required()
         @StringConstraints.Min(1)
+        @StringConstraints.StringSchema()
         title: string = '';
 
         @BooleanConstraints.BooleanSchema()
@@ -27,7 +27,7 @@ describe('server/validation/tsdv-joi', () => {
           isCompleted: 'true'
         };
         const result = validateAndTransform(input, Todo);
-        expect(result).to.deep.equal({
+        expect(result).toEqual({
           value: {
             id: 1,
             title: 'Walk the cats',
@@ -40,9 +40,10 @@ describe('server/validation/tsdv-joi', () => {
         const input: any = {
           title: ''
         };
-        expect(validateAndTransform(input, Todo))
-          .to.have.property('validationError')
-          .that.has.property('message', 'child "title" fails because ["title" is not allowed to be empty]');
+        expect(validateAndTransform(input, Todo)).toHaveProperty(
+          ['validationError', 'message'],
+          'child "title" fails because ["title" is not allowed to be empty]'
+        );
       });
     });
   });
@@ -60,9 +61,10 @@ describe('server/validation/tsdv-joi', () => {
         title: 'Walk the cats',
         isCompleted: 'true'
       };
-      expect(validateAndTransform(input, Todo))
-        .to.have.property('validationError')
-        .that.has.property('message', '"id" is not allowed. "title" is not allowed. "isCompleted" is not allowed');
+      expect(validateAndTransform(input, Todo)).toHaveProperty(
+        ['validationError', 'message'],
+        '"id" is not allowed. "title" is not allowed. "isCompleted" is not allowed'
+      );
     });
   });
 
@@ -74,7 +76,7 @@ describe('server/validation/tsdv-joi', () => {
         isCompleted: 'true'
       };
       const result = validateAndTransform(input);
-      expect(result).to.deep.equal({
+      expect(result).toEqual({
         value: {
           id: '1',
           title: 'Walk the cats',

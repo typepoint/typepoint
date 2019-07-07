@@ -1,5 +1,3 @@
-import { expect } from 'chai';
-
 import { argumentsToArray } from './functions';
 
 describe('shared/functions', () => {
@@ -11,8 +9,8 @@ describe('shared/functions', () => {
 
       const actual = wrapper('hello', 'world');
 
-      expect(actual).to.be.a('Array');
-      expect(actual).to.have.lengthOf(2);
+      expect(actual).toBeInstanceOf(Array);
+      expect(actual).toHaveLength(2);
     });
   });
 });

@@ -3,9 +3,7 @@ import { cleanseHttpMethod, HttpMethod, HttpMethods } from './shared/http';
 import { createPath, PathBuildingFunction } from './shared/pathBuilder';
 import { PathHelper, PathHelperParseMatch } from './shared/pathHelper';
 
-export interface Constructor<T> {
-  new(...args: any[]): T;
-}
+export type Constructor<T> = new (...args: any[]) => T;
 
 export const IsEmptyFieldName = ' isEmpty ';
 
@@ -44,8 +42,6 @@ export abstract class ArrayOf<T> {
 
 export function arrayOf<T>(Class: Constructor<T>): Constructor<ArrayOf<T>> {
   class AnonymousArrayOf extends ArrayOf<T> {
-    static isArrayOf: true = true;
-
     constructor() {
       super(Class);
     }
@@ -58,7 +54,7 @@ export function isArrayOf<T>(Class: Constructor<any>): Class is Constructor<Arra
   return !!(Class && (Class as any).isArrayOf);
 }
 
-export type NormalisedArrayOf<T> = T extends ArrayOf<any> ? Array<ReturnType<T['typeInfo']>['element']> : T;
+export type NormalisedArrayOf<T> = T extends ArrayOf<infer TElementType> ? TElementType[] : T;
 
 export interface EndpointDefinitionRequestTypeInfo<TParams, TBody> {
   params: NormalisedArrayOf<TParams>;
@@ -121,10 +117,10 @@ function isClassBasedEndpointDefinitionOptions<
   TRequestParams extends Object | Empty,
   TRequestBody extends Object | Empty,
   TResponseBody extends Object | Empty
-  // tslint:enable:ban-types
-  >(
-    options: EndpointDefinitionOptions<TRequestParams, TRequestBody, TResponseBody>
-  ): options is ClassBasedEndpointDefinitionOptions<TRequestParams, TRequestBody, TResponseBody> {
+// tslint:enable:ban-types
+>(
+  options: EndpointDefinitionOptions<TRequestParams, TRequestBody, TResponseBody>
+): options is ClassBasedEndpointDefinitionOptions<TRequestParams, TRequestBody, TResponseBody> {
 
   const partialOptions = options as
     Partial<ClassBasedEndpointDefinitionOptions<TRequestParams, TRequestBody, TResponseBody>>;

@@ -1,5 +1,3 @@
-import { expect } from 'chai';
-
 import { TestCase } from '../../tests/infrastructure/testCase';
 import { cleanseHttpMethod, HttpMethod } from './http';
 
@@ -15,12 +13,12 @@ describe('shared/http', () => {
         { input: 'delete', expected: 'DELETE' },
       ];
       for (const testCase of testCases) {
-        expect(cleanseHttpMethod(testCase.input)).to.equal(testCase.expected);
+        expect(cleanseHttpMethod(testCase.input)).toBe(testCase.expected);
       }
     });
 
     it('should error if method unsupported', () => {
-      expect(() => cleanseHttpMethod('SQUANCH' as any)).to.throw('Unsupported HTTP method: SQUANCH');
+      expect(() => cleanseHttpMethod('SQUANCH' as any)).toThrow('Unsupported HTTP method: SQUANCH');
     });
   });
 });

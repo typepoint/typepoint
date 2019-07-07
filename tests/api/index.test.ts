@@ -1,30 +1,18 @@
+import 'reflect-metadata';
+
 import axios from 'axios';
-import { assert, expect } from 'chai';
-import 'chai-as-promised';
 import * as clone from 'clone';
 import * as getPort from 'get-port';
 import * as httpStatusCodes from 'http-status-codes';
 import { Container, decorate, injectable } from 'inversify';
-import 'reflect-metadata';
-import * as sinon from 'sinon';
-
 import { TypePointClient } from '../../src/client';
 import { EndpointHandler, EndpointMiddleware, NotFoundMiddleware } from '../../src/server';
-
 import partialMockOf from '../../tests/infrastructure/mockOf';
 import { DataStore } from './db/dataStore';
 import { createTodo, deleteTodo, getCompletedTodos, getTodo, getTodos, updateTodo } from './definitions';
-import {
-  CreateTodoHandler, DeleteTodoHandler, GetTodoHandler,
-  GetTodosHandler, UpdateTodoHandler
-} from './handlers';
-import { GetCompletedTodosHandler } from './handlers/todos/listCompleted';
-import { RequestLoggerMiddleware } from './middleware/requestLogger';
-import { ResponseTimeMiddleware } from './middleware/responseTime';
 import { Todo } from './models/todo';
 import { Server } from './server';
 import { LoggerService } from './services/loggerService';
-import { TodoService } from './services/todoService';
 
 describe('api/Sample Server', () => {
   let todos: Todo[];
@@ -33,16 +21,13 @@ describe('api/Sample Server', () => {
   let client: TypePointClient;
   let loggerService: LoggerService;
 
-  before(() => {
+  beforeAll(() => {
     decorate(injectable(), EndpointHandler);
     decorate(injectable(), EndpointMiddleware);
     decorate(injectable(), NotFoundMiddleware);
   });
 
-  beforeEach(async function() {
-    // Allow server some time to spin up
-    this.timeout(5000);
-
+  beforeEach(async () => {
     // Configure ioc
     todos = [
       {
@@ -63,27 +48,17 @@ describe('api/Sample Server', () => {
     ];
     ioc = new Container({
       defaultScope: 'Singleton',
-      // autoBindInjectable: true
+      autoBindInjectable: true
     });
 
     loggerService = partialMockOf<LoggerService>({
-      info: sinon.spy(),
-      warn: sinon.spy(),
-      error: sinon.spy()
+      info: jest.fn(),
+      warn: jest.fn(),
+      error: jest.fn()
     });
 
-    ioc.bind(NotFoundMiddleware).toSelf();
     ioc.bind(DataStore).toDynamicValue(() => new DataStore(todos));
     ioc.bind(LoggerService).toDynamicValue(() => loggerService);
-    ioc.bind(ResponseTimeMiddleware).toSelf();
-    ioc.bind(RequestLoggerMiddleware).toSelf();
-    ioc.bind(TodoService).toSelf();
-    ioc.bind(CreateTodoHandler).toSelf();
-    ioc.bind(DeleteTodoHandler).toSelf();
-    ioc.bind(GetCompletedTodosHandler).toSelf();
-    ioc.bind(GetTodoHandler).toSelf();
-    ioc.bind(GetTodosHandler).toSelf();
-    ioc.bind(UpdateTodoHandler).toSelf();
 
     const port = await getPort();
 
@@ -95,8 +70,7 @@ describe('api/Sample Server', () => {
     });
   });
 
-  afterEach(async function() {
-    this.timeout(5000);
+  afterEach(async () => {
     await server.stop();
   });
 
@@ -105,34 +79,22 @@ describe('api/Sample Server', () => {
 
     const response = await client.fetch(getTodos);
 
-    expect(response)
-      .to.have.property('statusCode')
-      .that.deep.equals(200);
+    expect(response).toHaveProperty('statusCode', 200);
 
-    expect(response)
-      .to.have.property('statusText')
-      .that.deep.equals('OK');
+    expect(response).toHaveProperty('statusText', 'OK');
 
-    expect(response)
-      .to.have.property('body')
-      .that.deep.equals(expectation);
+    expect(response).toHaveProperty('body', expectation);
   });
 
   it('should get list of completed todos', async () => {
     const expectation = clone(todos).filter(todo => todo.isCompleted);
     const response = await client.fetch(getCompletedTodos);
 
-    expect(response)
-      .to.have.property('statusCode')
-      .that.deep.equals(200);
+    expect(response).toHaveProperty('statusCode', 200);
 
-    expect(response)
-      .to.have.property('statusText')
-      .that.deep.equals('OK');
+    expect(response).toHaveProperty('statusText', 'OK');
 
-    expect(response)
-      .to.have.property('body')
-      .that.deep.equals(expectation);
+    expect(response).toHaveProperty('body', expectation);
   });
 
   it('should get a todo', async () => {
@@ -148,38 +110,24 @@ describe('api/Sample Server', () => {
       }
     });
 
-    expect(response)
-      .to.have.property('statusCode')
-      .that.deep.equals(200);
+    expect(response).toHaveProperty('statusCode', 200);
 
-    expect(response)
-      .to.have.property('statusText')
-      .that.deep.equals('OK');
+    expect(response).toHaveProperty('statusText', 'OK');
 
-    expect(response)
-      .to.have.property('body')
-      .that.deep.equals(expectation);
+    expect(response).toHaveProperty('body', expectation);
   });
 
   it(`should not return a todo that doesn't exist`, async () => {
-    await client.fetch(getTodo, {
+    await expect(client.fetch(getTodo, {
       params: {
         id: '999'
       }
-    }).then(() => {
-      assert.fail('Expected fetch to return a promise rejection');
-    }, err => {
-      expect(err)
-        .to.have.property('response')
-        .to.have.property('statusCode', httpStatusCodes.NOT_FOUND);
-
-      expect(err)
-        .to.have.property('response')
-        .to.have.property('statusText', httpStatusCodes.getStatusText(httpStatusCodes.NOT_FOUND));
-
-      expect(err)
-        .to.have.property('response')
-        .to.have.property('body', '');
+    })).rejects.toMatchObject({
+      response: {
+        statusCode: httpStatusCodes.NOT_FOUND,
+        statusText: httpStatusCodes.getStatusText(httpStatusCodes.NOT_FOUND),
+        body: ''
+      }
     });
   });
 
@@ -197,23 +145,17 @@ describe('api/Sample Server', () => {
       }
     });
 
-    expect(response)
-      .to.have.property('statusCode')
-      .that.deep.equals(200);
+    expect(response).toHaveProperty('statusCode', 200);
 
-    expect(response)
-      .to.have.property('statusText')
-      .that.deep.equals('OK');
+    expect(response).toHaveProperty('statusText', 'OK');
 
-    expect(response)
-      .to.have.property('body')
-      .that.deep.equals({
-        id,
-        title,
-        isCompleted
-      });
+    expect(response).toHaveProperty('body', {
+      id,
+      title,
+      isCompleted
+    });
 
-    expect(todos).to.have.lengthOf(expectedLength);
+    expect(todos).toHaveLength(expectedLength);
   });
 
   it('should update todo', async () => {
@@ -232,17 +174,11 @@ describe('api/Sample Server', () => {
       body: valuesToUpdate
     });
 
-    expect(actual)
-      .to.have.property('statusCode')
-      .that.deep.equals(200);
+    expect(actual).toHaveProperty('statusCode', 200);
 
-    expect(actual)
-      .to.have.property('statusText')
-      .that.deep.equals('OK');
+    expect(actual).toHaveProperty('statusText', 'OK');
 
-    expect(actual)
-      .to.have.property('body')
-      .that.deep.equals(expectation);
+    expect(actual).toHaveProperty('body', expectation);
   });
 
   it('should not update todo when todo is invalid', async () => {
@@ -262,33 +198,13 @@ describe('api/Sample Server', () => {
     }
 
     if (!error) {
-      assert.fail('Expected fetch to reject with a validation error');
+      throw new Error('Expected fetch to reject with a validation error');
     }
 
-    expect(error)
-      .to.have.property('response')
-      .that.has.property('statusCode', 400);
-
-    expect(error)
-      .to.have.property('response')
-      .that.has.property('body')
-      .that.has.property('name', 'ValidationError');
-
-    expect(error)
-      .to.have.property('response')
-      .that.has.property('body')
-      .that.has.property('details')
-      .that.has.property('0')
-      .that.has.property('path', 'title');
-
-    expect(error)
-      .to.have.property('response')
-      .that.has.property('body')
-      .that.has.property('details')
-      .that.has.property('0')
-      .that.contains({
-        message: '"title" is not allowed to be empty'
-      });
+    expect(error).toHaveProperty(['response', 'statusCode'], 400);
+    expect(error).toHaveProperty(['response', 'body', 'name'], 'ValidationError');
+    expect(error).toHaveProperty(['response', 'body', 'details', '0', 'path'], 'title');
+    expect(error).toHaveProperty(['response', 'body', 'details', '0', 'message'], '"title" is not allowed to be empty');
   });
 
   it('should delete todo', async () => {
@@ -302,35 +218,26 @@ describe('api/Sample Server', () => {
       }
     });
 
-    expect(actual)
-      .to.have.property('statusCode')
-      .that.deep.equals(204);
+    expect(actual).toHaveProperty('statusCode', 204);
 
-    expect(actual)
-      .to.have.property('statusText')
-      .that.deep.equals('No Content');
+    expect(actual).toHaveProperty('statusText', 'No Content');
 
-    expect(actual)
-      .to.have.property('body')
-      .that.deep.equals('');
+    expect(actual).toHaveProperty('body', '');
 
-    expect(todos).to.have.lengthOf(expectedLength);
+    expect(todos).toHaveLength(expectedLength);
 
-    expect(todos.some(p => p.id === id)).to.be.false;
+    expect(todos.some(p => p.id === id)).toBe(false);
   });
 
   it('should use middleware to return a x-response-time header', async () => {
     const response = await client.fetch(getTodos);
 
-    expect(response)
-      .to.have.property('headers')
-      .that.has.property('x-response-time')
-      .that.matches(/^\d+ms$/i);
+    expect(response).toHaveProperty(['headers', 'x-response-time'], expect.stringMatching(/^\d+ms$/i));
   });
 
   it('should use middleware to log requests', async () => {
     await client.fetch(getTodos);
-    expect(loggerService.info).to.have.been.calledWith(sinon.match(/^GET\s\/todos\s\-\s\d+ms$/i));
+    expect(loggerService.info).toHaveBeenCalledWith(expect.stringMatching(/^GET\s\/todos\s\-\s\d+ms$/i));
   });
 
   it('should return a 404', async () => {
@@ -340,6 +247,6 @@ describe('api/Sample Server', () => {
         validateStatus: () => true
       }
     );
-    expect(res.status).to.equal(404);
+    expect(res.status).toBe(404);
   });
 });

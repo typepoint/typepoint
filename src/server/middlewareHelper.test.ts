@@ -1,6 +1,3 @@
-import { expect } from 'chai';
-import * as sinon from 'sinon';
-
 import partialMockOf from '../../tests/infrastructure/mockOf';
 import { EndpointHandler } from '../server';
 import { HandlerMatchIterator } from './middlewareHelper';
@@ -9,15 +6,15 @@ describe('server/middlewareHelper', () => {
   describe('HandlerMatchIterator', () => {
     it('should return handlers that match', () => {
       const requestLogger = partialMockOf<EndpointHandler>({
-        match: sinon.stub().returns({})
+        match: jest.fn().mockReturnValue({})
       });
 
       const getProduct = partialMockOf<EndpointHandler>({
-        match: sinon.stub().returns({ id: '1337' })
+        match: jest.fn().mockReturnValue({ id: '1337' })
       });
 
       const getProducts = partialMockOf<EndpointHandler>({
-        match: sinon.stub().returns(undefined)
+        match: jest.fn().mockReturnValue(undefined)
       });
 
       const allHandlers = [requestLogger, getProducts, getProduct];
@@ -25,25 +22,25 @@ describe('server/middlewareHelper', () => {
       const handlerMatchIterator = new HandlerMatchIterator(allHandlers, { method: 'GET', url: '/etc' });
 
       let handlerMatch = handlerMatchIterator.getNextMatch();
-      expect(handlerMatch).to.not.be.undefined;
-      expect(handlerMatch).to.have.property('parsedUrl').that.deep.equals({});
-      expect(handlerMatch).to.have.property('handler').that.equals(requestLogger);
+      expect(handlerMatch).toBeDefined();
+      expect(handlerMatch).toHaveProperty('parsedUrl', {});
+      expect(handlerMatch).toHaveProperty('handler', requestLogger);
 
       handlerMatch = handlerMatchIterator.getNextMatch();
-      expect(handlerMatch).to.not.be.undefined;
-      expect(handlerMatch).to.have.property('parsedUrl').that.deep.equals({ id: '1337' });
-      expect(handlerMatch).to.have.property('handler').that.equals(getProduct);
+      expect(handlerMatch).toBeDefined();
+      expect(handlerMatch).toHaveProperty('parsedUrl', { id: '1337' });
+      expect(handlerMatch).toHaveProperty('handler', getProduct);
 
       handlerMatch = handlerMatchIterator.getNextMatch();
-      expect(handlerMatch).to.be.undefined;
+      expect(handlerMatch).toBeUndefined();
     });
 
     it('should return undefined when no matching handlers', () => {
       const handler1 = partialMockOf<EndpointHandler>({
-        match: sinon.stub().returns(undefined)
+        match: jest.fn().mockReturnValue(undefined)
       });
       const handler2 = partialMockOf<EndpointHandler>({
-        match: sinon.stub().returns(undefined)
+        match: jest.fn().mockReturnValue(undefined)
       });
 
       const allHandlers = [handler1, handler2];
@@ -51,7 +48,7 @@ describe('server/middlewareHelper', () => {
       const handlerMatchIterator = new HandlerMatchIterator(allHandlers, { method: 'GET', url: '/etc' });
 
       const handlerMatch = handlerMatchIterator.getNextMatch();
-      expect(handlerMatch).to.be.undefined;
+      expect(handlerMatch).toBeUndefined();
     });
   });
 });

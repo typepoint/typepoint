@@ -1,5 +1,3 @@
-import { expect } from 'chai';
-
 import { TestCase } from '../../tests/infrastructure/testCase';
 import { parseQueryString, parseUrl, QueryParameterValues } from './url';
 
@@ -117,7 +115,7 @@ describe('shared/url', () => {
     it('should extract pre-path, path and post-path', () => {
       for (const testCase of testCases) {
         const actual = parseUrl(testCase.input);
-        expect(actual).to.eql(testCase.expected);
+        expect(actual).toEqual(testCase.expected);
       }
     });
   });
@@ -178,7 +176,7 @@ describe('shared/url', () => {
     it('should return parameter names and values', () => {
       for (const testCase of testCases) {
         const actual = parseQueryString(testCase.input);
-        expect(actual).to.deep.equal(testCase.expected);
+        expect(actual).toEqual(testCase.expected);
       }
     });
   });
