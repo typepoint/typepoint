@@ -1,10 +1,9 @@
-import * as bodyParser from 'body-parser';
-import * as express from 'express';
-import * as getPort from 'get-port';
-import * as http from 'http';
-import { Container } from 'inversify';
 import 'reflect-metadata';
 
+import * as bodyParser from 'body-parser';
+import * as express from 'express';
+import * as http from 'http';
+import { Container } from 'inversify';
 import { NotFoundMiddleware, Router } from '../../src/server';
 import { toMiddleware } from '../../src/server/express';
 import { validateAndTransform } from '../../src/server/validation/tsdv-joi';
@@ -64,8 +63,8 @@ export class Server {
 
     const server = http.createServer(app);
 
-    await new Promise((resolve, reject) => {
-      server.listen(this.port, (err: any) => err ? reject(err) : resolve());
+    await new Promise(resolve => {
+      server.listen(this.port, () => resolve());
       this.server = server;
     });
   }
