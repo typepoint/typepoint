@@ -122,9 +122,6 @@ client.fetch(GetTodo, {
 });
 ```
 
-## Note about breaking changes
-Currently TypePoint is _pre_ v1.0.0, thus breaking changes may be introduced in minor versions instead of major versions. Patch versions will continue to just include bug fixes and other non breaking changes. Once TypePoint has reached 1.0.0 it will follow strict semantic versioning.
-
 -------------------------------------------------------
 
 Got an problem or suggestion? Submit an [issue](https://github.com/typepoint/typepoint/issues)!
