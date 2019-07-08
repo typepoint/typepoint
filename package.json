@@ -9,9 +9,8 @@
   },
   "scripts": {
     "check": "npm run lint && npm run build && npm run test",
-    "clean": "npm run clean:dist",
-    "clean:dist": "rimraf ./dist",
-    "prebuild": "npm run clean:dist",
+    "clean": "rimraf ./dist",
+    "prebuild": "npm run clean",
     "build": "npm run build:entry && npm run build:server && npm run build:client",
     "build:client": "tsc -p ./src/tsconfig.client.json",
     "build:entry": "tsc -p ./src/tsconfig.entry.json",
