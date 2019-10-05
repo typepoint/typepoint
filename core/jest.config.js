@@ -4,6 +4,9 @@ module.exports = {
   collectCoverageFrom: [
     "src/**/*.ts?(x)"
   ],
+  coveragePathIgnorePatterns: [
+    ".*\.d\.ts$"
+  ],
   coverageDirectory: "coverage",
   globals: {
     "ts-jest": {

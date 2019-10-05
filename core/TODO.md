@@ -3,9 +3,9 @@
 ## Project
 - ✔ Add pre-commit checks
 - ✔ Package so that paths are optimal for consuming before publishing
-- □ Add documentation to README
-- □ Add proper 100% code coverage
-- □ Setup Greenkeeper
+- ✔ Add documentation to README
+- □ Add 100% code coverage
+- □ Setup Dependabot
 - □ Setup Commitizen (or similar) and start using conventional commits
 - ✔ Update package.json with correct github repository details
 - □ Split express middleware into separate repository and package
@@ -23,14 +23,14 @@
   - ✔ Way to specify arrays
   - ✔ Validation of request input
   - ✔ Coercion of request input to correct types
-  - □ Allow decoration based authorization
-  - □ Add pattern matching in path params e.g. path => path.literal('todo').number('id')
+  - ✔ Allow decoration based authorization
+  - ✔ Add pattern matching in path params e.g. path => path.literal('todo').number('id')
 
 ## Endpoint Handlers
 - ✔ Ability to have services you need injected for testability
 - ✔ Read access to typed versions of request
 - ✔ Read/Write access to typed response body
-- □ Access to extra typed attachments like User, etc
+- ✔ Access to extra typed attachments like User, etc
 - ✔ Ability to not handle route in a handler
 - ✔ Read request headers
 - ✔ Write response headers
