@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/typepoint/core/master/img/logo-no-bg-wide.png" width="400" />
+  <img src="https://github.com/typepoint/typepoint/raw/master/img/logo-no-bg-wide.png" width="400" />
   <p align="center">
     Library for easily
     <i>defining, enforcing, consuming, and/or serving</i>
@@ -7,8 +7,6 @@
     in TypeScript.
   </p>
 </p>
-
-[![CircleCI](https://circleci.com/gh/typepoint/core.svg?style=shield)](https://circleci.com/gh/typepoint/core)
 
 ## Install
 ```sh
