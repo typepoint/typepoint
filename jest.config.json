@@ -1,0 +1,18 @@
+{
+  "clearMocks": true,
+  "collectCoverage": true,
+  "collectCoverageFrom": ["src/**/*.ts?(x)"],
+  "coveragePathIgnorePatterns": [".*\\.d\\.ts$"],
+  "coverageDirectory": "coverage",
+  "globals": {
+    "ts-jest": {
+      "tsConfig": "./tsconfig.json"
+    }
+  },
+  "moduleFileExtensions": ["ts", "tsx", "js", "jsx"],
+  "testEnvironment": "node",
+  "testRegex": ["^.+\\.test\\.tsx?$"],
+  "transform": {
+    "^.+\\.tsx?$": "ts-jest"
+  }
+}

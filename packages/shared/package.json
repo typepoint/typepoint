@@ -1,0 +1,20 @@
+{
+  "name": "@typepoint/shared",
+  "version": "2.0.0",
+  "private": true,
+  "main": "src/index.ts",
+  "types": "src/index",
+  "license": "SEE LICENSE IN LICENSE",
+  "scripts": {
+    "clean": "../../support/clean.sh shared",
+    "build": "../../support/build.sh shared",
+    "lint": "../../support/lint.sh shared",
+    "release": "../../support/release.sh shared",
+    "ship": "../../support/ship.sh shared",
+    "test": "../../support/test.sh shared",
+    "verify": "../../support/verify.sh shared"
+  },
+  "devDependencies": {
+    "standard-version": "7.0.0"
+  }
+}

@@ -62,4 +62,7 @@ jspm_packages/
 # Build artifacts
 dist
 tests-output
-package
+tsconfig.tsbuildinfo
+
+# Generated scripts, configs, etc
+packages/**/jest.config.json
