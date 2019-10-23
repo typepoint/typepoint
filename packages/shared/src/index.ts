@@ -3,8 +3,30 @@ import { cleanseHttpMethod, HttpMethod } from './http';
 import { createPath, PathBuildingFunction } from './pathBuilder';
 import { PathHelper, PathHelperParseMatch } from './pathHelper';
 
-export { HttpMethod } from './http';
-export { PathHelper, PathHelperParseMatch } from './pathHelper';
+export {
+  cleanseHttpMethod,
+  HttpMethod,
+  HttpMethods,
+  UnsupportedHttpMethod,
+} from './http';
+export {
+  Logger,
+  NoopLogger,
+} from './logger';
+export {
+  GetUrlOptions,
+  PathHelperParseMatch,
+  ParsedPathPattern,
+  PathHelper,
+  RequiredPathParametersNotFound,
+  UnsupportedPathPatternError,
+} from './pathHelper';
+export {
+  parseQueryString,
+  ParsedUrl,
+  parseUrl,
+  QueryParameterValues,
+} from './url';
 
 export type Constructor<T> = new (...args: any[]) => T;
 

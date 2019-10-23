@@ -1,15 +1,15 @@
 {
   "name": "@typepoint/client",
   "version": "2.0.0",
-  "main": "dist/index.js",
-  "types": "dist/index",
+  "main": "src/index.ts",
+  "types": "src/index",
   "license": "SEE LICENSE IN LICENSE",
   "scripts": {
     "clean": "../../support/clean.sh client",
     "build": "../../support/build.sh client",
     "lint": "../../support/lint.sh client",
-    "release": "",
-    "ship": "",
+    "release": "../../support/release.sh client",
+    "ship": "../../support/ship.sh client",
     "test": "../../support/test.sh client",
     "verify": "yarn lint && yarn build && yarn test"
   },

@@ -6,7 +6,8 @@
   "coverageDirectory": "coverage",
   "globals": {
     "ts-jest": {
-      "tsConfig": "./tsconfig.json"
+      "isolatedModules": true,
+      "tsConfig": "./tsconfig.test.json"
     }
   },
   "moduleFileExtensions": ["ts", "tsx", "js", "jsx"],

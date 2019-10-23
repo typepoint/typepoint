@@ -1,0 +1,12 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "baseUrl": "src",
+    "noEmit": true,
+    "paths": {
+      "@typepoint/fixtures": ["../fixtures/src"],
+      "@typepoint/shared": ["../shared/src"]
+    }
+  },
+  "include": ["src/**/*.test.ts"]
+}

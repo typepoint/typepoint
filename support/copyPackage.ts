@@ -31,6 +31,16 @@ function run() {
     fieldsToRemove.forEach((fieldToRemove) => {
       delete packageObj[fieldToRemove];
     });
+
+    const { main, types } = packageObj;
+
+    if (typeof main === 'string') {
+      packageObj.main = main.replace('"src/', '');
+    }
+    if (typeof types === 'string') {
+      packageObj.types = types.replace('"src/', '');
+    }
+
     return JSON.stringify(packageObj, null, '  ');
   });
 }
