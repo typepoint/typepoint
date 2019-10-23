@@ -1,0 +1,25 @@
+{
+  "name": "@typepoint/joiful",
+  "version": "2.0.0",
+  "private": true,
+  "main": "src/index.ts",
+  "types": "src/index",
+  "license": "SEE LICENSE IN LICENSE",
+  "scripts": {
+    "clean": "../../support/clean.sh joiful",
+    "build": "../../support/build.sh joiful",
+    "lint": "../../support/lint.sh joiful",
+    "release": "../../support/release.sh joiful",
+    "ship": "../../support/ship.sh joiful",
+    "test": "../../support/test.sh joiful",
+    "verify": "../../support/verify.sh joiful"
+  },
+  "peerDependencies": {
+    "joiful": "^1.1.0",
+    "@typepoint/server": "2.x",
+    "@typepoint/shared": "2.x"
+  },
+  "devDependencies": {
+    "reflect-metadata": "0.1.13"
+  }
+}

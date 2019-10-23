@@ -1,0 +1,15 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "baseUrl": "src",
+    "noEmit": true,
+    "paths": {
+      "@typepoint/client": ["../client/src"],
+      "@typepoint/fixtures": ["../fixtures/src"],
+      "@typepoint/joiful": ["../joiful/src"],
+      "@typepoint/shared": ["../shared/src"]
+    }
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": ["src/**/*.test.ts"]
+}

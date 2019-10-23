@@ -11,6 +11,7 @@ module.exports = {
     },
   },
   rules: {
+    'no-param-reassign': 'off',
     'react/jsx-filename-extension': [2, { extensions: ['.js', '.jsx', '.ts', '.tsx'] }],
     'import/no-extraneous-dependencies': 'off', // [2, { devDependencies: ['**/*.test.tsx', '**/*.test.ts'] }],
     'import/no-unresolved': 'off',

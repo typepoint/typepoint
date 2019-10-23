@@ -1,7 +1,15 @@
 {
   "name": "@typepoint/fixtures",
   "version": "1.0.0",
+  "private": true,
   "main": "src/index.ts",
   "types": "src/index",
-  "license": "MIT"
+  "license": "SEE LICENSE IN LICENSE",
+  "scripts": {
+    "clean": "../../support/clean.sh fixtures",
+    "build": "../../support/build.sh fixtures",
+    "lint": "../../support/lint.sh fixtures",
+    "test": "../../support/test.sh fixtures",
+    "verify": "../../support/verify.sh fixtures"
+  }
 }

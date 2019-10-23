@@ -1,6 +1,7 @@
 SCRIPT_PATH=$(dirname "$0")
 ROOT_PATH="$SCRIPT_PATH/.."
 PACKAGE_PATH="$ROOT_PATH/packages/$1"
+DIST_PATH="$PACKAGE_PATH/dist"
 
 cd "$PACKAGE_PATH"
 
@@ -11,10 +12,18 @@ if test -f "$TS_BUILD_INFO_PATH"; then
   rm "$TS_BUILD_INFO_PATH"
 fi
 
-yarn tsc
+TS_CONFIG_FILE_NAME="$PACKAGE_PATH/tsconfig.json"
+MAIN_TS_CONFIG_FILE_NAME="$PACKAGE_PATH/tsconfig.main.json"
+if test -f "$MAIN_TS_CONFIG_FILE_NAME"; then
+  TS_CONFIG_FILE_NAME="$MAIN_TS_CONFIG_FILE_NAME"
+fi
 
-cp ./README.md ./dist
+yarn tsc -p "$TS_CONFIG_FILE_NAME"
 
-cp "$ROOT_PATH/LICENSE" ./dist
+if test -d "$DIST_PATH"; then
+  cp ./README.md ./dist
 
-yarn ts-node "$ROOT_PATH/support/copyPackage.ts" $1
+  cp "$ROOT_PATH/LICENSE" ./dist
+
+  yarn ts-node "$ROOT_PATH/support/copyPackage.ts" $1
+fi

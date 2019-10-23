@@ -1,0 +1,27 @@
+{
+  "name": "@typepoint/e2e-tests",
+  "version": "2.0.0",
+  "private": true,
+  "license": "SEE LICENSE IN LICENSE",
+  "scripts": {
+    "clean": "../../support/clean.sh e2e-tests",
+    "build": "../../support/build.sh e2e-tests",
+    "lint": "../../support/lint.sh e2e-tests",
+    "test": "../../support/test.sh e2e-tests",
+    "verify": "../../support/verify.sh e2e-tests"
+  },
+  "dependencies": {
+    "@typepoint/client": "2.0.0",
+    "@typepoint/joiful": "2.0.0",
+    "@typepoint/shared": "2.0.0",
+    "body-parser": "1.19.0",
+    "express": "4.17.1",
+    "get-port": "5.0.0",
+    "http-status-codes": "1.3.2",
+    "inversify": "5.0.1",
+    "joiful": "1.1.6"
+  },
+  "devDependencies": {
+    "@types/node": "12.11.1"
+  }
+}
