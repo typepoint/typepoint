@@ -8,8 +8,8 @@ cd "$PACKAGE_PATH"
 git push --follow-tags origin master
 
 # Publish package to npm
-cd ./dist
-yarn publish
+cd "$PACKAGE_PATH/dist"
+yarn publish --access=public --non-interactive --no-git-tag-version
 
 # Clean the dist folder
 cd ..
