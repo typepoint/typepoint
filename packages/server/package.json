@@ -15,7 +15,7 @@
     "verify": "../../support/verify.sh server"
   },
   "dependencies": {
-    "@typepoint/shared": "2.0.0",
+    "@typepoint/shared": "^2.0.0",
     "http-status-codes": "1.3.2"
   }
 }
