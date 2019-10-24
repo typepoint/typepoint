@@ -26,4 +26,8 @@ if test -d "$DIST_PATH"; then
   cp "$ROOT_PATH/LICENSE" ./dist
 
   yarn ts-node "$ROOT_PATH/support/copyPackage.ts" $1
+
+  if test -f "$PACKAGE_PATH/CHANGELOG.md"; then
+    cp "$PACKAGE_PATH/CHANGELOG.md" "$DIST_PATH/CHANGELOG.md"
+  fi
 fi
