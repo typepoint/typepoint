@@ -35,10 +35,12 @@ function run() {
     const { main, types } = packageObj;
 
     if (typeof main === 'string') {
-      packageObj.main = main.replace('"src/', '');
+      packageObj.main = main
+        .replace(/^src\//, '')
+        .replace(/\.ts$/, '.js');
     }
     if (typeof types === 'string') {
-      packageObj.types = types.replace('"src/', '');
+      packageObj.types = types.replace(/^src\//, '');
     }
 
     return JSON.stringify(packageObj, null, '  ');
