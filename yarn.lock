@@ -3576,10 +3576,10 @@ joi@^13.1.2:
     isemail "3.x.x"
     topo "3.x.x"
 
-joiful@1.1.3:
-  version "1.1.3"
-  resolved "https://registry.yarnpkg.com/joiful/-/joiful-1.1.3.tgz#bf0cbb3c75918c5e3915d1476b6cb00885fd8e91"
-  integrity sha512-ee8VyJ5C/FN9pA0EwTjNeoXbGGi+RmGeUwg2rZod0M9sy19pbnMkWo3yDW+yBFnLyyrmNIoXRH+51nGHdOhlFw==
+joiful@1.1.6:
+  version "1.1.6"
+  resolved "https://registry.yarnpkg.com/joiful/-/joiful-1.1.6.tgz#27e9f1026e57b619a777ffeff6e1f1c55aa0874c"
+  integrity sha512-WLeqVoumBk+qYTVN2kPlEhHRu5PilEGVSkwuh8fmOuGIwNc8NCiEHgYs9DYdgH3btMxZ8Sr1Icok8QIfehiI/w==
   dependencies:
     "@hapi/joi" "15.1.1"
     "@types/hapi__joi" "15.0.3"
