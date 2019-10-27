@@ -1,10 +1,10 @@
 {
   "name": "typepoint",
   "private": true,
-  "author": "Ben <codeandcats@gmail.com>",
+  "author": "Ben <codeandcats@gmail.com> (https://github.com/codeandcats)",
   "license": "SEE LICENSE IN LICENSE",
   "contributors": [
-    "Ben <codeandcats@gmail.com>",
+    "Ben <codeandcats@gmail.com> (https://github.com/codeandcats)",
     "Laurence Dougal Myers (https://github.com/laurence-myers)"
   ],
   "keywords": [
@@ -14,9 +14,8 @@
     "typed-point",
     "strongpoint",
     "strong-point",
-    "strongly",
     "typed",
-    "endpoints",
+    "endpoint",
     "express",
     "TypeScript",
     "typesafe",
@@ -36,7 +35,14 @@
   "homepage": "https://github.com/typepoint/typepoint#readme",
   "workspaces": {
     "packages": [
-      "packages/*"
+      "packages/client",
+      "packages/e2e-tests",
+      "packages/examples/todos",
+      "packages/express",
+      "packages/fixtures",
+      "packages/joiful",
+      "packages/server",
+      "packages/shared"
     ]
   },
   "pre-commit": {
