@@ -15,9 +15,9 @@
     "verify": "../../support/verify.sh joiful"
   },
   "peerDependencies": {
-    "joiful": "^1.1.0",
-    "@typepoint/server": "2.x",
-    "@typepoint/shared": "2.x"
+    "joiful": "^1.1.6",
+    "@typepoint/server": "^2.0.3",
+    "@typepoint/shared": "^2.0.2"
   },
   "devDependencies": {
     "reflect-metadata": "0.1.13"
