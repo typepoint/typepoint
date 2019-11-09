@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Empty, EndpointDefinition } from '@typepoint/shared';
+import { defineEndpoint, Empty, EndpointDefinition } from '@typepoint/shared';
 import * as fixtures from '@typepoint/fixtures';
 import { partialOf } from 'jest-helpers';
 import { TypePointClient, TypePointClientResponse, TypePointClientResponseError } from '.';
@@ -15,7 +15,7 @@ describe('client', () => {
 
     beforeEach(() => {
       products = fixtures.getProducts();
-      getProducts = new EndpointDefinition<Empty, Empty, fixtures.Product[]>((path) => path.literal('products'));
+      getProducts = defineEndpoint<Empty, Empty, fixtures.Product[]>((path) => path.literal('products'));
     });
 
     async function makeRequest() {
