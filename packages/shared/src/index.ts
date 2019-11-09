@@ -1,14 +1,7 @@
 // eslint-disable-next-line max-classes-per-file
-import { cleanseHttpMethod, HttpMethod } from './http';
 import { createPath, PathBuildingFunction } from './pathBuilder';
 import { PathHelper, PathHelperParseMatch } from './pathHelper';
 
-export {
-  cleanseHttpMethod,
-  HttpMethod,
-  HttpMethods,
-  UnsupportedHttpMethod,
-} from './http';
 export {
   Logger,
   NoopLogger,
@@ -28,6 +21,8 @@ export {
   QueryParameterValues,
 } from './url';
 
+export const cleanseHttpMethod = (method: string) => method.toUpperCase();
+
 export type Constructor<T> = new (...args: any[]) => T;
 
 export interface ArrayOfTypeInfo<T> {
@@ -39,12 +34,6 @@ export class ArrayOfClassInfo<T> {
   }
 }
 
-export class DoNotReferenceTypeInfo extends Error {
-  constructor(name: string) {
-    super(`Do not evaluate ${name}.typeInfo(). It is reserved for internal use only.`);
-  }
-}
-
 export abstract class ArrayOf<T> {
   static isArrayOf: true = true;
 
@@ -52,10 +41,6 @@ export abstract class ArrayOf<T> {
 
   constructor(Class: Constructor<T>) {
     this.classInfo = new ArrayOfClassInfo(Class);
-  }
-
-  typeInfo = (): ArrayOfTypeInfo<T> => {
-    throw new DoNotReferenceTypeInfo('ArrayOf');
   }
 }
 
@@ -73,24 +58,34 @@ export function isArrayOf<T>(Class: Constructor<any>): Class is Constructor<Arra
   return !!(Class && (Class as any).isArrayOf);
 }
 
-export type NormalisedArrayOf<T> = T extends ArrayOf<infer TElementType> ? TElementType[] : T;
+export type NormalizeArrayOf<T> = T extends ArrayOf<infer TElementType> ? TElementType[] : T;
 
 export class Empty {
+  readonly __isEmpty = true;
 }
 
-export interface EndpointDefinitionRequestTypeInfo<TParams, TBody> {
-  params: NormalisedArrayOf<TParams>;
-  body: NormalisedArrayOf<TBody>;
+export function isEmptyClass(Class: Constructor<any>): boolean {
+  return Class === Empty;
 }
 
-export interface EndpointDefinitionResponseTypeInfo<TBody> {
-  body: NormalisedArrayOf<TBody>;
+export function isEmptyValue(value: any) {
+  if (value === null || value === undefined) {
+    return true;
+  }
+
+  if (typeof value === 'object' && !Object.keys(value).length) {
+    return true;
+  }
+
+  return false;
 }
 
-export interface EndpointDefinitionTypeInfo<TRequestParams, TRequestBody, TResponseBody> {
-  request: EndpointDefinitionRequestTypeInfo<TRequestParams, TRequestBody>;
-  response: EndpointDefinitionResponseTypeInfo<TResponseBody>;
-}
+export type NormalizeTypePointType<T> =
+  T extends ArrayOf<infer TElementType>
+    ? TElementType[]
+    : T extends Empty
+      ? ({} | undefined)
+      : T;
 
 export interface EndpointDefinitionUrlOptions<TRequestParams> {
   server?: string | undefined;
@@ -190,89 +185,114 @@ export class EndpointDefinitionInvalidConstructorArgs extends Error {
   }
 }
 
-export class EndpointDefinition<
+export interface EndpointDefinition<
   TRequestParams extends Record<string, any> | Empty,
   TRequestBody extends Record<string, any> | Empty,
   TResponseBody extends Record<string, any> | Empty
 > {
-  readonly method: HttpMethod;
+  readonly method: string;
 
   readonly path: string;
 
   readonly classInfo?: EndpointDefinitionClassInfo<TRequestParams, TRequestBody, TResponseBody>;
 
-  private pathHelper: PathHelper;
+  parse(url: string): PathHelperParseMatch | undefined;
 
-  constructor(buildPath: PathBuildingFunction<TRequestParams>);
+  url(options?: EndpointDefinitionUrlOptions<TRequestParams>): string;
+}
 
-  // eslint-disable-next-line no-dupe-class-members
-  constructor(method: HttpMethod, buildPath: PathBuildingFunction<TRequestParams>);
+export function defineEndpoint<
+  TRequestParams extends Record<string, any> | Empty,
+  TRequestBody extends Record<string, any> | Empty,
+  TResponseBody extends Record<string, any> | Empty
+>(
+  buildPath: PathBuildingFunction<TRequestParams>
+): EndpointDefinition<TRequestParams, TRequestBody, TResponseBody>;
 
-  // eslint-disable-next-line no-dupe-class-members
-  constructor(options: EndpointDefinitionOptions<TRequestParams, TRequestBody, TResponseBody>);
+export function defineEndpoint<
+  TRequestParams extends Record<string, any> | Empty,
+  TRequestBody extends Record<string, any> | Empty,
+  TResponseBody extends Record<string, any> | Empty
+>(
+  method: string,
+  buildPath: PathBuildingFunction<TRequestParams>
+): EndpointDefinition<TRequestParams, TRequestBody, TResponseBody>;
 
-  // eslint-disable-next-line no-dupe-class-members
-  constructor(...args: any[]) {
-    const DEFAULT_METHOD: HttpMethod = 'GET';
+export function defineEndpoint<
+  TRequestParams extends Record<string, any> | Empty,
+  TRequestBody extends Record<string, any> | Empty,
+  TResponseBody extends Record<string, any> | Empty
+>(
+  options: EndpointDefinitionOptions<TRequestParams, TRequestBody, TResponseBody>
+): EndpointDefinition<TRequestParams, TRequestBody, TResponseBody>;
 
-    switch (args.length) {
-      case 1: {
-        if (typeof args[0] === 'object') {
-          const options: EndpointDefinitionOptions<TRequestParams, TRequestBody, TResponseBody> = args[0];
+export function defineEndpoint<
+  TRequestParams extends Record<string, any> | Empty,
+  TRequestBody extends Record<string, any> | Empty,
+  TResponseBody extends Record<string, any> | Empty
+>(...args: any[]): EndpointDefinition<TRequestParams, TRequestBody, TResponseBody> {
+  const DEFAULT_METHOD = 'GET';
 
-          this.method = cleanseHttpMethod(options.method || DEFAULT_METHOD);
-          this.path = createPath(options.path);
-          this.pathHelper = new PathHelper(this.path);
+  const [firstArg, secondArg] = args;
 
-          if (isClassBasedEndpointDefinitionOptions(options)) {
-            this.classInfo = new EndpointDefinitionClassInfo(
-              options.requestParams,
-              options.requestBody,
-              options.responseBody,
-            );
-          }
-        } else if (typeof args[0] === 'function') {
-          this.method = DEFAULT_METHOD;
-          this.path = createPath(args[0]);
-          this.pathHelper = new PathHelper(this.path);
-        } else {
-          throw new EndpointDefinitionInvalidConstructorArgs(args);
-        }
-        break;
+  const make = ({ classInfo, method, pathFunc }: {
+    classInfo?: EndpointDefinitionClassInfo<TRequestParams, TRequestBody, TResponseBody> | undefined;
+    method: string;
+    pathFunc: PathBuildingFunction<TRequestParams>;
+  }) => {
+    const path = createPath(pathFunc);
+    const pathHelper = new PathHelper(path);
+    return {
+      method,
+      path,
+      classInfo,
+      parse: (url: string) => pathHelper.parse(url),
+      url: (options?: EndpointDefinitionUrlOptions<TRequestParams>) => pathHelper.url(options),
+    };
+  };
+
+  switch (args.length) {
+    case 1: {
+      if (typeof firstArg === 'object') {
+        const options: EndpointDefinitionOptions<TRequestParams, TRequestBody, TResponseBody> = firstArg;
+
+        return make({
+          classInfo: isClassBasedEndpointDefinitionOptions(options) ? new EndpointDefinitionClassInfo(
+            options.requestParams,
+            options.requestBody,
+            options.responseBody,
+          ) : undefined,
+          method: cleanseHttpMethod(options.method || DEFAULT_METHOD),
+          pathFunc: options.path,
+        });
+      } if (typeof firstArg === 'function') {
+        return make({
+          method: DEFAULT_METHOD,
+          pathFunc: firstArg,
+        });
       }
 
-      case 2: {
-        this.method = cleanseHttpMethod(args[0]);
-        this.path = createPath(args[1]);
-        this.pathHelper = new PathHelper(this.path);
-        break;
-      }
-
-      default: {
-        throw new EndpointDefinitionInvalidConstructorArgs(args);
-      }
+      throw new EndpointDefinitionInvalidConstructorArgs(args);
     }
-  }
 
-  typeInfo = (): EndpointDefinitionTypeInfo<TRequestParams, TRequestBody, TResponseBody> => {
-    throw new DoNotReferenceTypeInfo('EndpointDefinition');
-  }
+    case 2: {
+      return make({
+        method: cleanseHttpMethod(firstArg || DEFAULT_METHOD),
+        pathFunc: secondArg,
+      });
+    }
 
-  parse(url: string): PathHelperParseMatch | undefined {
-    return this.pathHelper.parse(url);
-  }
-
-  url(options?: EndpointDefinitionUrlOptions<TRequestParams>) {
-    const result = this.pathHelper.url(options);
-    return result;
+    default: {
+      throw new EndpointDefinitionInvalidConstructorArgs(args);
+    }
   }
 }
 
 export type GetEndpointDefinitionRequestParams<TEndpointDefinition extends EndpointDefinition<any, any, any>> =
-  ReturnType<TEndpointDefinition['typeInfo']>['request']['params'];
+  TEndpointDefinition extends EndpointDefinition<infer TRequestParams, any, any> ? TRequestParams : never;
 
 export type GetEndpointDefinitionRequestBody<TEndpointDefinition extends EndpointDefinition<any, any, any>> =
-  ReturnType<TEndpointDefinition['typeInfo']>['request']['body'];
+  TEndpointDefinition extends EndpointDefinition<any, infer TRequestBody, any> ? TRequestBody : never;
 
 export type GetEndpointDefinitionResponseBody<TEndpointDefinition extends EndpointDefinition<any, any, any>> =
-  ReturnType<TEndpointDefinition['typeInfo']>['response']['body'];
+  TEndpointDefinition extends EndpointDefinition<any, any, infer TResponseBody> ? TResponseBody : never;
