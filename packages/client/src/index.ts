@@ -1,8 +1,15 @@
-import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
-import { Empty, EndpointDefinition, NormalisedArrayOf } from '@typepoint/shared';
+import axios, { AxiosInstance, AxiosRequestConfig, Method } from 'axios';
+import {
+  Empty,
+  EndpointDefinition,
+  GetEndpointDefinitionRequestParams,
+  GetEndpointDefinitionRequestBody,
+  GetEndpointDefinitionResponseBody,
+  NormalizeTypePointType,
+} from '@typepoint/shared';
 
 export interface TypePointClientResponse<TBody> {
-  body: NormalisedArrayOf<TBody>;
+  body: NormalizeTypePointType<TBody>;
   statusCode: number;
   statusText: string;
   headers: { [name: string]: string | undefined };
@@ -17,35 +24,16 @@ export interface TypePointClientOptions {
 export type EndpointDefinitionWithNoParamsOrBody = EndpointDefinition<Empty, Empty, any>;
 
 export type FetchParamsOptions<TRequestParams extends Record<string, any>> = (
-  TRequestParams extends Empty ? {} : { params: TRequestParams }
+  TRequestParams extends Empty ? {} : { params: NormalizeTypePointType<TRequestParams> }
 );
 
 export type FetchBodyOptions<TRequestBody extends Record<string, any>> = (
-  TRequestBody extends Empty ? {} : { body: TRequestBody }
+  TRequestBody extends Empty ? {} : { body: NormalizeTypePointType<TRequestBody> }
 );
 
 export type TypePointClientFetchOptions<TEndpointDefinition extends EndpointDefinition<any, any, any>> = (
-  FetchParamsOptions<ReturnType<TEndpointDefinition['typeInfo']>['request']['params']> &
-  FetchBodyOptions<ReturnType<TEndpointDefinition['typeInfo']>['request']['body']>
-);
-
-export type RequestWithEmptyParamsAndBody<TEndpointDefinition extends EndpointDefinition<any, any, any>> = (
-  (
-    definition: TEndpointDefinition,
-    options: TypePointClientFetchOptions<TEndpointDefinition>
-  ) => Promise<TypePointClientResponse<ReturnType<TEndpointDefinition['typeInfo']>['response']['body']>>
-);
-
-export type RequestWithParamsOrBody<TEndpointDefinition extends EndpointDefinition<any, any, any>> = (
-  (
-    definition: TEndpointDefinition,
-    options: TypePointClientFetchOptions<TEndpointDefinition>
-  ) => Promise<TypePointClientResponse<ReturnType<TEndpointDefinition['typeInfo']>['response']['body']>>
-);
-
-export type RequestFunction<TEndpointDefinition extends EndpointDefinition<any, any, any>> = (
-  RequestWithEmptyParamsAndBody<TEndpointDefinition> |
-  RequestWithParamsOrBody<TEndpointDefinition>
+  FetchParamsOptions<GetEndpointDefinitionRequestParams<TEndpointDefinition>> &
+  FetchBodyOptions<GetEndpointDefinitionRequestBody<TEndpointDefinition>>
 );
 
 export class TypePointClientResponseError extends Error {
@@ -63,6 +51,18 @@ export class TypePointClientResponseError extends Error {
   }
 }
 
+export interface FetchFunction {
+  <TEndpointDefinition extends EndpointDefinitionWithNoParamsOrBody>(
+    definition: TEndpointDefinition,
+    options?: TypePointClientFetchOptions<TEndpointDefinition>
+  ): Promise<TypePointClientResponse<GetEndpointDefinitionResponseBody<TEndpointDefinition>>>;
+
+  <TEndpointDefinition extends EndpointDefinition<any, any, any>>(
+    definition: TEndpointDefinition,
+    options: TypePointClientFetchOptions<TEndpointDefinition>
+  ): Promise<TypePointClientResponse<GetEndpointDefinitionResponseBody<TEndpointDefinition>>>;
+}
+
 export class TypePointClient {
   protected readonly axios: AxiosInstance;
 
@@ -73,24 +73,12 @@ export class TypePointClient {
     this.server = (options && options.server) || '';
   }
 
-  fetch<TEndpointDefinition extends EndpointDefinitionWithNoParamsOrBody>(
-    definition: TEndpointDefinition,
-    options?: TypePointClientFetchOptions<TEndpointDefinition>
-  ): Promise<TypePointClientResponse<ReturnType<TEndpointDefinition['typeInfo']>['response']['body']>>;
-
-  // eslint-disable-next-line no-dupe-class-members
-  fetch<TEndpointDefinition extends EndpointDefinition<any, any, any>>(
-    definition: TEndpointDefinition,
-    options: TypePointClientFetchOptions<TEndpointDefinition>
-  ): Promise<TypePointClientResponse<ReturnType<TEndpointDefinition['typeInfo']>['response']['body']>>;
-
-  // eslint-disable-next-line no-dupe-class-members
-  fetch<TEndpointDefinition extends EndpointDefinition<any, any, any>>(
+  fetch: FetchFunction = async <TEndpointDefinition extends EndpointDefinition<any, any, any>>(
     ...args: any[]
-  ): Promise<TypePointClientResponse<ReturnType<TEndpointDefinition['typeInfo']>['response']['body']>> {
+  ): Promise<TypePointClientResponse<GetEndpointDefinitionResponseBody<TEndpointDefinition>>> => {
     const endpoint: TEndpointDefinition = args[0];
     const options: TypePointClientFetchOptions<TEndpointDefinition> | undefined = (
-      arguments.length > 1 ? args[1] : undefined
+      args.length > 1 ? args[1] : undefined
     );
 
     const url = endpoint.url({
@@ -99,7 +87,7 @@ export class TypePointClient {
     });
 
     const requestOptions: AxiosRequestConfig = {
-      method: endpoint.method,
+      method: endpoint.method as Method,
       url,
     };
 
@@ -109,7 +97,7 @@ export class TypePointClient {
 
     return this.axios.request(requestOptions)
       .then((res) => {
-        const response: TypePointClientResponse<ReturnType<TEndpointDefinition['typeInfo']>['response']['body']> = {
+        const response: TypePointClientResponse<GetEndpointDefinitionResponseBody<TEndpointDefinition>> = {
           statusCode: res.status,
           statusText: res.statusText,
           header: (name) => res.headers[name],
@@ -122,7 +110,7 @@ export class TypePointClient {
         const res = err.response;
 
         const response: (
-          TypePointClientResponse<ReturnType<TEndpointDefinition['typeInfo']>['response']['body']> |
+          TypePointClientResponse<GetEndpointDefinitionResponseBody<TEndpointDefinition>> |
           undefined
         ) = (
           res ? {
