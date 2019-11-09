@@ -1,14 +1,37 @@
 // eslint-disable-next-line max-classes-per-file
 import { Product } from '@typepoint/fixtures';
+import { TestCase } from 'jest-helpers';
 import {
-  Empty, EndpointDefinition, arrayOf, isArrayOf,
+  arrayOf,
+  cleanseHttpMethod,
+  defineEndpoint,
+  Empty,
+  isArrayOf,
+  isEmptyClass,
+  isEmptyValue,
 } from '.';
 
 describe('shared', () => {
-  describe('EndpointDefinition', () => {
+  describe('arrayOf', () => {
+    class User {
+      id = ''
+
+      name = '';
+    }
+
+    it('should describe the class that it is an array of when instantiated', () => {
+      const ArrayOfUser = arrayOf(User);
+      expect(typeof ArrayOfUser).toBe('function');
+
+      const arrayOfUser = new ArrayOfUser();
+      expect(arrayOfUser).toHaveProperty(['classInfo', 'element'], User);
+    });
+  });
+
+  describe('defineEndpoint', () => {
     it('should return an endpoint definition with the specified method and path', () => {
       const method = 'POST';
-      const addProduct = new EndpointDefinition<Empty, Product, Product>(method, (path) => path.literal('products'));
+      const addProduct = defineEndpoint<Empty, Product, Product>(method, (path) => path.literal('products'));
 
       expect(addProduct).toBeDefined();
       expect(addProduct).toHaveProperty('method', method);
@@ -16,25 +39,11 @@ describe('shared', () => {
     });
 
     it('should default a GET method if method is not specified', () => {
-      const getProducts = new EndpointDefinition<Empty, Empty, Product[]>((path) => path.literal('products'));
+      const getProducts = defineEndpoint<Empty, Empty, Product[]>((path) => path.literal('products'));
 
       expect(getProducts).toBeDefined();
       expect(getProducts).toHaveProperty('method', 'GET');
       expect(getProducts).toHaveProperty('path', '/products');
-    });
-
-    it('should error if method is not supported', () => {
-      const method = 'SQUANCH';
-      expect(
-        () => new EndpointDefinition<Empty, Empty, Product[]>(method as any, (path) => path.literal('products')),
-      ).toThrow('Unsupported HTTP method: SQUANCH');
-    });
-
-    it('should error when trying to reference typeInfo', () => {
-      const getProducts = new EndpointDefinition<Empty, Empty, Product[]>((path) => path.literal('products'));
-      expect(() => getProducts.typeInfo()).toThrow(
-        'Do not evaluate EndpointDefinition.typeInfo(). It is reserved for internal use only.',
-      );
     });
 
     it('should include classInfo when defining endpoint using classes', () => {
@@ -54,7 +63,7 @@ describe('shared', () => {
       }
 
       const method = 'GET';
-      const getClient = new EndpointDefinition<GetClientRequestParams, Empty, Client>({
+      const getClient = defineEndpoint<GetClientRequestParams, Empty, Client>({
         method,
         path: (path) => path.literal('clients').param('id'),
         requestParams: GetClientRequestParams,
@@ -87,7 +96,7 @@ describe('shared', () => {
 
       const arrayOfClient = arrayOf(Client);
 
-      const getClients = new EndpointDefinition({
+      const getClients = defineEndpoint({
         path: (path) => path.literal('clients'),
         requestParams: GetClientsParams,
         requestBody: Empty,
@@ -100,30 +109,6 @@ describe('shared', () => {
       expect(getClients.classInfo).toHaveProperty(['request', 'params'], GetClientsParams);
       expect(getClients.classInfo).toHaveProperty(['request', 'body'], Empty);
       expect(getClients.classInfo).toHaveProperty(['response', 'body'], arrayOfClient);
-    });
-  });
-
-  describe('arrayOf', () => {
-    class User {
-      id = ''
-
-      name = '';
-    }
-
-    it('should describe the class that it is an array of when instantiated', () => {
-      const ArrayOfUser = arrayOf(User);
-      expect(typeof ArrayOfUser).toBe('function');
-
-      const arrayOfUser = new ArrayOfUser();
-      expect(arrayOfUser).toHaveProperty(['classInfo', 'element'], User);
-    });
-
-    it('should error if typeInfo is evaluated', () => {
-      const ArrayOfUser = arrayOf(User);
-      const arrayOfUser = new ArrayOfUser();
-      expect(
-        () => arrayOfUser.typeInfo(),
-      ).toThrow('Do not evaluate ArrayOf.typeInfo(). It is reserved for internal use only.');
     });
   });
 
@@ -142,6 +127,37 @@ describe('shared', () => {
     it('should return false for anything else', () => {
       const ArrayOfUser = User;
       expect(isArrayOf(ArrayOfUser)).toBe(false);
+    });
+  });
+
+  describe('isEmptyClass', () => {
+    it('should return true when passed in Empty', () => {
+      expect(isEmptyClass(Empty)).toBeTruthy();
+    });
+
+    it('should return false when not passed in Empty', () => {
+      class SomeOtherClass {}
+      expect(isEmptyClass(SomeOtherClass)).toBeFalsy();
+    });
+  });
+
+  describe('isEmptyValue', () => {
+    it('should return true for empty values', () => {
+      expect(isEmptyValue(null)).toBeTruthy();
+      expect(isEmptyValue(undefined)).toBeTruthy();
+      expect(isEmptyValue({})).toBeTruthy();
+    });
+
+    it('should return false for non empty values', () => {
+      expect(isEmptyValue({ key: 'value' })).toBeFalsy();
+    });
+  });
+
+  describe('cleanseHttpMethod', () => {
+    it('should return method in uppercase', () => {
+      expect(cleanseHttpMethod('get')).toBe('GET');
+      expect(cleanseHttpMethod('post')).toBe('POST');
+      expect(cleanseHttpMethod('squanch')).toBe('SQUANCH');
     });
   });
 });
