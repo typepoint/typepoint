@@ -1,17 +1,17 @@
 import { partialOf } from 'jest-helpers';
-import { Empty, EndpointDefinition, Constructor } from '@typepoint/shared';
+import { defineEndpoint, Empty, EndpointDefinition } from '@typepoint/shared';
 import { Todo } from '@typepoint/fixtures';
 import {
-  defineHandler, EndpointContext, Request, Response, NotFoundMiddleware, EndpointMiddleware, defineMiddleware,
+  createHandler, EndpointContext, Request, Response, notFoundMiddleware, EndpointMiddleware, defineMiddleware,
 } from './index';
 
 describe('server', () => {
-  describe('defineHandler', () => {
+  describe('createHandler', () => {
     let getTodos: EndpointDefinition<Empty, Empty, Todo[]>;
     let todos: Todo[];
 
     beforeEach(() => {
-      getTodos = new EndpointDefinition<Empty, Empty, Todo[]>((path) => path.literal('todos'));
+      getTodos = defineEndpoint<Empty, Empty, Todo[]>((path) => path.literal('todos'));
       todos = [{
         id: '1',
         title: 'Write todo app',
@@ -19,31 +19,25 @@ describe('server', () => {
       }];
     });
 
-    it('should define an anonymous handler class', () => {
-      const GetTodosHandler = defineHandler(getTodos, (context) => {
+    it('should define an anonymous handler', () => {
+      const getTodosHandler = createHandler(getTodos, (context) => {
         context.response.body = todos;
       });
-
-      const getTodosHandler = new GetTodosHandler();
       expect(getTodosHandler.name).toBe('AnonymousEndpointHandler');
     });
 
-    it('should define a named handler class', () => {
+    it('should define a named handler', () => {
       const name = 'getTodosHandler';
-      const GetTodosHandler = defineHandler(getTodos, (context) => {
+      const getTodosHandler = createHandler(getTodos, (context) => {
         context.response.body = todos;
       }, name);
-
-      const handler = new GetTodosHandler();
-      expect(handler.name).toBe(name);
+      expect(getTodosHandler.name).toBe(name);
     });
 
-    it('should define an handler class that can parse matching requests', async () => {
-      const GetTodosHandler = defineHandler(getTodos, (context) => {
+    it('should define an handler that can parse matching requests', async () => {
+      const getTodosHandler = createHandler(getTodos, (context) => {
         context.response.body = todos;
       });
-
-      const getTodosHandler = new GetTodosHandler();
 
       const request = partialOf<Request<any, any>>({
         method: 'GET',
@@ -61,12 +55,10 @@ describe('server', () => {
       });
     });
 
-    it('should define an handler class that will not parse non-matching requests', async () => {
-      const GetTodosHandler = defineHandler(getTodos, (context) => {
+    it('should define an handler that will not parse non-matching requests', async () => {
+      const getTodosHandler = createHandler(getTodos, (context) => {
         context.response.body = todos;
       });
-
-      const getTodosHandler = new GetTodosHandler();
 
       const request = partialOf<Request<any, any>>({
         method: 'POST',
@@ -74,13 +66,14 @@ describe('server', () => {
         params: {
         },
       });
+
       const match = getTodosHandler.match(request);
 
       expect(match).toBe(undefined);
     });
 
-    it('should define a handler class that can handle requests', async () => {
-      const GetTodosHandler = defineHandler(getTodos, (ctx) => {
+    it('should define a handler that can handle requests', async () => {
+      const getTodosHandler = createHandler(getTodos, (ctx) => {
         ctx.response.body = todos;
       });
 
@@ -89,19 +82,19 @@ describe('server', () => {
           body: undefined,
         }),
       });
-      const getTodosHandler = new GetTodosHandler();
+
       await getTodosHandler.handle(context, () => Promise.resolve());
 
       expect(context).toHaveProperty(['response', 'body'], todos);
     });
   });
 
-  describe('NotFoundMiddleware', () => {
+  describe('notFoundMiddleware', () => {
     let middleware: EndpointMiddleware;
     let context: EndpointContext<any, any, any>;
 
     beforeEach(() => {
-      middleware = new NotFoundMiddleware();
+      middleware = notFoundMiddleware();
       context = partialOf<EndpointContext<any, any, any>>({
         response: partialOf<Response<any>>({
           statusCode: undefined,
@@ -126,72 +119,62 @@ describe('server', () => {
 
   describe('defineMiddleware', () => {
     describe('when called with a name', () => {
-      const XyzMiddlewareClass = defineMiddleware((context, next) => { }, 'XyzMiddleware');
-      const xyz = new XyzMiddlewareClass();
-      expect(xyz).toHaveProperty('name', 'XyzMiddleware');
+      const someMiddleware = defineMiddleware(async () => { }, 'SomeMiddleware');
+      expect(someMiddleware).toHaveProperty('name', 'SomeMiddleware');
     });
 
     describe('when called without a name', () => {
-      const AnonMiddlewareClass = defineMiddleware((context, next) => { });
-      const anon = new AnonMiddlewareClass();
-      expect(anon).toHaveProperty('name', 'AnonymousEndpointMiddleware');
+      const anonymousMiddleware = defineMiddleware(async () => { });
+      expect(anonymousMiddleware).toHaveProperty('name', 'AnonymousEndpointMiddleware');
     });
 
     describe('when called', () => {
       let log: string;
-      let ExampleEndpointMiddleware: Constructor<EndpointMiddleware>;
+      let someMiddleware: EndpointMiddleware;
+      let context: EndpointContext<any, any, any>;
 
       const addToLog = (text: string) => {
         log += `${text}\n`;
       };
 
+      const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
       beforeEach(() => {
         log = '';
-        const middlewareDelay = 100;
-        ExampleEndpointMiddleware = defineMiddleware((context, next) => {
-          addToLog('ExampleEndpointMiddleware: start');
-          return new Promise<void>((resolve) => {
-            setTimeout(() => {
-              addToLog('ExampleEndpointMiddleware: finish');
-              resolve();
-            }, middlewareDelay);
-          });
+        someMiddleware = defineMiddleware(async (_context, next) => {
+          addToLog('Middleware started');
+          await next();
+          addToLog('Middleware finished');
         });
       });
 
-      it('should return an EndpointMiddleware class', () => {
-        expect(ExampleEndpointMiddleware).toBeInstanceOf(Function);
-        expect(ExampleEndpointMiddleware).toHaveProperty('name', 'AnonymousEndpointMiddleware');
-
-        const exampleEndpointMiddleware = new ExampleEndpointMiddleware();
-        expect(exampleEndpointMiddleware).toBeInstanceOf(EndpointMiddleware);
+      it('should return an endpoint middleware', () => {
+        expect(someMiddleware.handle).toBeInstanceOf(Function);
+        expect(someMiddleware).toHaveProperty('name', 'AnonymousEndpointMiddleware');
       });
 
-      describe('when creating an instance of result', () => {
-        let context: EndpointContext<any, any, any>;
-        let exampleEndpointMiddleware: EndpointMiddleware;
-
-        beforeEach(() => {
-          exampleEndpointMiddleware = new ExampleEndpointMiddleware();
+      describe('and running middleware', () => {
+        beforeEach(async () => {
+          context = partialOf<EndpointContext<any, any, any>>({});
+          const next = jest.fn().mockImplementation(async () => {
+            addToLog('Handler started');
+            await delay(100);
+            addToLog('Handler finished');
+          });
+          addToLog('Before calling middleware');
+          await someMiddleware.handle(context, next);
+          addToLog('After calling middleware');
         });
 
-        describe('and calling handle', () => {
-          beforeEach(async () => {
-            context = partialOf<EndpointContext<any, any, any>>({});
-            const next = jest.fn();
-            addToLog('Before calling middleware');
-            await exampleEndpointMiddleware.handle(context, next);
-            addToLog('After calling middleware');
-          });
-
-          it('should wait until handler function has finished', () => {
-            expect(log).toBe(
-              'Before calling middleware\n'
-              + 'ExampleEndpointMiddleware: start\n'
-              + 'ExampleEndpointMiddleware: finish\n'
-              + 'After calling middleware\n',
-            );
-          });
+        it('should wait until handler function has finished', () => {
+          expect(log).toBe(
+            'Before calling middleware\n'
+            + 'Middleware started\n'
+            + 'Handler started\n'
+            + 'Handler finished\n'
+            + 'Middleware finished\n'
+            + 'After calling middleware\n',
+          );
         });
       });
     });
