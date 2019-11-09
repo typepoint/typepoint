@@ -9,14 +9,17 @@ import {
 import {
   Constructor,
   isArrayOf,
+  isEmptyClass,
+  isEmptyValue,
 } from '@typepoint/shared';
+import { ArrayOf } from '../../shared/src/index';
 
 export const getValidateAndTransformFunction = (options?: { validator?: Validator }) => {
   const validator = (options && options.validator) || new Validator();
 
   const validateAndTransform: ValidateAndTransformFunction = <T extends {}>(
     input: T,
-    Class?: Constructor<T>,
+    Class?: Constructor<T> | (T extends Array<infer TElement> ? Constructor<ArrayOf<TElement>> : never),
   ): ValidateAndTransformFunctionResult => {
     if (Class) {
       const checkValidationResult = (
@@ -32,11 +35,19 @@ export const getValidateAndTransformFunction = (options?: { validator?: Validato
         };
       };
 
-      if (isArrayOf(Class)) {
-        const arrayOfInstance = new Class();
+      if (isEmptyClass(Class)) {
+        if (!isEmptyValue(input)) {
+          return {
+            validationError: {
+              message: 'Value is not empty',
+            },
+          };
+        }
+      } else if (isArrayOf(Class)) {
+        const arrayOfInstance: ArrayOf<any> = new Class();
         const ElementClass = arrayOfInstance.classInfo && arrayOfInstance.classInfo.element;
         if (ElementClass) {
-          const elementValidationResult = validator.validateAsClass(input, ElementClass);
+          const elementValidationResult = validator.validateArrayAsClass(input as unknown as any[], ElementClass);
           return checkValidationResult(elementValidationResult);
         }
       } else {
