@@ -12,10 +12,11 @@ if test -f "$TS_BUILD_INFO_PATH"; then
   rm "$TS_BUILD_INFO_PATH"
 fi
 
-TS_CONFIG_FILE_NAME="$PACKAGE_PATH/tsconfig.json"
 MAIN_TS_CONFIG_FILE_NAME="$PACKAGE_PATH/tsconfig.main.json"
 if test -f "$MAIN_TS_CONFIG_FILE_NAME"; then
   TS_CONFIG_FILE_NAME="$MAIN_TS_CONFIG_FILE_NAME"
+else
+  TS_CONFIG_FILE_NAME="$PACKAGE_PATH/tsconfig.json"
 fi
 
 yarn tsc -p "$TS_CONFIG_FILE_NAME"
