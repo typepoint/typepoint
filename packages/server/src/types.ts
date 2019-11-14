@@ -1,5 +1,10 @@
 import {
-  Constructor, EndpointDefinition, HttpMethod, PathHelper, PathHelperParseMatch,
+  EndpointDefinition,
+  GetEndpointDefinitionRequestParams,
+  GetEndpointDefinitionRequestBody,
+  GetEndpointDefinitionResponseBody,
+  NormalizeTypePointType,
+  PathHelperParseMatch,
 } from '@typepoint/shared';
 
 export interface RequestCookies {
@@ -51,10 +56,10 @@ export interface RequestHeaders {
 }
 
 export interface Request<TRequestParams, TRequestBody> {
-  readonly method: HttpMethod;
+  readonly method: string;
   readonly url: string;
-  params: TRequestParams;
-  body: TRequestBody;
+  params: NormalizeTypePointType<TRequestParams>;
+  body: NormalizeTypePointType<TRequestBody>;
   readonly cookies: RequestCookies;
   readonly headers: RequestHeaders;
   readonly signedCookies: RequestCookies;
@@ -84,7 +89,7 @@ export type ResponseContentType = 'application/json' | string;
 export interface Response<TResponseBody> {
   statusCode: number | undefined;
   contentType: ResponseContentType;
-  body: TResponseBody | undefined;
+  body: NormalizeTypePointType<TResponseBody> | undefined;
 
   readonly hasFlushedHeaders: boolean;
   readonly hasFlushed: boolean;
@@ -100,40 +105,42 @@ export interface Response<TResponseBody> {
   headers(): ResponseHeaders;
 }
 
-// Use Interface Merging to add your own custom fields to the `EndpointContextCustomMetadata` declaration
+// Use Interface Merging to add your own custom fields to the `EndpointContextMetadata` declaration
 // and implement and use your own middleware to actually add the fields to `context.meta`
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface EndpointContextCustomMetadata {
+export interface EndpointContextMetadata {
 }
 
 export interface EndpointContext<TRequestParams, TRequestBody, TResponseBody> {
-  meta: EndpointContextCustomMetadata;
+  meta: EndpointContextMetadata;
   request: Request<TRequestParams, TRequestBody>;
   response: Response<TResponseBody>;
 }
 
 export type EndpointContextFromDefinition<TEndpointDefinition extends EndpointDefinition<any, any, any>> =
   EndpointContext<
-  ReturnType<TEndpointDefinition['typeInfo']>['request']['params'],
-  ReturnType<TEndpointDefinition['typeInfo']>['request']['body'],
-  ReturnType<TEndpointDefinition['typeInfo']>['response']['body']
+  GetEndpointDefinitionRequestParams<TEndpointDefinition>,
+  GetEndpointDefinitionRequestBody<TEndpointDefinition>,
+  GetEndpointDefinitionResponseBody<TEndpointDefinition>
   >;
 
-export type EndpointHandlerFunction<TEndpointDefinition extends EndpointDefinition<any, any, any>> =
+export type EndpointHandlerFunctionFromDefinition<TEndpointDefinition extends EndpointDefinition<any, any, any>> =
   (
     context: EndpointContext<
-    ReturnType<TEndpointDefinition['typeInfo']>['request']['params'],
-    ReturnType<TEndpointDefinition['typeInfo']>['request']['body'],
-    ReturnType<TEndpointDefinition['typeInfo']>['response']['body']
+    GetEndpointDefinitionRequestParams<TEndpointDefinition>,
+    GetEndpointDefinitionRequestBody<TEndpointDefinition>,
+    GetEndpointDefinitionResponseBody<TEndpointDefinition>
     >,
     next: () => Promise<void>
   ) => Promise<void> | void;
 
-// eslint-disable-next-line @typescript-eslint/interface-name-prefix
-export interface IEndpointHandler {
-  readonly name: string;
-  readonly definition?: EndpointDefinition<any, any, any>;
-  match?: (request: { method: string; url: string }) => PathHelperParseMatch | undefined;
+export interface EndpointMiddleware {
+  name: string;
   handle(context: EndpointContext<any, any, any>, next: () => Promise<void>): Promise<void> | void;
+}
+
+export interface EndpointHandler extends EndpointMiddleware {
+  definition: EndpointDefinition<any, any, any>;
+  match: (request: { method: string; url: string }) => PathHelperParseMatch | undefined;
 }

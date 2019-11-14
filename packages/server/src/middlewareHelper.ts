@@ -1,14 +1,13 @@
 import {
-  HttpMethod,
   PathHelperParseMatch,
   parseQueryString,
   parseUrl,
 } from '@typepoint/shared';
-import { IEndpointHandler } from './types';
+import { EndpointHandler, EndpointMiddleware } from './types';
 
 export interface HandlerMatch {
   type: 'handler' | 'middleware';
-  handler: IEndpointHandler;
+  handler: EndpointHandler | EndpointMiddleware;
   parsedUrl: PathHelperParseMatch;
 }
 
@@ -16,15 +15,15 @@ export class HandlerMatchIterator {
   private handlerIndex = 0;
 
   constructor(
-    private handlers: IEndpointHandler[],
-    private request: { method: HttpMethod; url: string },
+    private handlers: (EndpointMiddleware | EndpointHandler)[],
+    private request: { method: string; url: string },
   ) {
   }
 
   getNextMatch(): HandlerMatch | undefined {
     while (this.handlerIndex < this.handlers.length) {
       const handler = this.handlers[this.handlerIndex++];
-      if (handler.match) {
+      if ('match' in handler && handler.match) {
         const parsedUrl = handler.match(this.request);
         if (parsedUrl) {
           return {
