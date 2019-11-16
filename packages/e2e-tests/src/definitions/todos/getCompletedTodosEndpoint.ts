@@ -1,11 +1,7 @@
-import {
-  arrayOf,
-  Empty,
-  EndpointDefinition,
-} from '@typepoint/shared';
+import { arrayOf, defineEndpoint, Empty } from '@typepoint/shared';
 import { Todo } from '../../models/todo';
 
-export const getCompletedTodos = new EndpointDefinition({
+export const getCompletedTodosEndpoint = defineEndpoint({
   path: (path) => path.literal('todos').literal('completed'),
   requestParams: Empty,
   requestBody: Empty,

@@ -1,6 +1,6 @@
-export { GetCompletedTodosHandler } from './todos';
-export { GetTodoHandler } from './todos';
-export { GetTodosHandler } from './todos';
-export { CreateTodoHandler } from './todos';
-export { UpdateTodoHandler } from './todos';
-export { DeleteTodoHandler } from './todos';
+export { addTodoHandler } from './todos/addTodoHandler';
+export { deleteTodoHandler } from './todos/deleteTodoHandler';
+export { getCompletedTodosHandler } from './todos/getCompletedTodosHandler';
+export { getTodoHandler } from './todos/getTodoHandler';
+export { getTodosHandler } from './todos/getTodosHandler';
+export { updateTodoHandler } from './todos/updateTodoHandler';
