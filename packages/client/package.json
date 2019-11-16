@@ -11,7 +11,7 @@
     "release": "../../support/release.sh client",
     "ship": "../../support/ship.sh client",
     "test": "../../support/test.sh client",
-    "verify": "yarn lint && yarn build && yarn test"
+    "validate": "yarn lint && yarn build && yarn test"
   },
   "dependencies": {
     "@typepoint/shared": "^2.0.2",

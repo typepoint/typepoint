@@ -47,25 +47,30 @@
       "packages/shared"
     ]
   },
-  "pre-commit": {
-    "run": "verify"
-  },
   "scripts": {
     "build": "tsc",
     "clean": "rimraf ./packages/client/dist ./packages/express/dist ./packages/fixtures/dist ./packages/joiful/dist ./packages/server/dist ./packages/shared/dist",
     "lint": "eslint ./packages --ext .js,.jsx,.ts,.tsx",
     "lint:fix": "yarn lint --fix",
     "prebuild": "yarn run clean",
-    "verify": "yarn workspace @typepoint/client verify && yarn workspace @typepoint/express verify && yarn workspace @typepoint/joiful verify && yarn workspace @typepoint/react verify && yarn workspace @typepoint/server && yarn workspace @typepoint/shared verify"
+    "validate-imports": "ts-node ./support/validateImports.ts",
+    "validate": "yarn validate-imports && yarn workspace @typepoint/client validate && yarn workspace @typepoint/express validate && yarn workspace @typepoint/joiful validate && yarn workspace @typepoint/react validate && yarn workspace @typepoint/server && yarn workspace @typepoint/shared validate"
   },
   "devDependencies": {
+    "@types/bluebird": "3.5.29",
+    "@types/chalk": "2.2.0",
     "@types/fs-extra": "8.0.0",
+    "@types/glob": "7.1.1",
     "@types/jest": "24.0.18",
+    "@types/line-column": "1.0.0",
+    "@types/lodash": "4.14.148",
     "@types/node": "12.7.11",
     "@types/rimraf": "2.0.2",
     "@types/typescript": "2.0.0",
     "@typescript-eslint/eslint-plugin": "2.3.2",
     "@typescript-eslint/parser": "2.3.2",
+    "bluebird": "3.7.1",
+    "chalk": "3.0.0",
     "eslint": "6.5.1",
     "eslint-config-airbnb": "18.0.1",
     "eslint-config-prettier": "6.4.0",
@@ -78,10 +83,13 @@
     "eslint-plugin-react": "7.16.0",
     "eslint-plugin-react-hooks": "^1.7.0",
     "fs-extra": "8.1.0",
-    "husky": "3.0.8",
+    "glob": "7.1.6",
+    "husky": "3.0.9",
     "jest": "24.9.0",
     "jest-helpers": "3.1.0",
     "jq.node": "2.1.2",
+    "line-column": "1.0.2",
+    "lodash": "4.17.15",
     "pre-commit": "1.2.2",
     "prettier": "1.18.2",
     "rimraf": "3.0.0",

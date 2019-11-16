@@ -8,7 +8,7 @@
     "build": "../../support/build.sh e2e-tests",
     "lint": "../../support/lint.sh e2e-tests",
     "test": "../../support/test.sh e2e-tests",
-    "verify": "../../support/verify.sh e2e-tests"
+    "validate": "../../support/verify.sh e2e-tests"
   },
   "dependencies": {
     "@typepoint/client": "^2.0.1",
