@@ -7,12 +7,12 @@ import {
   ValidateAndTransformFunctionResult,
 } from '@typepoint/server';
 import {
+  ArrayOf,
   Constructor,
   isArrayOf,
   isEmptyClass,
   isEmptyValue,
 } from '@typepoint/shared';
-import { ArrayOf } from '../../shared/src/index';
 
 export const getValidateAndTransformFunction = (options?: { validator?: Validator }) => {
   const validator = (options && options.validator) || new Validator();
