@@ -3,21 +3,19 @@ import 'reflect-metadata';
 import * as bodyParser from 'body-parser';
 import * as express from 'express';
 import * as http from 'http';
-import { Container } from 'inversify';
-import { NotFoundMiddleware, Router } from '@typepoint/server';
+import { notFoundMiddleware, Router } from '@typepoint/server';
 import { toMiddleware } from '@typepoint/express';
 import { getValidateAndTransformFunction } from '@typepoint/joiful';
-import { Constructor } from '@typepoint/shared';
 import {
-  CreateTodoHandler,
-  DeleteTodoHandler,
-  GetCompletedTodosHandler,
-  GetTodoHandler,
-  GetTodosHandler,
-  UpdateTodoHandler,
+  addTodoHandler,
+  deleteTodoHandler,
+  getCompletedTodosHandler,
+  getTodoHandler,
+  getTodosHandler,
+  updateTodoHandler,
 } from './handlers';
-import { ResponseTimeMiddleware } from './middleware';
-import { RequestLoggerMiddleware } from './middleware/requestLogger';
+import { responseTimeMiddleware } from './middleware/responseTimeMiddleware';
+import { requestLoggerMiddleware } from './middleware/requestLoggerMiddleware';
 
 export class Server {
   get serverAddress() {
@@ -26,7 +24,7 @@ export class Server {
 
   private server: http.Server | undefined;
 
-  constructor(private port: number, private ioc: Container) {
+  constructor(private port: number) {
   }
 
   async start() {
@@ -38,30 +36,22 @@ export class Server {
 
     const router = new Router({
       handlers: [
-        GetCompletedTodosHandler,
-        GetTodoHandler,
-        GetTodosHandler,
-        CreateTodoHandler,
-        UpdateTodoHandler,
-        DeleteTodoHandler,
+        getCompletedTodosHandler,
+        getTodoHandler,
+        getTodosHandler,
+        addTodoHandler,
+        updateTodoHandler,
+        deleteTodoHandler,
       ],
-      ioc: {
-        get: <T>(Class: Constructor<T>) => this.ioc.get(Class),
-      },
       middleware: [
-        RequestLoggerMiddleware,
-        ResponseTimeMiddleware,
-        NotFoundMiddleware,
+        requestLoggerMiddleware,
+        responseTimeMiddleware,
+        notFoundMiddleware(),
       ],
       validateAndTransform,
     });
 
-    // tslint:disable-next-line: no-console
-    // const log = console.log.bind(console);
-
-    const middleware = toMiddleware(router, {
-      // logger: { log, info: log, warn: log, error: log, debug: log }
-    });
+    const middleware = toMiddleware(router);
 
     const app = express();
     app.use(bodyParser.json());

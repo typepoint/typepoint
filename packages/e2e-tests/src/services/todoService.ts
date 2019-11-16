@@ -1,47 +1,45 @@
-import { injectable } from 'inversify';
-import { DataStore } from '../db/dataStore';
+import { getTodos: getTodosFixture } from '@typepoint/fixtures';
 import { NotFoundError } from '../models/notFound';
 import { Todo, UpdatableTodoFields } from '../models/todo';
 
-@injectable()
-export class TodoService {
-  constructor(private dataStore: DataStore) {
-  }
+const todos: Todo[] = getTodosFixture();
 
-  add(todo: UpdatableTodoFields): Todo {
-    const result = {
-      ...todo,
-      id: `${this.dataStore.todos.length + 1}`,
-    };
-    this.dataStore.todos.push(result);
-    return result;
+const getTodoIndexById = (id: string): number => {
+  const index = todos.findIndex((todo) => todo.id === id);
+  if (index === -1) {
+    throw new NotFoundError('Todo not found');
   }
+  return index;
+};
 
-  get(id: string): Todo {
-    return this.dataStore.todos[this.getTodoIndexById(id)];
-  }
+export const addTodo = (todo: UpdatableTodoFields): Todo => {
+  const addedTodo = {
+    ...todo,
+    id: `${todos.length + 1}`,
+  };
+  todos.push(addedTodo);
+  return addedTodo;
+};
 
-  getAll(): Todo[] {
-    return this.dataStore.todos;
-  }
+export const getTodo = (id: string): Todo => {
+  const index = getTodoIndexById(id);
+  return todos[index];
+};
 
-  update(id: string, values: UpdatableTodoFields): Todo {
-    const todo = this.dataStore.todos[this.getTodoIndexById(id)];
-    todo.title = values.title;
-    todo.isCompleted = values.isCompleted;
-    return todo;
-  }
+export const getTodos = (): Todo[] => todos;
 
-  remove(id: string): void {
-    const index = this.getTodoIndexById(id);
-    this.dataStore.todos.splice(index, 1);
-  }
+export const updateTodo = (id: string, values: UpdatableTodoFields): Todo => {
+  const indexToUpdate = getTodoIndexById(id);
+  const updatedTodo = {
+    ...todos[indexToUpdate],
+    title: values.title,
+    isCompleted: values.isCompleted,
+  };
+  todos[indexToUpdate] = updatedTodo;
+  return updatedTodo;
+};
 
-  private getTodoIndexById(id: string): number {
-    const index = this.dataStore.todos.findIndex((todo) => todo.id === id);
-    if (index === -1) {
-      throw new NotFoundError('Todo not found');
-    }
-    return index;
-  }
-}
+export const deleteTodo = (id: string): void => {
+  const indexToRemove = getTodoIndexById(id);
+  todos.splice(indexToRemove, 1);
+};

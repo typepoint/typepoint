@@ -1,6 +1,6 @@
 import { defineMiddleware } from '@typepoint/server';
 
-export const ResponseTimeMiddleware = defineMiddleware(async (context, next) => {
+export const responseTimeMiddleware = defineMiddleware(async (context, next) => {
   const start = Date.now();
   try {
     await next();
@@ -8,4 +8,4 @@ export const ResponseTimeMiddleware = defineMiddleware(async (context, next) => 
     const duration = `${Date.now() - start}ms`;
     context.response.header('x-response-time', duration);
   }
-}, 'ResponseTimeMiddleware');
+}, 'responseTimeMiddleware');

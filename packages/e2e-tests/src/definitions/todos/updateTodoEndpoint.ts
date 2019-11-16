@@ -1,5 +1,5 @@
 import * as jf from 'joiful';
-import { EndpointDefinition } from '@typepoint/shared';
+import { defineEndpoint } from '@typepoint/shared';
 import { Todo, UpdatableTodoFields } from '../../models/todo';
 
 export class UpdateTodoRequestParams {
@@ -15,7 +15,7 @@ export class UpdateTodoRequestBody implements UpdatableTodoFields {
   isCompleted = false;
 }
 
-export const updateTodo = new EndpointDefinition({
+export const updateTodoEndpoint = defineEndpoint({
   method: 'PUT',
   path: (path) => path.literal('todos').param('id'),
   requestParams: UpdateTodoRequestParams,

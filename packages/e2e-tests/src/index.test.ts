@@ -1,70 +1,32 @@
 import 'reflect-metadata';
 
 import axios from 'axios';
-import * as clone from 'clone';
 import * as getPort from 'get-port';
 import * as httpStatusCodes from 'http-status-codes';
-import { Container, decorate, injectable } from 'inversify';
 import { TypePointClient } from '@typepoint/client';
-import { EndpointHandler, EndpointMiddleware, NotFoundMiddleware } from '@typepoint/server';
-import { partialOf } from 'jest-helpers';
-import { DataStore } from './db/dataStore';
-import {
-  createTodo, deleteTodo, getCompletedTodos, getTodo, getTodos, updateTodo,
-} from './definitions';
-import { Todo } from './models/todo';
+import { addTodoEndpoint } from './definitions/todos/addTodoEndpoint';
+import { getCompletedTodosEndpoint } from './definitions/todos/getCompletedTodosEndpoint';
+import { getTodoEndpoint } from './definitions/todos/getTodoEndpoint';
+import { getTodosEndpoint } from './definitions/todos/getTodosEndpoint';
+import { deleteTodoEndpoint } from './definitions/todos/deleteTodoEndpoint';
+import { updateTodoEndpoint } from './definitions/todos/updateTodoEndpoint';
 import { Server } from './server';
-import { LoggerService } from './services/loggerService';
+import * as todoService from './services/todoService';
+import * as loggerService from './services/loggerService';
 
 describe('api/Sample Server', () => {
-  let todos: Todo[];
-  let ioc: Container;
   let server: Server;
   let client: TypePointClient;
-  let loggerService: LoggerService;
-
-  beforeAll(() => {
-    decorate(injectable(), EndpointHandler);
-    decorate(injectable(), EndpointMiddleware);
-    decorate(injectable(), NotFoundMiddleware);
-  });
 
   beforeEach(async () => {
-    // Configure ioc
-    todos = [
-      {
-        id: '1',
-        title: 'Laundry',
-        isCompleted: false,
-      },
-      {
-        id: '2',
-        title: 'Washing up',
-        isCompleted: false,
-      },
-      {
-        id: '3',
-        title: 'Walk the cats',
-        isCompleted: false,
-      },
-    ];
-    ioc = new Container({
-      defaultScope: 'Singleton',
-      autoBindInjectable: true,
-    });
+    jest.spyOn(todoService, 'addTodo');
+    jest.spyOn(todoService, 'deleteTodo');
+    jest.spyOn(todoService, 'getTodos');
+    jest.spyOn(todoService, 'updateTodo');
 
-    loggerService = partialOf<LoggerService>({
-      info: jest.fn(),
-      warn: jest.fn(),
-      error: jest.fn(),
-    });
+    jest.spyOn(loggerService, 'info').mockImplementation(() => {});
 
-    ioc.bind(DataStore).toDynamicValue(() => new DataStore(todos));
-    ioc.bind(LoggerService).toDynamicValue(() => loggerService);
-
-    const port = await getPort();
-
-    server = new Server(port, ioc);
+    server = new Server(await getPort());
     await server.start();
 
     client = new TypePointClient({
@@ -77,50 +39,61 @@ describe('api/Sample Server', () => {
   });
 
   it('should get list of todos', async () => {
-    const expectation = clone(todos);
-
-    const response = await client.fetch(getTodos);
+    const response = await client.fetch(getTodosEndpoint);
 
     expect(response).toHaveProperty('statusCode', 200);
-
     expect(response).toHaveProperty('statusText', 'OK');
-
-    expect(response).toHaveProperty('body', expectation);
+    expect(response).toHaveProperty('body', [
+      {
+        id: '1',
+        title: 'Laundry',
+        isCompleted: true,
+      },
+      {
+        id: '2',
+        title: 'Washing up',
+        isCompleted: false,
+      },
+      {
+        id: '3',
+        title: 'Walk the cats',
+        isCompleted: false,
+      },
+    ]);
   });
 
   it('should get list of completed todos', async () => {
-    const expectation = clone(todos).filter((todo) => todo.isCompleted);
-    const response = await client.fetch(getCompletedTodos);
+    const response = await client.fetch(getCompletedTodosEndpoint);
 
     expect(response).toHaveProperty('statusCode', 200);
-
     expect(response).toHaveProperty('statusText', 'OK');
-
-    expect(response).toHaveProperty('body', expectation);
+    expect(response).toHaveProperty('body', [
+      {
+        id: '1',
+        title: 'Laundry',
+        isCompleted: true,
+      },
+    ]);
   });
 
   it('should get a todo', async () => {
-    const expectation = {
-      id: '1',
-      title: 'Laundry',
-      isCompleted: false,
-    };
-
-    const response = await client.fetch(getTodo, {
+    const response = await client.fetch(getTodoEndpoint, {
       params: {
         id: '1',
       },
     });
 
     expect(response).toHaveProperty('statusCode', 200);
-
     expect(response).toHaveProperty('statusText', 'OK');
-
-    expect(response).toHaveProperty('body', expectation);
+    expect(response).toHaveProperty('body', {
+      id: '1',
+      title: 'Laundry',
+      isCompleted: true,
+    });
   });
 
   it('should not return a todo that doesn\'t exist', async () => {
-    await expect(client.fetch(getTodo, {
+    await expect(client.fetch(getTodoEndpoint, {
       params: {
         id: '999',
       },
@@ -137,10 +110,7 @@ describe('api/Sample Server', () => {
     const title = 'Create a todo app';
     const isCompleted = true;
 
-    const expectedLength = todos.length + 1;
-    const id = `${expectedLength}`;
-
-    const response = await client.fetch(createTodo, {
+    const response = await client.fetch(addTodoEndpoint, {
       body: {
         title,
         isCompleted,
@@ -148,16 +118,12 @@ describe('api/Sample Server', () => {
     });
 
     expect(response).toHaveProperty('statusCode', 200);
-
     expect(response).toHaveProperty('statusText', 'OK');
-
     expect(response).toHaveProperty('body', {
-      id,
+      id: '4',
       title,
       isCompleted,
     });
-
-    expect(todos).toHaveLength(expectedLength);
   });
 
   it('should update todo', async () => {
@@ -166,21 +132,18 @@ describe('api/Sample Server', () => {
       isCompleted: false,
     };
 
-    const expectation = {
-      ...valuesToUpdate,
-      id: '1',
-    };
-
-    const actual = await client.fetch(updateTodo, {
+    const actual = await client.fetch(updateTodoEndpoint, {
       params: { id: '1' },
       body: valuesToUpdate,
     });
 
     expect(actual).toHaveProperty('statusCode', 200);
-
     expect(actual).toHaveProperty('statusText', 'OK');
-
-    expect(actual).toHaveProperty('body', expectation);
+    expect(actual).toHaveProperty('body', {
+      id: '1',
+      title: 'Do taxes',
+      isCompleted: false,
+    });
   });
 
   it('should not update todo when todo is invalid', async () => {
@@ -191,7 +154,7 @@ describe('api/Sample Server', () => {
 
     let error: any;
     try {
-      await client.fetch(updateTodo, {
+      await client.fetch(updateTodoEndpoint, {
         params: { id: '1' },
         body: valuesToUpdate,
       });
@@ -209,36 +172,28 @@ describe('api/Sample Server', () => {
     expect(error).toHaveProperty(['response', 'body', 'details', '0', 'message'], '"title" is not allowed to be empty');
   });
 
-  it('should delete todo', async () => {
+  it('should delete a todo', async () => {
     const id = '2';
 
-    const expectedLength = todos.length - 1;
-
-    const actual = await client.fetch(deleteTodo, {
+    const actual = await client.fetch(deleteTodoEndpoint, {
       params: {
         id,
       },
     });
 
     expect(actual).toHaveProperty('statusCode', 204);
-
     expect(actual).toHaveProperty('statusText', 'No Content');
-
     expect(actual).toHaveProperty('body', '');
-
-    expect(todos).toHaveLength(expectedLength);
-
-    expect(todos.some((p) => p.id === id)).toBe(false);
   });
 
   it('should use middleware to return a x-response-time header', async () => {
-    const response = await client.fetch(getTodos);
+    const response = await client.fetch(getTodosEndpoint);
 
     expect(response).toHaveProperty(['headers', 'x-response-time'], expect.stringMatching(/^\d+ms$/i));
   });
 
   it('should use middleware to log requests', async () => {
-    await client.fetch(getTodos);
+    await client.fetch(getTodosEndpoint);
     expect(loggerService.info).toHaveBeenCalledWith(expect.stringMatching(/^GET\s\/todos\s-\s\d+ms$/i));
   });
 
