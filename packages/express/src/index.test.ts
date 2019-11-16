@@ -2,7 +2,6 @@ import * as express from 'express';
 import {
   Router,
   EndpointMiddleware,
-  EndpointContext,
   defineMiddleware,
 } from '@typepoint/server';
 import { partialOf } from 'jest-helpers';
@@ -61,24 +60,25 @@ describe('server/express', () => {
       beforeEach(() => {
         const middlewareDelayInMs = 100;
 
-        const Middleware1 = defineMiddleware((context, next) => delay(middlewareDelayInMs)
-          .then(() => logger.debug('Before next()'))
-          .then(() => next())
-          .then(() => logger.debug('After next()')), 'Middleware1');
+        const middleware1 = defineMiddleware(async (_context, next) => {
+          await delay(middlewareDelayInMs);
+          logger.debug('Before next()');
+          await next();
+          logger.debug('After next()');
+        }, 'Middleware1');
 
-        const Middleware2 = defineMiddleware((context, next) => delay(middlewareDelayInMs)
-          .then(() => logger.debug('Before next()'))
-          .then(() => next())
-          .then(() => logger.debug('After next()')), 'Middleware2');
+        const middleware2 = defineMiddleware(async (_context, next) => {
+          await delay(middlewareDelayInMs);
+          logger.debug('Before next()');
+          await next();
+          logger.debug('After next()');
+        }, 'Middleware2');
 
-        middlewares = [
-          new Middleware1(),
-          new Middleware2(),
-        ];
+        middlewares = [middleware1, middleware2];
 
         router = partialOf<Router>({
-          getMiddlewares: jest.fn().mockReturnValue(middlewares),
-          getHandlers: jest.fn().mockReturnValue([]),
+          middlewares,
+          handlers: [],
         });
 
         logger = new TestLogger();
@@ -101,6 +101,7 @@ describe('server/express', () => {
             url: 'https://www.example.com/todos',
           });
           res = partialOf<express.Response>({
+            json: jest.fn(),
             end: () => resolve(),
           });
           next = () => resolve();
@@ -118,7 +119,9 @@ describe('server/express', () => {
             + 'DEBUG Wait over\n'
             + 'DEBUG Before next()\n'
             + 'DEBUG After next()\n'
-            + 'DEBUG After next()\n';
+            + 'DEBUG Executed middleware: Middleware2\n'
+            + 'DEBUG After next()\n'
+            + 'DEBUG Executed middleware: Middleware1\n';
           expect(logger.toString()).toBe(expectedLog);
         });
       });

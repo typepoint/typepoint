@@ -1,5 +1,5 @@
 import { Response as ExpressResponse } from 'express';
-import * as httpStatusCodes from 'http-status-codes';
+import { OK, NOT_FOUND } from 'http-status-codes';
 import { partialOf } from 'jest-helpers';
 import { getProducts, Product } from '@typepoint/fixtures';
 import { Response as TypePointResponse, SetCookieOptions } from '@typepoint/server';
@@ -56,18 +56,18 @@ describe('server/express/typePointExpressResponse', () => {
 
     it('should automatically set the statusCode to 200 when setting body', () => {
       response.body = { body: products[0] };
-      expect(response.statusCode).toBe(httpStatusCodes.OK);
+      expect(response.statusCode).toBe(OK);
     });
 
     it('should not change the statusCode when setting body if statusCode had already been set', () => {
-      response.statusCode = httpStatusCodes.NOT_FOUND;
+      response.statusCode = NOT_FOUND;
       response.body = {
         error: {
           code: 'PRODUCT_DISCONTINUED',
           message: 'Product is no longer available',
         },
       };
-      expect(response.statusCode).toBe(httpStatusCodes.NOT_FOUND);
+      expect(response.statusCode).toBe(NOT_FOUND);
     });
 
     it('should have a contentType of \'application/json\' by default', () => {
