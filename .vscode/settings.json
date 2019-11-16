@@ -37,7 +37,6 @@
     "**/CVS": true,
     "**/.DS_Store": true
   },
-  "prettier.eslintIntegration": true,
   "typescript.format.insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces": true,
   "typescript.format.insertSpaceAfterFunctionKeywordForAnonymousFunctions": false,
   "typescript.tsdk": "node_modules/typescript/lib",

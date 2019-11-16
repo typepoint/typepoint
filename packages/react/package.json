@@ -11,14 +11,16 @@
     "release": "../../support/release.sh react",
     "ship": "../../support/ship.sh react",
     "test": "../../support/test.sh react",
-    "verify": "yarn lint && yarn build && yarn test"
+    "validate": "yarn lint && yarn build && yarn test"
   },
   "dependencies": {
     "@typepoint/client": "^2.0.1",
     "@typepoint/shared": "^2.0.2"
   },
   "devDependencies": {
-    "@testing-library/react": "9.3.2"
+    "@testing-library/react": "9.3.2",
+    "react": "16.11.0",
+    "react-dom": "16.11.0"
   },
   "peerDependencies": {
     "react": "^16.11.0"

@@ -12,7 +12,7 @@
     "release": "../../support/release.sh joiful",
     "ship": "../../support/ship.sh joiful",
     "test": "../../support/test.sh joiful",
-    "verify": "../../support/verify.sh joiful"
+    "validate": "../../support/verify.sh joiful"
   },
   "peerDependencies": {
     "joiful": "^1.1.6",

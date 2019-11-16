@@ -24,7 +24,6 @@ function run() {
     const packageObj = JSON.parse(content);
     const fieldsToRemove = [
       'devDependencies',
-      'precommit',
       'private',
       'scripts',
     ];

@@ -12,7 +12,7 @@
     "release": "../../support/release.sh express",
     "ship": "../../support/ship.sh express",
     "test": "../../support/test.sh express",
-    "verify": "../../support/verify.sh express"
+    "validate": "../../support/verify.sh express"
   },
   "dependencies": {
     "@typepoint/shared": "^2.0.2",
