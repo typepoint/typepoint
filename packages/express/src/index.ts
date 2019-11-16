@@ -1,6 +1,5 @@
-import * as clone from 'clone';
 import * as express from 'express';
-import * as httpStatusCodes from 'http-status-codes';
+import { BAD_REQUEST, INTERNAL_SERVER_ERROR } from 'http-status-codes';
 import {
   cleanseHttpMethod,
   EndpointDefinitionClassInfo,
@@ -8,17 +7,20 @@ import {
   NoopLogger,
 } from '@typepoint/shared';
 import {
-  EndpointContextCustomMetadata,
-  EndpointContext, EndpointHandler,
-  IEndpointHandler,
+  EndpointContext,
+  EndpointContextMetadata,
+  EndpointHandler,
+  EndpointMiddleware,
   HandlerMatch,
   HandlerMatchIterator,
-  Request, Response,
-  Router, UnprotectedRouter,
+  Router,
 } from '@typepoint/server';
 import { combineMiddlewares } from './middleware';
 import { TypePointExpressRequest } from './typePointExpressRequest';
 import { TypePointExpressResponse } from './typePointExpressResponse';
+
+
+import clone = require('clone');
 
 export interface ToMiddlewareOptions {
   expressMiddlewares?: express.RequestHandler[];
@@ -52,7 +54,7 @@ function validateAndTransformParams(options: ValidateAndTransformParamsOptions):
 
   const validationResult = router.validateAndTransform(context.request.params, requestParamsClass);
   if (validationResult.validationError) {
-    context.response.statusCode = httpStatusCodes.BAD_REQUEST;
+    context.response.statusCode = BAD_REQUEST;
     context.response.body = validationResult.validationError;
     return false;
   }
@@ -84,7 +86,7 @@ function validateAndTransformBody(options: ValidateAndTransformBodyOptions): boo
 
   const validationResult = router.validateAndTransform(clone(originalRequestBody), requestBodyClass);
   if (validationResult.validationError) {
-    context.response.statusCode = httpStatusCodes.BAD_REQUEST;
+    context.response.statusCode = BAD_REQUEST;
     context.response.body = validationResult.validationError;
     return false;
   }
@@ -95,10 +97,10 @@ function validateAndTransformBody(options: ValidateAndTransformBodyOptions): boo
 
 function validateAndTransform(options: ValidateAndTransformOptions): boolean {
   const {
-    context, handlerMatch, originalRequestBody, router,
+    context, handlerMatch: { handler }, originalRequestBody, router,
   } = options;
 
-  const { definition } = handlerMatch.handler;
+  const definition = 'definition' in handler ? handler.definition : undefined;
   const classInfo = definition && definition.classInfo;
 
   if (!validateAndTransformParams({ classInfo, context, router })) {
@@ -116,7 +118,7 @@ function validateAndTransform(options: ValidateAndTransformOptions): boolean {
 
 function trySendInternalServerError(res: express.Response, err: Error | string | any) {
   if (!res.headersSent) {
-    res.statusCode = httpStatusCodes.INTERNAL_SERVER_ERROR;
+    res.statusCode = INTERNAL_SERVER_ERROR;
     res.json((err && err.message) || err);
     res.end();
   }
@@ -133,7 +135,7 @@ export function toMiddleware(router: Router, options?: ToMiddlewareOptions): exp
     const originalRequestBody = clone(req.body);
 
     try {
-      const meta: EndpointContextCustomMetadata = {};
+      const meta: EndpointContextMetadata = {};
       const request = new TypePointExpressRequest(req);
       const response = new TypePointExpressResponse(res);
       context = { meta, request, response };
@@ -147,9 +149,9 @@ export function toMiddleware(router: Router, options?: ToMiddlewareOptions): exp
     }
 
     try {
-      const allHandlers: IEndpointHandler[] = [
-        ...router.getMiddlewares(),
-        ...router.getHandlers(),
+      const allHandlers: (EndpointHandler | EndpointMiddleware)[] = [
+        ...router.middlewares,
+        ...router.handlers,
       ];
 
       const handlerMatchIterator = new HandlerMatchIterator(allHandlers, {
@@ -173,6 +175,10 @@ export function toMiddleware(router: Router, options?: ToMiddlewareOptions): exp
           }
 
           await handlerMatch.handler.handle(context, executeNextHandler);
+
+          if (handlerMatch.handler.name) {
+            logger.debug(`Executed ${handlerMatch.type}: ${handlerMatch.handler.name}`);
+          }
         }
       };
 
@@ -182,7 +188,7 @@ export function toMiddleware(router: Router, options?: ToMiddlewareOptions): exp
         context.response.flush();
         res.end();
       } else {
-        await next();
+        next();
       }
     } catch (err) {
       logger.error(err);

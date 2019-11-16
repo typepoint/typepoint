@@ -1,5 +1,6 @@
 import { Response as ExpressResponse } from 'express';
-import * as httpStatusCodes from 'http-status-codes';
+import { OK } from 'http-status-codes';
+import { NormalizeTypePointType } from '@typepoint/shared';
 import {
   HeadersAlreadySent,
   Response as TypePointResponse,
@@ -45,25 +46,23 @@ export class TypePointExpressResponse<TResponseBody> implements TypePointRespons
     }
   }
 
-  get body(): TResponseBody | undefined {
+  get body(): NormalizeTypePointType<TResponseBody> | undefined {
     return this.innerBody;
   }
 
-  set body(value: TResponseBody | undefined) {
+  set body(value: NormalizeTypePointType<TResponseBody> | undefined) {
     this.ensureBodyNotSent();
 
     this.innerBody = value;
 
     if (this.statusCode === undefined) {
-      this.statusCode = httpStatusCodes.OK;
+      this.statusCode = OK;
     }
   }
 
   private innerStatusCode: number | undefined;
 
-  private innerStatusText: string | undefined;
-
-  private innerBody: TResponseBody | undefined;
+  private innerBody: NormalizeTypePointType<TResponseBody> | undefined;
 
   private innerHasFlushedBody = false;
 

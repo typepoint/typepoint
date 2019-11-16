@@ -1,15 +1,15 @@
 import { Request as ExpressRequest } from 'express';
-import { cleanseHttpMethod, HttpMethod } from '@typepoint/shared';
+import { cleanseHttpMethod, NormalizeTypePointType } from '@typepoint/shared';
 import { Request as TypePointRequest, RequestCookies, RequestHeaders } from '@typepoint/server';
 
 export class TypePointExpressRequest<TParams, TBody> implements TypePointRequest<TParams, TBody> {
   readonly url: string;
 
-  readonly method: HttpMethod;
+  readonly method: string;
 
-  params: TParams;
+  params: NormalizeTypePointType<TParams>;
 
-  body: TBody;
+  body: NormalizeTypePointType<TBody>;
 
   readonly cookies: RequestCookies;
 
