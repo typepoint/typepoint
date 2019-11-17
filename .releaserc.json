@@ -1,0 +1,19 @@
+{
+  "commitPaths": ["./"],
+  "plugins": [
+    "@semantic-release/commit-analyzer",
+    "@semantic-release/release-notes-generator",
+    "@semantic-release/changelog",
+    ["@semantic-release/npm", { "npmPublish": false }],
+    [
+      "@semantic-release/exec",
+      {
+        "publishCmd": "yarn ts-node ../../support/copyPackage.ts"
+      }
+    ],
+    ["@semantic-release/exec", { "publishCmd": "cp ./{CHANGELOG.md,README.md} ./dist/" }],
+    ["@semantic-release/exec", { "publishCmd": "cp ../../LICENSE ./dist/" }],
+    ["@semantic-release/exec", { "publishCmd": "npm publish ./dist --access=public" }],
+    "@semantic-release/git"
+  ]
+}

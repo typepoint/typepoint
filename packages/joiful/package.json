@@ -9,7 +9,7 @@
     "clean": "../../support/clean.sh joiful",
     "build": "../../support/build.sh joiful",
     "lint": "../../support/lint.sh joiful",
-    "release": "../../support/release.sh joiful",
+    "preship": "yarn validate",
     "ship": "../../support/ship.sh joiful",
     "test": "../../support/test.sh joiful",
     "validate": "../../support/validate.sh joiful"

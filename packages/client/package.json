@@ -8,7 +8,7 @@
     "clean": "../../support/clean.sh client",
     "build": "../../support/build.sh client",
     "lint": "../../support/lint.sh client",
-    "release": "../../support/release.sh client",
+    "preship": "yarn validate",
     "ship": "../../support/ship.sh client",
     "test": "../../support/test.sh client",
     "validate": "yarn lint && yarn build && yarn test"

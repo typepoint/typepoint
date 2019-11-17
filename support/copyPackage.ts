@@ -1,5 +1,4 @@
 import * as fs from 'fs-extra';
-import * as path from 'path';
 
 function updateFile(fileName: string, replacer: (content: string) => string) {
   let content = fs.readFileSync(fileName, { encoding: 'utf8' });
@@ -8,16 +7,9 @@ function updateFile(fileName: string, replacer: (content: string) => string) {
 }
 
 function run() {
-  const packageName = process.argv[2];
-
-  if (!packageName) {
-    console.log('Package name not specified');
-    return;
-  }
-
-  const rootPath = path.dirname(__dirname);
-  const sourceFileName = `${rootPath}/packages/${packageName}/package.json`;
-  const destinationFileName = `${__dirname}/../packages/${packageName}/dist/package.json`;
+  const packagePath = process.cwd;
+  const sourceFileName = `${packagePath}/package.json`;
+  const destinationFileName = `${packagePath}/dist/package.json`;
   fs.copyFileSync(sourceFileName, destinationFileName);
 
   updateFile(destinationFileName, (content) => {
@@ -36,7 +28,8 @@ function run() {
     if (typeof main === 'string') {
       packageObj.main = main
         .replace(/^src\//, '')
-        .replace(/\.ts$/, '.js');
+        .replace(/\.ts$/, '.js')
+        .replace(/\.tsx$/, '.js');
     }
     if (typeof types === 'string') {
       packageObj.types = types.replace(/^src\//, '');
