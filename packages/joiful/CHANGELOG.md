@@ -1,3 +1,10 @@
+## [2.0.2](https://github.com/typepoint/typepoint/compare/@typepoint/joiful_v2.0.1...@typepoint/joiful_v2.0.2) (2019-11-17)
+
+
+### Bug Fixes
+
+* **package:** add author ([e131bcd](https://github.com/typepoint/typepoint/commit/e131bcdc3d39ee6e50819b6aee730ef1ea5509e3))
+
 # 1.0.0 (2019-11-17)
 
 
