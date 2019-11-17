@@ -32,7 +32,9 @@ function run() {
         .replace(/\.tsx$/, '.js');
     }
     if (typeof types === 'string') {
-      packageObj.types = types.replace(/^src\//, '');
+      packageObj.types = types
+        .replace(/^src\//, '')
+        .replace(/(\.d\.ts|\.ts)$/, '.d.ts');
     }
 
     return JSON.stringify(packageObj, null, '  ');
