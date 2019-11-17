@@ -12,7 +12,7 @@
     "release": "../../support/release.sh shared",
     "ship": "../../support/ship.sh shared",
     "test": "../../support/test.sh shared",
-    "validate": "../../support/verify.sh shared"
+    "validate": "../../support/validate.sh shared"
   },
   "devDependencies": {
     "standard-version": "7.0.0"
