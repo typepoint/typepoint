@@ -2,7 +2,7 @@
   "name": "@typepoint/react",
   "version": "2.0.0",
   "main": "src/index.tsx",
-  "types": "src/index",
+  "types": "src/index.tsx",
   "license": "SEE LICENSE IN LICENSE",
   "scripts": {
     "clean": "../../support/clean.sh react",
