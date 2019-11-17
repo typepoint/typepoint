@@ -1,3 +1,10 @@
+## [2.0.4](https://github.com/typepoint/typepoint/compare/@typepoint/shared_v2.0.3...@typepoint/shared_v2.0.4) (2019-11-17)
+
+
+### Bug Fixes
+
+* **package:** add missing author tag ([a72b554](https://github.com/typepoint/typepoint/commit/a72b554aebaa0b9d0b48bed7d74ba35fab7c7047))
+
 ## [2.0.3](https://github.com/typepoint/typepoint/compare/@typepoint/shared_v2.0.2...@typepoint/shared_v2.0.3) (2019-11-17)
 
 
