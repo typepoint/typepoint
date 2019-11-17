@@ -37,8 +37,6 @@
     "packages": [
       "packages/client",
       "packages/e2e-tests",
-      "packages/examples/todos-hooks-nextjs",
-      "packages/examples/todos-hooks-parcel",
       "packages/express",
       "packages/fixtures",
       "packages/joiful",
