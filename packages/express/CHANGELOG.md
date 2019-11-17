@@ -1,3 +1,10 @@
+## [2.0.2](https://github.com/typepoint/typepoint/compare/@typepoint/express_v2.0.1...@typepoint/express_v2.0.2) (2019-11-17)
+
+
+### Bug Fixes
+
+* **package:** add author ([7f95859](https://github.com/typepoint/typepoint/commit/7f9585912cfa342acdb324eb1f565b582383edcf))
+
 # 1.0.0 (2019-11-17)
 
 
