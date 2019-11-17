@@ -1,0 +1,4 @@
+{
+  "extends": "../../.releaserc.json",
+  "tagFormat": "@typepoint/shared_v${version}"
+}
