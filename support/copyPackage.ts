@@ -7,10 +7,9 @@ function updateFile(fileName: string, replacer: (content: string) => string) {
 }
 
 function run() {
-  const packagePath = process.cwd;
+  const packagePath = process.cwd();
   const sourceFileName = `${packagePath}/package.json`;
   const destinationFileName = `${packagePath}/dist/package.json`;
-  console.log(`Copying ${sourceFileName} to ${destinationFileName}`);
   fs.copyFileSync(sourceFileName, destinationFileName);
 
   updateFile(destinationFileName, (content) => {
