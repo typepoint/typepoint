@@ -1,3 +1,12 @@
+## [1.0.1](https://github.com/typepoint/typepoint/compare/@typepoint/express_v1.0.0...@typepoint/express_v1.0.1) (2019-11-17)
+
+
+### Bug Fixes
+
+* **package:** bump version ([cd72a54](https://github.com/typepoint/typepoint/commit/cd72a547f12f14c4b63044d8841dba00c253d1bb))
+* **package:** fix types entry in package.json ([c9633d5](https://github.com/typepoint/typepoint/commit/c9633d5e1addda49fa04c92be00a8c408b2e791e))
+* **package:** fix types entry in package.json ([949f03a](https://github.com/typepoint/typepoint/commit/949f03adcf0c5c812d864e65a0da0ed5c23395f9))
+
 # 1.0.0 (2019-11-17)
 
 
