@@ -1,3 +1,10 @@
+## [2.0.5](https://github.com/typepoint/typepoint/compare/@typepoint/shared_v2.0.4...@typepoint/shared_v2.0.5) (2019-11-17)
+
+
+### Bug Fixes
+
+* **types:** fix types entry in package.json ([6b05c72](https://github.com/typepoint/typepoint/commit/6b05c72d74c8a8645957c3d56267dfa914647100))
+
 ## [2.0.4](https://github.com/typepoint/typepoint/compare/@typepoint/shared_v2.0.3...@typepoint/shared_v2.0.4) (2019-11-17)
 
 
