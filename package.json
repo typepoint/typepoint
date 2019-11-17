@@ -27,7 +27,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/typepoint/typepoint.git"
+    "url": "https://github.com/typepoint/typepoint.git"
   },
   "bugs": {
     "url": "https://github.com/typepoint/typepoint/issues"
@@ -54,9 +54,15 @@
     "lint:fix": "yarn lint --fix",
     "prebuild": "yarn run clean",
     "validate-imports": "ts-node ./support/validateImports.ts",
-    "validate": "yarn validate-imports && yarn workspace @typepoint/client validate && yarn workspace @typepoint/express validate && yarn workspace @typepoint/joiful validate && yarn workspace @typepoint/react validate && yarn workspace @typepoint/server && yarn workspace @typepoint/shared validate"
+    "validate": "yarn validate-imports && yarn workspace @typepoint/client validate && yarn workspace @typepoint/express validate && yarn workspace @typepoint/joiful validate && yarn workspace @typepoint/react validate && yarn workspace @typepoint/server && yarn workspace @typepoint/shared validate",
+    "semantic-release": "semantic-release"
   },
   "devDependencies": {
+    "@semantic-release/changelog": "3.0.5",
+    "@semantic-release/commit-analyzer": "6.3.3",
+    "@semantic-release/exec": "3.3.8",
+    "@semantic-release/git": "7.0.18",
+    "@semantic-release/npm": "5.3.4",
     "@types/bluebird": "3.5.29",
     "@types/chalk": "2.2.0",
     "@types/fs-extra": "8.0.0",
@@ -93,10 +99,12 @@
     "pre-commit": "1.2.2",
     "prettier": "1.18.2",
     "rimraf": "3.0.0",
+    "semantic-release": "^15.13.30",
     "ts-jest": "24.1.0",
     "ts-node": "8.4.1",
     "ts-node-dev": "1.0.0-pre.43",
     "typescript": "3.6.4"
   },
-  "dependencies": {}
+  "dependencies": {},
+  "version": "0.0.0-development"
 }

@@ -9,12 +9,10 @@
     "clean": "../../support/clean.sh shared",
     "build": "../../support/build.sh shared",
     "lint": "../../support/lint.sh shared",
-    "release": "../../support/release.sh shared",
+    "preship": "yarn validate",
     "ship": "../../support/ship.sh shared",
     "test": "../../support/test.sh shared",
     "validate": "../../support/validate.sh shared"
   },
-  "devDependencies": {
-    "standard-version": "7.0.0"
-  }
+  "devDependencies": {}
 }

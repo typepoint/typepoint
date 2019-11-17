@@ -4,13 +4,9 @@ PACKAGE_PATH="$SCRIPT_PATH/../packages/$1"
 
 cd "$PACKAGE_PATH"
 
-# Push CHANGE_LOG and package.json changes up to origin/master
-git push --follow-tags origin master
+if test -f "$PACKAGE_PATH/package.json"; then
+  cp "$PACKAGE_PATH/package.json" "$DIST_PATH/package.json"
+fi
 
 # Publish package to npm
-cd "$PACKAGE_PATH/dist"
-yarn publish --access=public --non-interactive --no-git-tag-version
-
-# Clean the dist folder
-cd ..
-yarn run clean
+GH_TOKEN=$TP_GITHUB_TOKEN NPM_TOKEN=$TP_NPM_TOKEN yarn semantic-release --no-ci

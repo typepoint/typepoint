@@ -9,7 +9,7 @@
     "clean": "../../support/clean.sh server",
     "build": "../../support/build.sh server",
     "lint": "../../support/lint.sh server",
-    "release": "../../support/release.sh server",
+    "preship": "yarn validate",
     "ship": "../../support/ship.sh server",
     "test": "../../support/test.sh server",
     "validate": "../../support/validate.sh server"

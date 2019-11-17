@@ -9,7 +9,7 @@
     "clean": "../../support/clean.sh express",
     "build": "../../support/build.sh express",
     "lint": "../../support/lint.sh express",
-    "release": "../../support/release.sh express",
+    "preship": "yarn validate",
     "ship": "../../support/ship.sh express",
     "test": "../../support/test.sh express",
     "validate": "../../support/validate.sh express"

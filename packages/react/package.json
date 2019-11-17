@@ -8,7 +8,7 @@
     "clean": "../../support/clean.sh react",
     "build": "../../support/build.sh react",
     "lint": "../../support/lint.sh react",
-    "release": "../../support/release.sh react",
+    "preship": "yarn validate",
     "ship": "../../support/ship.sh react",
     "test": "../../support/test.sh react",
     "validate": "yarn lint && yarn build && yarn test"
