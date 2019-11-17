@@ -5,6 +5,7 @@
   "main": "src/index.ts",
   "types": "src/index",
   "license": "SEE LICENSE IN LICENSE",
+  "author": "Ben <codeandcats@gmail.com> (https://github.com/codeandcats)",
   "scripts": {
     "clean": "../../support/clean.sh shared",
     "build": "../../support/build.sh shared",
