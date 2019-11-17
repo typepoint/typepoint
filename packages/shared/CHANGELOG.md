@@ -1,3 +1,10 @@
+## [2.0.3](https://github.com/typepoint/typepoint/compare/@typepoint/shared_v2.0.2...@typepoint/shared_v2.0.3) (2019-11-17)
+
+
+### Bug Fixes
+
+* **readme:** add logo ([6590c68](https://github.com/typepoint/typepoint/commit/6590c6892e2130ba91e8839510087be2d2aaa06b))
+
 # Changelog
 
 All notable changes to this project will be documented in this file.
