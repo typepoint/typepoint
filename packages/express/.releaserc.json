@@ -1,0 +1,4 @@
+{
+  "extends": "../../.releaserc.json",
+  "tagFormat": "@typepoint/express_v${version}"
+}
