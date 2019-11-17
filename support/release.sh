@@ -9,7 +9,7 @@ cd "$PACKAGE_PATH"
 git checkout master
 git pull origin master
 
-"$SCRIPT_PATH/verify.sh" $1
+"$SCRIPT_PATH/validate.sh" $1
 
 # Run standard-version for this package
 # to update CHANGE_LOG, and package.json version

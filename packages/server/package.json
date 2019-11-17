@@ -12,7 +12,7 @@
     "release": "../../support/release.sh server",
     "ship": "../../support/ship.sh server",
     "test": "../../support/test.sh server",
-    "validate": "../../support/verify.sh server"
+    "validate": "../../support/validate.sh server"
   },
   "dependencies": {
     "@typepoint/shared": "^2.0.0",
