@@ -34,7 +34,7 @@ function run() {
     if (typeof types === 'string') {
       packageObj.types = types
         .replace(/^src\//, '')
-        .replace(/(\.d\.ts|\.ts)$/, '.d.ts');
+        .replace(/(\.d\.ts|\.ts|\.tsx)$/, '.d.ts');
     }
 
     return JSON.stringify(packageObj, null, '  ');
