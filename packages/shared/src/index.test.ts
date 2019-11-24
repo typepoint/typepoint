@@ -1,15 +1,18 @@
 // eslint-disable-next-line max-classes-per-file
 import { Product } from '@typepoint/fixtures';
-import { TestCase } from 'jest-helpers';
+import { assert, Equal } from 'type-assertions';
 import {
+  EndpointDefinition,
   arrayOf,
+  ArrayOf,
   cleanseHttpMethod,
+  Constructor,
   defineEndpoint,
   Empty,
   isArrayOf,
   isEmptyClass,
   isEmptyValue,
-} from '.';
+} from './index';
 
 describe('shared', () => {
   describe('arrayOf', () => {
@@ -23,6 +26,10 @@ describe('shared', () => {
       const ArrayOfUser = arrayOf(User);
       expect(typeof ArrayOfUser).toBe('function');
 
+      type Actual = typeof ArrayOfUser;
+      type Expected = Constructor<ArrayOf<User>>;
+      assert<Equal<Actual, Expected>>();
+
       const arrayOfUser = new ArrayOfUser();
       expect(arrayOfUser).toHaveProperty(['classInfo', 'element'], User);
     });
@@ -33,6 +40,8 @@ describe('shared', () => {
       const method = 'POST';
       const addProduct = defineEndpoint<Empty, Product, Product>(method, (path) => path.literal('products'));
 
+      assert<Equal<typeof addProduct, EndpointDefinition<Empty, Product, Product>>>();
+
       expect(addProduct).toBeDefined();
       expect(addProduct).toHaveProperty('method', method);
       expect(addProduct).toHaveProperty('path', '/products');
@@ -40,6 +49,8 @@ describe('shared', () => {
 
     it('should default a GET method if method is not specified', () => {
       const getProducts = defineEndpoint<Empty, Empty, Product[]>((path) => path.literal('products'));
+
+      assert<Equal<typeof getProducts, EndpointDefinition<Empty, Empty, Product[]>>>();
 
       expect(getProducts).toBeDefined();
       expect(getProducts).toHaveProperty('method', 'GET');
@@ -70,6 +81,8 @@ describe('shared', () => {
         requestBody: Empty,
         responseBody: Client,
       });
+
+      assert<Equal<typeof getClient, EndpointDefinition<GetClientRequestParams, Empty, Client>>>();
 
       expect(getClient).toBeDefined();
       expect(getClient).toHaveProperty('method', method);
@@ -102,6 +115,8 @@ describe('shared', () => {
         requestBody: Empty,
         responseBody: arrayOfClient,
       });
+
+      assert<Equal<typeof getClients, EndpointDefinition<GetClientsParams, Empty, ArrayOf<Client>>>>();
 
       expect(getClients).toBeDefined();
       expect(getClients).toHaveProperty('method', 'GET');
