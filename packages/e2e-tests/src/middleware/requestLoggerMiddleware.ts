@@ -1,4 +1,3 @@
-import chalk from 'chalk';
 import { defineMiddleware } from '@typepoint/server';
 import { info } from '../services/loggerService';
 
@@ -10,7 +9,7 @@ export const requestLoggerMiddleware = defineMiddleware(async ({ request, respon
     error = err;
   } finally {
     const responseTime = response.header('x-response-time');
-    const errorMessage = error ? chalk.red(` - ${error.message || error}`) : '';
+    const errorMessage = error ? ` - ${error.message || error}` : '';
     info(
       `${request.method} ${request.url} - ${responseTime}${errorMessage}`,
     );
