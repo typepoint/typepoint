@@ -1,8 +1,8 @@
-import { getTodos: getTodosFixture } from '@typepoint/fixtures';
+import * as fixtures from '@typepoint/fixtures';
 import { NotFoundError } from '../models/notFound';
 import { Todo, UpdatableTodoFields } from '../models/todo';
 
-const todos: Todo[] = getTodosFixture();
+const todos: Todo[] = fixtures.getTodos();
 
 const getTodoIndexById = (id: string): number => {
   const index = todos.findIndex((todo) => todo.id === id);
