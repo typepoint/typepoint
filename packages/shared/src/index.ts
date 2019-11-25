@@ -54,7 +54,7 @@ export function arrayOf<T>(Class: Constructor<T>): Constructor<ArrayOf<T>> {
   return AnonymousArrayOf;
 }
 
-export function isArrayOf<T>(Class: Constructor<any>): Class is Constructor<ArrayOf<any>> {
+export function isArrayOf(Class: any): Class is Constructor<ArrayOf<any>> {
   return !!(Class && (Class as any).isArrayOf);
 }
 
@@ -64,7 +64,7 @@ export class Empty {
   readonly __isEmpty = true;
 }
 
-export function isEmptyClass(Class: Constructor<any>): boolean {
+export function isEmptyClass(Class: any): boolean {
   return Class === Empty;
 }
 
@@ -80,59 +80,59 @@ export function isEmptyValue(value: any) {
   return false;
 }
 
-export type NormalizeTypePointType<T> =
+export type NormalizeDefinitionType<T> = (
+  T extends Array<Constructor<infer TInstance>>
+    ? TInstance[]
+    : T extends Constructor<infer TInstance>
+      ? TInstance
+      : T extends ArrayOf<infer TElementType>
+        ? TElementType[]
+        : T extends [infer TElementType]
+          ? TElementType
+          : T
+);
+
+function normalizeDefinitionType<T>(value: T): NormalizeDefinitionType<T> {
+  return value as unknown as NormalizeDefinitionType<T>;
+}
+
+export type NormalizeTypePointType<T> = (
   T extends ArrayOf<infer TElementType>
     ? TElementType[]
     : T extends Empty
       ? ({} | undefined)
-      : T;
+      : T
+);
+
+export type AllowableRequestParams = Empty | Record<string, any>;
+export type AllowableRequestBody = Empty | Record<string, any> | Array<any>;
+export type AllowableResponseBody = Empty | Record<string, any> | Array<any>;
+
+export type AllowableClassBasedRequestParams = Empty | Constructor<any>;
+export type AllowableClassBasedRequestBody = Empty | Constructor<any> | Constructor<any>[];
+export type AllowableClassBasedResponseBody = Empty | Constructor<any> | Constructor<any>[];
 
 export interface EndpointDefinitionUrlOptions<TRequestParams> {
   server?: string | undefined;
-  params?: TRequestParams | undefined;
-}
-
-export interface BaseEndpointDefinitionOptions<
-  TRequestParams extends Record<string, any> | Empty,
-  TRequestBody extends Record<string, any> | Empty,
-  TResponseBody extends Record<string, any> | Empty
-> {
-
-  method?: string;
-  path: PathBuildingFunction<TRequestParams>;
-
+  params?: NormalizeDefinitionType<TRequestParams> | undefined;
 }
 
 export interface ClassBasedEndpointDefinitionOptions<
-  TRequestParams extends Record<string, any> | Empty,
-  TRequestBody extends Record<string, any> | Empty,
-  TResponseBody extends Record<string, any> | Empty
-> extends BaseEndpointDefinitionOptions<TRequestParams, TRequestBody, TResponseBody> {
-
-  requestParams: Constructor<TRequestParams>;
-  requestBody: Constructor<TRequestBody>;
-  responseBody: Constructor<TResponseBody>;
+  TRequestParams extends AllowableClassBasedRequestParams,
+  TRequestBody extends AllowableClassBasedRequestBody,
+  TResponseBody extends AllowableClassBasedResponseBody
+> {
+  method?: string;
+  path: PathBuildingFunction<NormalizeDefinitionType<TRequestParams>>;
+  requestParams: TRequestParams;
+  requestBody: TRequestBody;
+  responseBody: TResponseBody;
 }
 
-export type EndpointDefinitionOptions<
-  TRequestParams extends Record<string, any> | Empty,
-  TRequestBody extends Record<string, any> | Empty,
-  TResponseBody extends Record<string, any> | Empty
-> = (
-  BaseEndpointDefinitionOptions<TRequestParams, TRequestBody, TResponseBody> |
-  ClassBasedEndpointDefinitionOptions<TRequestParams, TRequestBody, TResponseBody>
-);
-
-function isClassBasedEndpointDefinitionOptions<
-  TRequestParams extends Record<string, any> | Empty,
-  TRequestBody extends Record<string, any> | Empty,
-  TResponseBody extends Record<string, any> | Empty
->(
-  options: EndpointDefinitionOptions<TRequestParams, TRequestBody, TResponseBody>,
-): options is ClassBasedEndpointDefinitionOptions<TRequestParams, TRequestBody, TResponseBody> {
-  const partialOptions = options as
-    Partial<ClassBasedEndpointDefinitionOptions<TRequestParams, TRequestBody, TResponseBody>>;
-
+function isClassBasedEndpointDefinitionOptions(
+  options: ClassBasedEndpointDefinitionOptions<any, any, any>,
+): boolean {
+  const partialOptions = options as Partial<ClassBasedEndpointDefinitionOptions<any, any, any>>;
   return !!(
     partialOptions.requestParams
     && partialOptions.requestBody
@@ -143,34 +143,30 @@ function isClassBasedEndpointDefinitionOptions<
 export class EndpointDefinitionRequestClassInfo<TParams, TBody> {
   constructor(
     readonly params: Constructor<TParams>,
-    readonly body: Constructor<TBody>,
+    readonly body: Constructor<TBody> | [any],
   ) {
   }
 }
 
 export class EndpointDefinitionResponseClassInfo<TBody> {
   constructor(
-    readonly body: Constructor<TBody>,
+    readonly body: Constructor<TBody> | [any],
   ) {
   }
 }
 
-export class EndpointDefinitionClassInfo<
-  TRequestParams extends Record<string, any> | Empty,
-  TRequestBody extends Record<string, any> | Empty,
-  TResponseBody
-> {
-  readonly request: EndpointDefinitionRequestClassInfo<TRequestParams, TRequestBody>;
+export class EndpointDefinitionClassInfo {
+  readonly request: EndpointDefinitionRequestClassInfo<any, any>;
 
-  readonly response: EndpointDefinitionResponseClassInfo<TResponseBody>;
+  readonly response: EndpointDefinitionResponseClassInfo<any>;
 
   constructor(
-    requestParams: Constructor<TRequestParams>,
-    requestBody: Constructor<TRequestBody>,
-    responseBody: Constructor<TResponseBody>,
+    requestParams: Constructor<any>,
+    requestBody: Constructor<any> | [any],
+    responseBody: Constructor<any> | [any],
   ) {
-    this.request = new EndpointDefinitionRequestClassInfo(requestParams, requestBody);
-    this.response = new EndpointDefinitionResponseClassInfo(responseBody);
+    this.request = new EndpointDefinitionRequestClassInfo<any, any>(requestParams, requestBody);
+    this.response = new EndpointDefinitionResponseClassInfo<any>(responseBody);
   }
 }
 
@@ -186,59 +182,73 @@ export class EndpointDefinitionInvalidConstructorArgs extends Error {
 }
 
 export interface EndpointDefinition<
-  TRequestParams extends Record<string, any> | Empty,
-  TRequestBody extends Record<string, any> | Empty,
-  TResponseBody extends Record<string, any> | Empty
+  TRequestParams extends AllowableRequestParams,
+  TRequestBody extends AllowableRequestBody,
+  TResponseBody extends AllowableResponseBody
 > {
   readonly method: string;
 
   readonly path: string;
 
-  readonly classInfo?: EndpointDefinitionClassInfo<TRequestParams, TRequestBody, TResponseBody>;
+  readonly classInfo?: EndpointDefinitionClassInfo | undefined;
 
   parse(url: string): PathHelperParseMatch | undefined;
 
-  url(options?: EndpointDefinitionUrlOptions<TRequestParams>): string;
+  url(options?: EndpointDefinitionUrlOptions<TRequestParams> | undefined): string;
 }
 
 export function defineEndpoint<
-  TRequestParams extends Record<string, any> | Empty,
-  TRequestBody extends Record<string, any> | Empty,
-  TResponseBody extends Record<string, any> | Empty
+  TRequestParams extends AllowableRequestParams,
+  TRequestBody extends AllowableRequestBody,
+  TResponseBody extends AllowableResponseBody
 >(
   buildPath: PathBuildingFunction<TRequestParams>
-): EndpointDefinition<TRequestParams, TRequestBody, TResponseBody>;
+): EndpointDefinition<
+NormalizeDefinitionType<TRequestParams>,
+NormalizeDefinitionType<TRequestBody>,
+NormalizeDefinitionType<TResponseBody>
+>;
 
 export function defineEndpoint<
-  TRequestParams extends Record<string, any> | Empty,
-  TRequestBody extends Record<string, any> | Empty,
-  TResponseBody extends Record<string, any> | Empty
+  TRequestParams extends AllowableRequestParams = Empty,
+  TRequestBody extends AllowableRequestBody = Empty,
+  TResponseBody extends AllowableResponseBody = Empty,
 >(
   method: string,
   buildPath: PathBuildingFunction<TRequestParams>
-): EndpointDefinition<TRequestParams, TRequestBody, TResponseBody>;
+): EndpointDefinition<
+NormalizeDefinitionType<TRequestParams>,
+NormalizeDefinitionType<TRequestBody>,
+NormalizeDefinitionType<TResponseBody>
+>;
 
 export function defineEndpoint<
-  TRequestParams extends Record<string, any> | Empty,
-  TRequestBody extends Record<string, any> | Empty,
-  TResponseBody extends Record<string, any> | Empty
+  TRequestParams extends AllowableClassBasedRequestParams,
+  TRequestBody extends AllowableClassBasedRequestBody,
+  TResponseBody extends AllowableClassBasedResponseBody,
 >(
-  options: EndpointDefinitionOptions<TRequestParams, TRequestBody, TResponseBody>
-): EndpointDefinition<TRequestParams, TRequestBody, TResponseBody>;
+  options: ClassBasedEndpointDefinitionOptions<TRequestParams, TRequestBody, TResponseBody>,
+): EndpointDefinition<
+NormalizeDefinitionType<TRequestParams>,
+NormalizeDefinitionType<TRequestBody>,
+NormalizeDefinitionType<TResponseBody>
+>;
 
 export function defineEndpoint<
-  TRequestParams extends Record<string, any> | Empty,
-  TRequestBody extends Record<string, any> | Empty,
-  TResponseBody extends Record<string, any> | Empty
->(...args: any[]): EndpointDefinition<TRequestParams, TRequestBody, TResponseBody> {
+  TRequestParams extends AllowableRequestParams,
+  TRequestBody extends AllowableRequestBody,
+  TResponseBody extends AllowableResponseBody,
+>(...args: any[]): EndpointDefinition<
+NormalizeDefinitionType<TRequestParams>,
+NormalizeDefinitionType<TRequestBody>,
+NormalizeDefinitionType<TResponseBody>
+> {
   const DEFAULT_METHOD = 'GET';
 
-  const [firstArg, secondArg] = args;
-
   const make = ({ classInfo, method, pathFunc }: {
-    classInfo?: EndpointDefinitionClassInfo<TRequestParams, TRequestBody, TResponseBody> | undefined;
+    classInfo?: EndpointDefinitionClassInfo | undefined;
     method: string;
-    pathFunc: PathBuildingFunction<TRequestParams>;
+    pathFunc: PathBuildingFunction<NormalizeDefinitionType<TRequestParams>>;
   }) => {
     const path = createPath(pathFunc);
     const pathHelper = new PathHelper(path);
@@ -247,28 +257,31 @@ export function defineEndpoint<
       path,
       classInfo,
       parse: (url: string) => pathHelper.parse(url),
-      url: (options?: EndpointDefinitionUrlOptions<TRequestParams>) => pathHelper.url(options),
+      url: (options?: EndpointDefinitionUrlOptions<NormalizeDefinitionType<TRequestParams>>) => pathHelper.url(options),
     };
   };
 
   switch (args.length) {
     case 1: {
-      if (typeof firstArg === 'object') {
-        const options: EndpointDefinitionOptions<TRequestParams, TRequestBody, TResponseBody> = firstArg;
-
-        return make({
-          classInfo: isClassBasedEndpointDefinitionOptions(options) ? new EndpointDefinitionClassInfo(
-            options.requestParams,
-            options.requestBody,
-            options.responseBody,
-          ) : undefined,
-          method: cleanseHttpMethod(options.method || DEFAULT_METHOD),
-          pathFunc: options.path,
-        });
-      } if (typeof firstArg === 'function') {
+      const [firstArg] = args;
+      if (typeof firstArg === 'function') {
         return make({
           method: DEFAULT_METHOD,
           pathFunc: firstArg,
+        });
+      }
+
+      if (firstArg && typeof firstArg === 'object') {
+        const classInfo = isClassBasedEndpointDefinitionOptions(firstArg) ? new EndpointDefinitionClassInfo(
+          normalizeDefinitionType(firstArg.requestParams),
+          normalizeDefinitionType(firstArg.requestBody),
+          normalizeDefinitionType(firstArg.responseBody),
+        ) : undefined;
+
+        return make({
+          classInfo,
+          method: cleanseHttpMethod(firstArg.method || DEFAULT_METHOD),
+          pathFunc: firstArg.path,
         });
       }
 
@@ -276,9 +289,10 @@ export function defineEndpoint<
     }
 
     case 2: {
+      const [method, pathFunc] = args;
       return make({
-        method: cleanseHttpMethod(firstArg || DEFAULT_METHOD),
-        pathFunc: secondArg,
+        method: cleanseHttpMethod(method || DEFAULT_METHOD),
+        pathFunc,
       });
     }
 
