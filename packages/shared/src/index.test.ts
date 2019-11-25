@@ -74,7 +74,7 @@ describe('shared', () => {
       }
 
       const method = 'GET';
-      const getClient = defineEndpoint<GetClientRequestParams, Empty, Client>({
+      const getClient = defineEndpoint({
         method,
         path: (path) => path.literal('clients').param('id'),
         requestParams: GetClientRequestParams,
@@ -92,7 +92,7 @@ describe('shared', () => {
       expect(getClient.classInfo).toHaveProperty(['response', 'body'], Client);
     });
 
-    it('should include classInfo when defining endpoint using classes that includes an array', () => {
+    it('should include classInfo when defining endpoint using classes that includes an array using arrayOf', () => {
       class GetClientsParams {
         includeInactive = false;
       }
@@ -116,7 +116,7 @@ describe('shared', () => {
         responseBody: arrayOfClient,
       });
 
-      assert<Equal<typeof getClients, EndpointDefinition<GetClientsParams, Empty, ArrayOf<Client>>>>();
+      assert<Equal<typeof getClients, EndpointDefinition<GetClientsParams, Empty, Client[]>>>();
 
       expect(getClients).toBeDefined();
       expect(getClients).toHaveProperty('method', 'GET');
@@ -127,52 +127,84 @@ describe('shared', () => {
     });
   });
 
-  describe('isArrayOfClass', () => {
-    class User {
-      id = ''
-
-      name = '';
+  it('should include classInfo when defining endpoint using classes that includes an array using [Type]', () => {
+    class GetClientsParams {
+      includeInactive = false;
     }
 
-    it('should return true for arrayOf results', () => {
-      const ArrayOfUser = arrayOf(User);
-      expect(isArrayOf(ArrayOfUser)).toBe(true);
+    class Client {
+      constructor(
+        public name: string,
+        public creationDate: Date,
+        public modificationDate: Date,
+        id?: number,
+      ) {
+      }
+    }
+
+    const getClients = defineEndpoint({
+      path: (path) => path.literal('clients'),
+      requestParams: GetClientsParams,
+      requestBody: Empty,
+      responseBody: [Client],
     });
 
-    it('should return false for anything else', () => {
-      const ArrayOfUser = User;
-      expect(isArrayOf(ArrayOfUser)).toBe(false);
-    });
+    assert<Equal<typeof getClients, EndpointDefinition<GetClientsParams, Empty, Client[]>>>();
+
+    expect(getClients).toBeDefined();
+    expect(getClients).toHaveProperty('method', 'GET');
+    expect(getClients).toHaveProperty('path', '/clients');
+    expect(getClients.classInfo).toHaveProperty(['request', 'params'], GetClientsParams);
+    expect(getClients.classInfo).toHaveProperty(['request', 'body'], Empty);
+    expect(getClients.classInfo).toHaveProperty(['response', 'body'], [Client]);
+  });
+});
+
+describe('isArrayOfClass', () => {
+  class User {
+    id = ''
+
+    name = '';
+  }
+
+  it('should return true for arrayOf results', () => {
+    const ArrayOfUser = arrayOf(User);
+    expect(isArrayOf(ArrayOfUser)).toBe(true);
   });
 
-  describe('isEmptyClass', () => {
-    it('should return true when passed in Empty', () => {
-      expect(isEmptyClass(Empty)).toBeTruthy();
-    });
+  it('should return false for anything else', () => {
+    const ArrayOfUser = User;
+    expect(isArrayOf(ArrayOfUser)).toBe(false);
+  });
+});
 
-    it('should return false when not passed in Empty', () => {
-      class SomeOtherClass {}
-      expect(isEmptyClass(SomeOtherClass)).toBeFalsy();
-    });
+describe('isEmptyClass', () => {
+  it('should return true when passed in Empty', () => {
+    expect(isEmptyClass(Empty)).toBeTruthy();
   });
 
-  describe('isEmptyValue', () => {
-    it('should return true for empty values', () => {
-      expect(isEmptyValue(null)).toBeTruthy();
-      expect(isEmptyValue(undefined)).toBeTruthy();
-      expect(isEmptyValue({})).toBeTruthy();
-    });
+  it('should return false when not passed in Empty', () => {
+    class SomeOtherClass {}
+    expect(isEmptyClass(SomeOtherClass)).toBeFalsy();
+  });
+});
 
-    it('should return false for non empty values', () => {
-      expect(isEmptyValue({ key: 'value' })).toBeFalsy();
-    });
+describe('isEmptyValue', () => {
+  it('should return true for empty values', () => {
+    expect(isEmptyValue(null)).toBeTruthy();
+    expect(isEmptyValue(undefined)).toBeTruthy();
+    expect(isEmptyValue({})).toBeTruthy();
   });
 
-  describe('cleanseHttpMethod', () => {
-    it('should return method in uppercase', () => {
-      expect(cleanseHttpMethod('get')).toBe('GET');
-      expect(cleanseHttpMethod('post')).toBe('POST');
-      expect(cleanseHttpMethod('squanch')).toBe('SQUANCH');
-    });
+  it('should return false for non empty values', () => {
+    expect(isEmptyValue({ key: 'value' })).toBeFalsy();
+  });
+});
+
+describe('cleanseHttpMethod', () => {
+  it('should return method in uppercase', () => {
+    expect(cleanseHttpMethod('get')).toBe('GET');
+    expect(cleanseHttpMethod('post')).toBe('POST');
+    expect(cleanseHttpMethod('squanch')).toBe('SQUANCH');
   });
 });
