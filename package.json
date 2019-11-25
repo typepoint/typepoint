@@ -52,7 +52,7 @@
     "lint:fix": "yarn lint --fix",
     "prebuild": "yarn run clean",
     "validate-imports": "ts-node ./support/validateImports.ts",
-    "validate": "yarn validate-imports && yarn workspace @typepoint/client validate && yarn workspace @typepoint/express validate && yarn workspace @typepoint/joiful validate && yarn workspace @typepoint/react validate && yarn workspace @typepoint/server && yarn workspace @typepoint/shared validate",
+    "validate": "yarn validate-imports && yarn workspace @typepoint/client validate && yarn workspace @typepoint/express validate && yarn workspace @typepoint/joiful validate && yarn workspace @typepoint/react validate && yarn workspace @typepoint/server && yarn workspace @typepoint/shared validate && yarn workspace @typepoint/e2e-tests validate",
     "semantic-release": "semantic-release"
   },
   "devDependencies": {
