@@ -1,6 +1,7 @@
 SCRIPT_PATH=$(dirname "$0")
 ROOT_PATH="$SCRIPT_PATH/.."
 PACKAGE_PATH="$SCRIPT_PATH/../packages/$1"
+FILE_TO_TEST="$2"
 
 cd "$PACKAGE_PATH"
 
@@ -13,4 +14,4 @@ else
   cp "$ROOT_PATH/jest.config.json" "./"
 fi
 
-yarn jest --config "$JEST_CONFIG_FILE_NAME"
+yarn jest --config "$JEST_CONFIG_FILE_NAME" "$FILE_TO_TEST"
