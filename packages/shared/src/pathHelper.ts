@@ -5,14 +5,14 @@ import {
 } from './url';
 
 export class UnsupportedPathPatternError extends Error {
-  /* istanbul ignore next */
+  // istanbul ignore next - typescript creates a branch for super calls
   constructor(path: string) {
     super(`Unsupported path pattern: "${path}"`);
   }
 }
 
 export class RequiredPathParametersNotFound extends Error {
-  /* istanbul ignore next */
+  // istanbul ignore next - typescript creates a branch for super calls
   constructor(parameterNames: string[]) {
     super(`Required path parameters not found: ${parameterNames.join(', ')}`);
   }
