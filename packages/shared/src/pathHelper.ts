@@ -1,14 +1,18 @@
 // eslint-disable-next-line max-classes-per-file
 import { escapeRegExp } from './regexp';
-import { ParsedUrl, parseQueryString, parseUrl } from './url';
+import {
+  addQueryStringToUrl, ParsedUrl, parseQueryString, parseUrl,
+} from './url';
 
 export class UnsupportedPathPatternError extends Error {
+  /* istanbul ignore next */
   constructor(path: string) {
     super(`Unsupported path pattern: "${path}"`);
   }
 }
 
 export class RequiredPathParametersNotFound extends Error {
+  /* istanbul ignore next */
   constructor(parameterNames: string[]) {
     super(`Required path parameters not found: ${parameterNames.join(', ')}`);
   }
@@ -130,7 +134,7 @@ export class PathHelper {
     const params = (options && options.params) || {};
     const server = (options && options.server) || '';
 
-    const providedParameterNames = params ? Object.getOwnPropertyNames(params) : [];
+    const providedParameterNames = Object.getOwnPropertyNames(params);
     const missingParameterNames: string[] = [];
     const queryStringParameterNames: string[] = [];
 
@@ -156,18 +160,14 @@ export class PathHelper {
       throw new RequiredPathParametersNotFound(missingParameterNames);
     }
 
-    let url = this.pathPattern.replace(/:([^\s/?\n\d][^\s/?\n]*)/gim, (_, key) => {
-      let parameterValue = params[key];
-      parameterValue = typeof parameterValue === 'undefined' ? '' : parameterValue;
-      return parameterValue;
-    });
+    let url = this.pathPattern.replace(/:([^\s/?\n\d][^\s/?\n]*)/gim, (_, key) => `${params[key]}`);
 
     const queryString = queryStringParameterNames
       .map((parameterName) => `${encodeURIComponent(parameterName)}=${encodeURIComponent(params[parameterName])}`)
       .join('&');
 
     if (queryString) {
-      url = url + (url.indexOf('?') === -1 ? '?' : '&') + queryString;
+      url = addQueryStringToUrl(url, queryString);
     }
 
     if (server) {

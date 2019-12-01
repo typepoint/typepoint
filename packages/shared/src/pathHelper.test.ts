@@ -1,7 +1,23 @@
 import { TestCase } from 'jest-helpers';
-import { PathHelper } from './pathHelper';
+import {
+  PathHelper, UnsupportedPathPatternError, RequiredPathParametersNotFound, GetUrlOptions,
+} from './pathHelper';
 
 describe('shared/pathHelper', () => {
+  describe('UnsupportedPathPatternError', () => {
+    it('should have message', () => {
+      expect(new UnsupportedPathPatternError('cat.meow'))
+        .toHaveProperty('message', 'Unsupported path pattern: "cat.meow"');
+    });
+  });
+
+  describe('RequiredPathParametersNotFound', () => {
+    it('should have message', () => {
+      expect(new RequiredPathParametersNotFound(['customerId', 'orderId']))
+        .toHaveProperty('message', 'Required path parameters not found: customerId, orderId');
+    });
+  });
+
   describe('parsePathPattern', () => {
     it('should parse the path pattern correctly', () => {
       type ParsePathPatternTestCase = TestCase<string, { prePath: string; path: string; postPath: string }>;
@@ -117,7 +133,7 @@ describe('shared/pathHelper', () => {
 
   describe('url', () => {
     it('should generate the url correctly', () => {
-      type UrlTestCase = TestCase<{ pathPattern: string; params: { [key: string]: any } }, string>;
+      type UrlTestCase = TestCase<{ pathPattern: string; options?: GetUrlOptions }, string>;
 
       const userId = '123';
       const orderId = '456';
@@ -128,37 +144,39 @@ describe('shared/pathHelper', () => {
         {
           input: {
             pathPattern: '/users',
-            params: {},
+            options: { params: {} },
           },
           expected: '/users',
         },
         {
           input: {
             pathPattern: '/users/:userId',
-            params: { userId },
+            options: { params: { userId } },
           },
           expected: `/users/${userId}`,
         },
         {
           input: {
             pathPattern: '/users/:userId/orders',
-            params: { userId },
+            options: { params: { userId } },
           },
           expected: `/users/${userId}/orders`,
         },
         {
           input: {
             pathPattern: '/users/:userId/orders',
-            params: { userId },
+            options: { params: { userId } },
           },
           expected: `/users/${userId}/orders`,
         },
         {
           input: {
             pathPattern: '/users/:userId/orders/:orderId',
-            params: {
-              userId,
-              orderId,
+            options: {
+              params: {
+                userId,
+                orderId,
+              },
             },
           },
           expected: `/users/${userId}/orders/${orderId}`,
@@ -166,10 +184,12 @@ describe('shared/pathHelper', () => {
         {
           input: {
             pathPattern: '/users/:userId/orders/:orderId',
-            params: {
-              userId,
-              orderId,
-              format,
+            options: {
+              params: {
+                userId,
+                orderId,
+                format,
+              },
             },
           },
           expected: `/users/${userId}/orders/${orderId}?format=${format}`,
@@ -177,11 +197,13 @@ describe('shared/pathHelper', () => {
         {
           input: {
             pathPattern: '/users/:userId/orders/:orderId',
-            params: {
-              userId,
-              orderId,
-              format,
-              pretty,
+            options: {
+              params: {
+                userId,
+                orderId,
+                format,
+                pretty,
+              },
             },
           },
           expected: `/users/${userId}/orders/${orderId}?format=${format}&pretty=${pretty}`,
@@ -189,35 +211,35 @@ describe('shared/pathHelper', () => {
         {
           input: {
             pathPattern: 'example.com/users/:userId',
-            params: { userId },
+            options: { params: { userId } },
           },
           expected: `example.com/users/${userId}`,
         },
         {
           input: {
             pathPattern: 'example.com:8080/users/:userId',
-            params: { userId },
+            options: { params: { userId } },
           },
           expected: `example.com:8080/users/${userId}`,
         },
         {
           input: {
             pathPattern: 'wow.cool.example.com:8080/users/:userId',
-            params: { userId },
+            options: { params: { userId } },
           },
           expected: `wow.cool.example.com:8080/users/${userId}`,
         },
         {
           input: {
             pathPattern: 'example.com:8080/users/:userId/orders/:orderId',
-            params: { userId, orderId },
+            options: { params: { userId, orderId } },
           },
           expected: `example.com:8080/users/${userId}/orders/${orderId}`,
         },
         {
           input: {
             pathPattern: 'http://example.com:8080/users/:userId/orders/:orderId',
-            params: { userId, orderId },
+            options: { params: { userId, orderId } },
           },
           expected: `http://example.com:8080/users/${userId}/orders/${orderId}`,
         },
@@ -225,9 +247,7 @@ describe('shared/pathHelper', () => {
 
       testCases.forEach((testCase) => {
         const helper = new PathHelper(testCase.input.pathPattern);
-        const url = helper.url({
-          params: testCase.input.params,
-        });
+        const url = helper.url(testCase.input.options);
         expect(url).toBe(testCase.expected);
       });
     });

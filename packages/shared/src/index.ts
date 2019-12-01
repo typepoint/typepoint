@@ -55,12 +55,16 @@ export function arrayOf<T>(Class: Constructor<T>): Constructor<ArrayOf<T>> {
 }
 
 export function isArrayOf(Class: any): Class is Constructor<ArrayOf<any>> {
-  return !!(Class && (Class as any).isArrayOf);
+  if (!Class) {
+    return false;
+  }
+  return Boolean((Class as any).isArrayOf);
 }
 
 export type NormalizeArrayOf<T> = T extends ArrayOf<infer TElementType> ? TElementType[] : T;
 
 export class Empty {
+  /* istanbul ignore next */
   readonly __isEmpty = true;
 }
 
@@ -124,20 +128,9 @@ export interface ClassBasedEndpointDefinitionOptions<
 > {
   method?: string;
   path: PathBuildingFunction<NormalizeDefinitionType<TRequestParams>>;
-  requestParams: TRequestParams;
-  requestBody: TRequestBody;
-  responseBody: TResponseBody;
-}
-
-function isClassBasedEndpointDefinitionOptions(
-  options: ClassBasedEndpointDefinitionOptions<any, any, any>,
-): boolean {
-  const partialOptions = options as Partial<ClassBasedEndpointDefinitionOptions<any, any, any>>;
-  return !!(
-    partialOptions.requestParams
-    && partialOptions.requestBody
-    && partialOptions.responseBody
-  );
+  requestParams?: TRequestParams;
+  requestBody?: TRequestBody;
+  responseBody?: TResponseBody;
 }
 
 export class EndpointDefinitionRequestClassInfo<TParams, TBody> {
@@ -177,6 +170,7 @@ export class EndpointDefinitionInvalidConstructorArgs extends Error {
         ? 'zero arguments'
         : actualArgs.map((arg) => typeof arg).join(', ')
     );
+    /* istanbul ignore next */
     super(`Invalid EndpointDefinition constructor arguments - received ${actualArgs.length} arguments: ${received}`);
   }
 }
@@ -223,9 +217,9 @@ NormalizeDefinitionType<TResponseBody>
 >;
 
 export function defineEndpoint<
-  TRequestParams extends AllowableClassBasedRequestParams,
-  TRequestBody extends AllowableClassBasedRequestBody,
-  TResponseBody extends AllowableClassBasedResponseBody,
+  TRequestParams extends AllowableClassBasedRequestParams = Empty,
+  TRequestBody extends AllowableClassBasedRequestBody = Empty,
+  TResponseBody extends AllowableClassBasedResponseBody = Empty,
 >(
   options: ClassBasedEndpointDefinitionOptions<TRequestParams, TRequestBody, TResponseBody>,
 ): EndpointDefinition<
@@ -272,11 +266,11 @@ NormalizeDefinitionType<TResponseBody>
       }
 
       if (firstArg && typeof firstArg === 'object') {
-        const classInfo = isClassBasedEndpointDefinitionOptions(firstArg) ? new EndpointDefinitionClassInfo(
-          normalizeDefinitionType(firstArg.requestParams),
-          normalizeDefinitionType(firstArg.requestBody),
-          normalizeDefinitionType(firstArg.responseBody),
-        ) : undefined;
+        const classInfo = new EndpointDefinitionClassInfo(
+          normalizeDefinitionType(firstArg.requestParams || Empty),
+          normalizeDefinitionType(firstArg.requestBody || Empty),
+          normalizeDefinitionType(firstArg.responseBody || Empty),
+        );
 
         return make({
           classInfo,
@@ -290,6 +284,10 @@ NormalizeDefinitionType<TResponseBody>
 
     case 2: {
       const [method, pathFunc] = args;
+      if (typeof method !== 'string' || typeof pathFunc !== 'function') {
+        throw new EndpointDefinitionInvalidConstructorArgs(args);
+      }
+
       return make({
         method: cleanseHttpMethod(method || DEFAULT_METHOD),
         pathFunc,

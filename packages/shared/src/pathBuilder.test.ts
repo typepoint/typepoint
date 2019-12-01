@@ -12,6 +12,14 @@ describe('shared/pathBuilder', () => {
       expect(result).toBe('/');
     });
 
+    it('should not add blank literals', () => {
+      expect(createPath((path) => path.literal(''))).toBe('/');
+    });
+
+    it('should not add blank params', () => {
+      expect(createPath((path) => path.param('' as never))).toBe('/');
+    });
+
     it('should generate a path with a literal', () => {
       const result = createPath<Empty>((path) => path
         .literal('todos'));
