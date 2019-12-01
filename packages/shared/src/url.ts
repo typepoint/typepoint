@@ -21,12 +21,10 @@ export function parseUrl(url: string): ParsedUrl {
       } else {
         index++;
       }
-    } else if (pathLength === undefined) {
-      if (url[index] === '#' || url[index] === '?') {
-        pathLength = index - pathStartIndex;
-      } else {
-        index++;
-      }
+    } else if (url[index] === '#' || url[index] === '?') {
+      pathLength = index - pathStartIndex;
+    } else {
+      index++;
     }
   }
 
@@ -112,4 +110,20 @@ export function parseQueryString(queryString: string): QueryParameterValues {
   }
 
   return result;
+}
+
+export function addQueryStringToUrl(url: string, queryString: string) {
+  const index = url.indexOf('?');
+  const endsWithQuestionMark = index === url.length - 1;
+
+  let separator = '';
+
+  if (index === -1) {
+    separator = '?';
+  } else if (!endsWithQuestionMark) {
+    separator = '&';
+  }
+
+  url = url + separator + queryString;
+  return url;
 }

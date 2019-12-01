@@ -1,5 +1,7 @@
 import { TestCase } from 'jest-helpers';
-import { parseQueryString, parseUrl, QueryParameterValues } from './url';
+import {
+  parseQueryString, parseUrl, QueryParameterValues, addQueryStringToUrl,
+} from './url';
 
 describe('shared/url', () => {
   describe('parseUrl', () => {
@@ -27,6 +29,14 @@ describe('shared/url', () => {
         expected: {
           prePath: '',
           path: '/users',
+          postPath: '',
+        },
+      },
+      {
+        input: 'users',
+        expected: {
+          prePath: 'users',
+          path: '',
           postPath: '',
         },
       },
@@ -134,6 +144,10 @@ describe('shared/url', () => {
         expected: {},
       },
       {
+        input: '?',
+        expected: {},
+      },
+      {
         input: `?format=${format}`,
         expected: { format },
       },
@@ -177,6 +191,38 @@ describe('shared/url', () => {
       testCases.forEach((testCase) => {
         const actual = parseQueryString(testCase.input);
         expect(actual).toEqual(testCase.expected);
+      });
+    });
+  });
+
+  describe('addQueryStringToUrl', () => {
+    it('should correctly add a query string to an url', () => {
+      const testCases: TestCase<{ url: string; queryString: string }, string>[] = [
+        {
+          input: {
+            url: 'http://catfinder.ninja',
+            queryString: 'breed=bengal',
+          },
+          expected: 'http://catfinder.ninja?breed=bengal',
+        },
+        {
+          input: {
+            url: 'http://catfinder.ninja?',
+            queryString: 'breed=bengal',
+          },
+          expected: 'http://catfinder.ninja?breed=bengal',
+        },
+        {
+          input: {
+            url: 'http://catfinder.ninja?breed=bengal',
+            queryString: 'temperament=feisty',
+          },
+          expected: 'http://catfinder.ninja?breed=bengal&temperament=feisty',
+        },
+      ];
+      testCases.forEach(({ input: { url, queryString }, expected }) => {
+        const actual = addQueryStringToUrl(url, queryString);
+        expect(actual).toEqual(expected);
       });
     });
   });
