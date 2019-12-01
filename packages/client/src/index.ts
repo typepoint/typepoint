@@ -1,4 +1,6 @@
-import axios, { AxiosInstance, AxiosRequestConfig, Method } from 'axios';
+import axios, {
+  AxiosInstance, AxiosRequestConfig, Method, AxiosResponse,
+} from 'axios';
 import {
   Empty,
   EndpointDefinition,
@@ -45,7 +47,9 @@ export class TypePointClientResponseError extends Error {
     message: string,
     public response: TypePointClientResponse<any> | undefined,
   ) {
+    /* istanbul ignore next */
     super(message);
+
     this.statusCode = response ? response.statusCode : undefined;
     this.statusText = response ? response.statusText : undefined;
   }
@@ -91,37 +95,28 @@ export class TypePointClient {
       url,
     };
 
-    if (options && (options as { body: any }).body) {
-      requestOptions.data = (options as { body: any }).body;
+    const body = options && (options as any).body;
+    if (body) {
+      requestOptions.data = body;
     }
+
+    const wrapResponse = (res: AxiosResponse<any>): TypePointClientResponse<
+    GetEndpointDefinitionResponseBody<TEndpointDefinition>
+    > => ({
+      statusCode: res.status,
+      statusText: res.statusText,
+      header: (name) => res.headers[name],
+      headers: res.headers,
+      body: res.data,
+    });
 
     return this.axios.request(requestOptions)
       .then((res) => {
-        const response: TypePointClientResponse<GetEndpointDefinitionResponseBody<TEndpointDefinition>> = {
-          statusCode: res.status,
-          statusText: res.statusText,
-          header: (name) => res.headers[name],
-          headers: res.headers,
-          body: res.data,
-        };
-
+        const response = wrapResponse(res);
         return response;
       }, (err) => {
         const res = err.response;
-
-        const response: (
-          TypePointClientResponse<GetEndpointDefinitionResponseBody<TEndpointDefinition>> |
-          undefined
-        ) = (
-          res ? {
-            statusCode: res.status,
-            statusText: res.statusText,
-            header: (name) => res.headers[name],
-            headers: res.headers,
-            body: res.data,
-          } : undefined
-        );
-
+        const response = res ? wrapResponse(res) : undefined;
         const error = new TypePointClientResponseError(
           err.message || `${err}`,
           response,
