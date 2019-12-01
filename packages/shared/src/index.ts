@@ -64,7 +64,7 @@ export function isArrayOf(Class: any): Class is Constructor<ArrayOf<any>> {
 export type NormalizeArrayOf<T> = T extends ArrayOf<infer TElementType> ? TElementType[] : T;
 
 export class Empty {
-  /* istanbul ignore next */
+  // istanbul ignore next
   readonly __isEmpty = true;
 }
 
@@ -170,7 +170,7 @@ export class EndpointDefinitionInvalidConstructorArgs extends Error {
         ? 'zero arguments'
         : actualArgs.map((arg) => typeof arg).join(', ')
     );
-    /* istanbul ignore next */
+    // istanbul ignore next - typescript creates a branch for super calls
     super(`Invalid EndpointDefinition constructor arguments - received ${actualArgs.length} arguments: ${received}`);
   }
 }
