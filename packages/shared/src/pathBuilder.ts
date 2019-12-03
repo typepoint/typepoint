@@ -1,3 +1,9 @@
+const removeLeadingAndTrailingSlashes = (
+  (path: string) => path
+    .replace(/^\/+/, '')
+    .replace(/\/+$/, '')
+);
+
 export class PathBuilder<TRequestParams> {
   private readonly parts: string[] = [];
 
@@ -9,7 +15,7 @@ export class PathBuilder<TRequestParams> {
 
   literal(path: string): PathBuilder<TRequestParams> {
     if (path) {
-      this.parts.push(path);
+      this.parts.push(removeLeadingAndTrailingSlashes(path));
     }
     return this;
   }
