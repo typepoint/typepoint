@@ -20,6 +20,10 @@ describe('shared/pathBuilder', () => {
       expect(createPath((path) => path.param('' as never))).toBe('/');
     });
 
+    it('should not add extraneous slashes', () => {
+      expect(createPath((path) => path.literal('/api/todos/').literal('/completed/'))).toBe('/api/todos/completed');
+    });
+
     it('should generate a path with a literal', () => {
       const result = createPath<Empty>((path) => path
         .literal('todos'));
