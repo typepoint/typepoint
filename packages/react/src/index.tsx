@@ -11,13 +11,16 @@ import {
   TypePointClientResponse,
   TypePointClientResponseError,
 } from '@typepoint/client';
+import { parse, stringify } from './json';
 
 const {
   createContext, useCallback, useContext, useEffect, useState,
 } = React;
 
 function notNil<T>(value: T): Exclude<T, undefined | null> {
+  // istanbul ignore next
   if (value === null || value === undefined) {
+    // istanbul ignore next
     throw new Error('Unexpected nil value');
   }
 
@@ -39,6 +42,7 @@ export const TypePointProvider = ({ children, client }: TypePointProviderProps) 
 
 export class MissingTypePointProvider extends Error {
   constructor() {
+    // istanbul ignore next
     super('Cannot call useEndpoint or useEndpointLazily without wrapping component tree with TypePointProvider');
   }
 }
@@ -131,10 +135,10 @@ export const useEndpoint = (<TEndpointDefinition extends EndpointDefinition<any,
     fetch, loading, error, response,
   } = useEndpointLazily(endpointDefinition);
 
-  const optionsString = options ? JSON.stringify(options) : '';
+  const optionsString = stringify(options);
 
   const refetch = useCallback(
-    () => fetch(optionsString ? JSON.parse(optionsString) : undefined),
+    () => fetch(parse(optionsString)),
     [fetch, optionsString],
   );
 
