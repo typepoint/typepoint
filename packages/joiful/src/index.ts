@@ -17,9 +17,9 @@ import {
 export const getValidateAndTransformFunction = (options?: { validator?: Validator }) => {
   const validator = (options && options.validator) || new Validator();
 
-  const validateAndTransform: ValidateAndTransformFunction = <T extends {}>(
-    input: T,
-    Class?: Constructor<T> | (T extends Array<infer TElement> ? Constructor<ArrayOf<TElement>> : never),
+  const validateAndTransform: ValidateAndTransformFunction = (
+    input: any,
+    Class?: Constructor<any> | any[] | undefined,
   ): ValidateAndTransformFunctionResult => {
     if (Class) {
       const checkValidationResult = (
@@ -51,13 +51,14 @@ export const getValidateAndTransformFunction = (options?: { validator?: Validato
           return checkValidationResult(elementValidationResult);
         }
       } else {
-        const validationResult = validator.validateAsClass(input, Class);
+        // TODO: Need to loosen validateAsClass method in Joiful
+        const validationResult = validator.validateAsClass(input, Class as any);
         return checkValidationResult(validationResult);
       }
     }
 
     return {
-      value: input as any as T,
+      value: input,
     };
   };
 
