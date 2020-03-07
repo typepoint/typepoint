@@ -17,5 +17,7 @@
     "@typepoint/shared": "^2.0.5",
     "axios": "0.19.0"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "@typepoint/fixtures": "1.0.0"
+  }
 }
