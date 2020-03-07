@@ -23,13 +23,22 @@ import {
 import {
   HandlerMatch,
   HandlerMatchIterator,
+  validateAndTransformRequestPayload,
 } from './middlewareHelper';
+import {
+  Router,
+  RouterOptions,
+  ValidateAndTransformFunction,
+  ValidateAndTransformFunctionResult,
+} from './router';
 
 export {
+  Router,
   RequestCookies,
   RequestHeaders,
   Request,
   ResponseHeaders,
+  RouterOptions,
   SetCookieOptions,
   ResponseContentType,
   Response,
@@ -41,12 +50,16 @@ export {
   EndpointMiddleware,
   HandlerMatch,
   HandlerMatchIterator,
+  ValidateAndTransformFunction,
+  ValidateAndTransformFunctionResult,
+  validateAndTransformRequestPayload,
 };
 
 export class HeadersAlreadySent extends Error {
   constructor(message?: string) {
     let fullMessage = message ? `${message} - ` : '';
     fullMessage += 'Headers have already been sent';
+    /* istanbul ignore next */
     super(fullMessage);
   }
 }
@@ -76,7 +89,7 @@ export type EndpointMiddlewareHandlerFunction = (
 
 export type EndpointMiddlewareClass = Constructor<EndpointMiddleware>;
 
-export function defineMiddleware(
+export function createMiddleware(
   handler: EndpointMiddlewareHandlerFunction,
   name?: string,
 ): EndpointMiddleware {
@@ -86,21 +99,7 @@ export function defineMiddleware(
   };
 }
 
-export interface ValidateAndTransformFunctionResult {
-  value?: any;
-  validationError?: Error | string | any;
-}
-
-export type ValidateAndTransformFunction = (
-  input: any,
-  Class?: Constructor<any>
-) => ValidateAndTransformFunctionResult;
-
-export interface RouterOptions {
-  handlers?: EndpointHandler[];
-  middleware?: EndpointMiddleware[];
-  validateAndTransform?: ValidateAndTransformFunction;
-}
+export const defineMiddleware = createMiddleware;
 
 export type RouterHandleMethod = (request: any, response: any) => Promise<void>;
 
@@ -108,48 +107,7 @@ export interface UnprotectedRouter {
   readonly handle: RouterHandleMethod;
 }
 
-export class HandlerConstructorError extends Error {
-  constructor(Handler: EndpointHandler, innerError: Error | string | any) {
-    let message = 'Error creating handler';
-    if (Handler.name) {
-      message += ` ${Handler.name}`;
-    }
-    if (innerError) {
-      if (typeof innerError === 'string') {
-        message += `: ${innerError}`;
-      } else if (innerError.message) {
-        message += `: ${innerError.message}`;
-      }
-      if (innerError.stack) {
-        message += `\n\n${innerError.stack}`;
-      }
-    }
-    super(message);
-  }
-}
-
-export class Router {
-  readonly validateAndTransform: ValidateAndTransformFunction | undefined;
-
-  readonly handlers: EndpointHandler[];
-
-  readonly middlewares: EndpointMiddleware[];
-
-  constructor(options?: RouterOptions) {
-    this.validateAndTransform = options && options.validateAndTransform;
-    this.handlers = (options && options.handlers) || [];
-    this.middlewares = (options && options.middleware) || [];
-  }
-
-  use(...handlers: EndpointHandler[]): this {
-    if (handlers.length) {
-      this.handlers.push(...handlers);
-    }
-    return this;
-  }
-}
-
-export const notFoundMiddleware = () => defineMiddleware(async (context, next) => {
+export const notFoundMiddleware = () => createMiddleware(async (context, next) => {
   await next();
 
   if (!context.response.hasFlushedHeaders && !context.response.statusCode) {
@@ -157,7 +115,7 @@ export const notFoundMiddleware = () => defineMiddleware(async (context, next) =
   }
 }, 'notFoundMiddleware');
 
-export const addHeadersMiddleware = (headers: { [name: string]: string }) => defineMiddleware(async (context, next) => {
+export const addHeadersMiddleware = (headers: { [name: string]: string }) => createMiddleware(async (context, next) => {
   Object.entries(headers).forEach(([name, value]) => {
     context.response.header(name, value);
   });

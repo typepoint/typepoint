@@ -9,6 +9,11 @@ import {
   SetCookieOptions,
 } from '@typepoint/server';
 
+export const isContentTypeJson = (contentType: string) => (
+  (contentType || '').toLowerCase() === 'application/json'
+);
+
+
 export class TypePointExpressResponse<TResponseBody> implements TypePointResponse<TResponseBody> {
   get hasFlushedHeaders(): boolean {
     return this.response.headersSent;
@@ -80,7 +85,7 @@ export class TypePointExpressResponse<TResponseBody> implements TypePointRespons
   flush() {
     if (this.body === undefined) {
       this.response.end();
-    } else if ((this.contentType || '').toLowerCase() === 'application/json') {
+    } else if (isContentTypeJson(this.contentType)) {
       this.response.json(this.body);
     } else {
       this.response.send(this.body);
