@@ -1,8 +1,16 @@
-import { partialOf } from 'jest-helpers';
+import { partialOf, deepPartialOf } from 'jest-helpers';
 import { defineEndpoint, Empty, EndpointDefinition } from '@typepoint/shared';
 import { Todo } from '@typepoint/fixtures';
 import {
-  createHandler, EndpointContext, Request, Response, notFoundMiddleware, EndpointMiddleware, defineMiddleware,
+  addHeadersMiddleware,
+  createHandler,
+  defineMiddleware,
+  EndpointContext,
+  EndpointMiddleware,
+  HeadersAlreadySent,
+  notFoundMiddleware,
+  Request,
+  Response,
 } from './index';
 
 describe('server', () => {
@@ -177,6 +185,34 @@ describe('server', () => {
           );
         });
       });
+    });
+  });
+
+  describe('addHeadersMiddleware', () => {
+    it('should create middleware that automatically adds the given headers', async () => {
+      const middleware = addHeadersMiddleware({
+        Authorization: 'Basic Secret',
+      });
+
+      expect(middleware.name).toBe('AddHeadersMiddleware');
+
+      const context = deepPartialOf<EndpointContext<any, any, any>>({
+        response: {
+          header: jest.fn(),
+        },
+      });
+      const next = jest.fn();
+      await middleware.handle(context, next);
+
+      expect(context.response.header).toHaveBeenCalledWith('Authorization', 'Basic Secret');
+      expect(next).toHaveBeenCalledWith();
+    });
+  });
+
+  describe('HeadersAlreadySent', () => {
+    it('should create an error object', () => {
+      expect(new HeadersAlreadySent()).toHaveProperty('message', 'Headers have already been sent');
+      expect(new HeadersAlreadySent('Can not redirect')).toHaveProperty('message', 'Can not redirect - Headers have already been sent');
     });
   });
 });

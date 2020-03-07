@@ -2,8 +2,8 @@ import { Response as ExpressResponse } from 'express';
 import { OK, NOT_FOUND } from 'http-status-codes';
 import { partialOf } from 'jest-helpers';
 import { getProducts, Product } from '@typepoint/fixtures';
-import { Response as TypePointResponse, SetCookieOptions } from '@typepoint/server';
-import { TypePointExpressResponse } from './typePointExpressResponse';
+import { HeadersAlreadySent, Response as TypePointResponse, SetCookieOptions } from '@typepoint/server';
+import { TypePointExpressResponse, isContentTypeJson } from './typePointExpressResponse';
 
 type ResponseBody<TBody> = (
   {
@@ -17,16 +17,30 @@ type ResponseBody<TBody> = (
 );
 
 describe('server/express/typePointExpressResponse', () => {
+  describe('isContentTypeJson', () => {
+    expect(isContentTypeJson('application/json')).toBe(true);
+    expect(isContentTypeJson('text/html')).toBe(false);
+    expect(isContentTypeJson('')).toBe(false);
+  });
+
   describe('TypePointExpressResponse', () => {
     let expressResponse: ExpressResponse;
     let response: TypePointResponse<ResponseBody<Product>>;
     let products: Product[];
+    let statusCodeSetter: (value: any) => void;
+
+    function fakeResponseToBeSent() {
+      // At the moment, not sure how to tell if express response has
+      // sent body or just the headers. So we use headersSent
+      expressResponse.headersSent = true;
+    }
 
     beforeEach(() => {
       expressResponse = partialOf<ExpressResponse>({
         clearCookie: jest.fn(),
         cookie: jest.fn(),
         contentType: jest.fn(),
+        end: jest.fn(),
         flushHeaders: jest.fn(),
         headersSent: false,
         json: jest.fn(),
@@ -39,6 +53,13 @@ describe('server/express/typePointExpressResponse', () => {
         }),
         setHeader: jest.fn(),
         removeHeader: jest.fn(),
+      });
+
+      statusCodeSetter = jest.fn();
+
+      Object.defineProperty(expressResponse, 'statusCode', {
+        get: jest.fn(),
+        set: statusCodeSetter,
       });
 
       response = new TypePointExpressResponse(expressResponse);
@@ -70,8 +91,34 @@ describe('server/express/typePointExpressResponse', () => {
       expect(response.statusCode).toBe(NOT_FOUND);
     });
 
+    it('should allow setting status code', () => {
+      response.statusCode = OK;
+      expect(statusCodeSetter).toHaveBeenCalledWith(OK);
+    });
+
+    it('should not set status code if falsy', () => {
+      response.statusCode = undefined;
+      expect(statusCodeSetter).not.toHaveBeenCalled();
+    });
+
     it('should have a contentType of \'application/json\' by default', () => {
       expect(response.contentType).toBe('application/json');
+    });
+
+    it('should allow setting content type', () => {
+      response.contentType = 'application/json';
+      expect(expressResponse.contentType).toHaveBeenCalledWith('application/json');
+
+      fakeResponseToBeSent();
+
+      expect(
+        () => { response.contentType = 'text/html'; },
+      ).toThrow(new HeadersAlreadySent());
+    });
+
+    it('should not set content type if falsy', () => {
+      response.contentType = '';
+      expect(expressResponse.contentType).not.toHaveBeenCalled();
     });
 
     it('should send body as json when content-type is \'application/json\'', () => {
@@ -124,6 +171,12 @@ describe('server/express/typePointExpressResponse', () => {
       });
     });
 
+    it('should say whether response has flushed or not', () => {
+      expect(response.hasFlushed).toEqual(false);
+      response.flush();
+      expect(response.hasFlushed).toEqual(true);
+    });
+
     it('should set cookie in express response', () => {
       const cookieName = 'widgetEnabled';
       const cookieValue = 'true';
@@ -141,6 +194,25 @@ describe('server/express/typePointExpressResponse', () => {
       };
       response.clearCookie(cookieName, cookieOptions);
       expect(expressResponse.clearCookie).toHaveBeenCalledWith(cookieName, cookieOptions);
+    });
+
+    it('should error when trying to change body after its been sent', () => {
+      response.body = { body: products[0] };
+      response.flush();
+
+      fakeResponseToBeSent();
+
+      expect(() => { response.body = { body: products[1] }; }).toThrow(new HeadersAlreadySent());
+    });
+
+    it('should error when trying to change header after headers have been sent', () => {
+      response.header('Authorization', 'Bearer 1234');
+
+      fakeResponseToBeSent();
+
+      expect(
+        () => { response.header('Authorization', 'Bearer 4567'); },
+      ).toThrow(new HeadersAlreadySent('Cannot set header'));
     });
   });
 });

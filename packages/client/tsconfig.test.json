@@ -3,6 +3,7 @@
   "compilerOptions": {
     "baseUrl": "src",
     "noEmit": true,
+    "target": "ES6",
     "paths": {
       "@typepoint/fixtures": ["../fixtures/src"],
       "@typepoint/shared": ["../shared/src"]
