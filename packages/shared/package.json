@@ -15,5 +15,7 @@
     "test": "../../support/test.sh shared",
     "validate": "../../support/validate.sh shared"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "@typepoint/fixtures": "1.0.0"
+  }
 }

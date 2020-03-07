@@ -26,6 +26,7 @@
   },
   "devDependencies": {
     "@types/clone": "0.1.30",
-    "@types/express": "4.17.1"
+    "@types/express": "4.17.1",
+    "@typepoint/fixtures": "1.0.0"
   }
 }
