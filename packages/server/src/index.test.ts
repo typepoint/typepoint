@@ -1,6 +1,8 @@
 import { partialOf, deepPartialOf } from 'jest-helpers';
 import { defineEndpoint, Empty, EndpointDefinition } from '@typepoint/shared';
 import { Todo } from '@typepoint/fixtures';
+import { assert, Equal, Not } from 'type-assertions';
+import { EndpointHandlerFunctionFromDefinition } from './types';
 import {
   addHeadersMiddleware,
   createHandler,
@@ -94,6 +96,39 @@ describe('server', () => {
       await getTodosHandler.handle(context, () => Promise.resolve());
 
       expect(context).toHaveProperty(['response', 'body'], todos);
+    });
+
+    it('should define a handler that can handle requests with endpoint using [Type] array syntax', async () => {
+      const getTodosV2 = defineEndpoint({
+        path: (path) => path.literal('api/todos'),
+        requestParams: Empty,
+        requestBody: Empty,
+        responseBody: [Todo],
+      });
+      const getTodosHandler = createHandler(getTodosV2, async (ctx) => {
+        ctx.response.body = todos;
+      });
+
+      const context = partialOf<EndpointContext<any, any, any>>({
+        response: partialOf<Response<any>>({
+          body: undefined,
+        }),
+      });
+
+      await getTodosHandler.handle(context, () => Promise.resolve());
+
+      expect(context).toHaveProperty(['response', 'body'], todos);
+
+
+      type GetTodosHandleFunction = EndpointHandlerFunctionFromDefinition<typeof getTodosV2>;
+      type ContextType = Parameters<GetTodosHandleFunction>[0];
+      type Next = Parameters<GetTodosHandleFunction>[1];
+
+      assert<Equal<ContextType, EndpointContext<Empty, Empty, Todo[]>>>();
+      assert<Not<Equal<ContextType, EndpointContext<Empty, Empty, [Todo]>>>>();
+
+      type ExpectedNext = () => Promise<void>;
+      assert<Equal<Next, ExpectedNext>>();
     });
   });
 
