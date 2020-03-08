@@ -212,7 +212,8 @@ describe('server', () => {
   describe('HeadersAlreadySent', () => {
     it('should create an error object', () => {
       expect(new HeadersAlreadySent()).toHaveProperty('message', 'Headers have already been sent');
-      expect(new HeadersAlreadySent('Can not redirect')).toHaveProperty('message', 'Can not redirect - Headers have already been sent');
+      expect(new HeadersAlreadySent('Can not redirect'))
+        .toHaveProperty('message', 'Can not redirect - Headers have already been sent');
     });
   });
 });
