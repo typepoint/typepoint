@@ -55,17 +55,23 @@ export class TypePointClientResponseError extends Error {
   }
 }
 
-export interface FetchFunction {
+export interface FetchFunctionWithOptionalOptions {
   <TEndpointDefinition extends EndpointDefinitionWithNoParamsOrBody>(
     definition: TEndpointDefinition,
     options?: TypePointClientFetchOptions<TEndpointDefinition>
   ): Promise<TypePointClientResponse<GetEndpointDefinitionResponseBody<TEndpointDefinition>>>;
+}
 
+export interface FetchFunctionWithRequiredOptions {
   <TEndpointDefinition extends EndpointDefinition<any, any, any>>(
     definition: TEndpointDefinition,
     options: TypePointClientFetchOptions<TEndpointDefinition>
   ): Promise<TypePointClientResponse<GetEndpointDefinitionResponseBody<TEndpointDefinition>>>;
 }
+
+export type FetchFunction =
+  FetchFunctionWithOptionalOptions &
+  FetchFunctionWithRequiredOptions;
 
 export class TypePointClient {
   protected readonly axios: AxiosInstance;
