@@ -1,7 +1,7 @@
-import { defineMiddleware } from '@typepoint/server';
+import { createMiddleware } from '@typepoint/server';
 import { info } from '../services/loggerService';
 
-export const requestLoggerMiddleware = defineMiddleware(async ({ request, response }, next) => {
+export const requestLoggerMiddleware = createMiddleware(async ({ request, response }, next) => {
   let error: any;
   try {
     await next();

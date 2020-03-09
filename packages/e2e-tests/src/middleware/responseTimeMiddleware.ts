@@ -1,6 +1,6 @@
-import { defineMiddleware } from '@typepoint/server';
+import { createMiddleware } from '@typepoint/server';
 
-export const responseTimeMiddleware = defineMiddleware(async (context, next) => {
+export const responseTimeMiddleware = createMiddleware(async (context, next) => {
   const start = Date.now();
   try {
     await next();
