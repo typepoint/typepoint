@@ -161,12 +161,28 @@ describe('server', () => {
   });
 
   describe('defineMiddleware', () => {
-    describe('when called with a name', () => {
+    beforeEach(() => {
+      jest.spyOn(console, 'warn').mockImplementation(() => {});
+    });
+
+    afterEach(() => {
+      jest.restoreAllMocks();
+    });
+
+    it('warns that it is depreciated', () => {
+      defineMiddleware(async () => {});
+      // eslint-disable-next-line no-console
+      expect(console.warn).toHaveBeenLastCalledWith(
+        'defineMiddleware is deprecated and will be removed in a future release. Use createMiddleware instead.',
+      );
+    });
+
+    it('should have a name when specified', () => {
       const someMiddleware = defineMiddleware(async () => { }, 'SomeMiddleware');
       expect(someMiddleware).toHaveProperty('name', 'SomeMiddleware');
     });
 
-    describe('when called without a name', () => {
+    it('should have a default name when none provided', () => {
       const anonymousMiddleware = defineMiddleware(async () => { });
       expect(anonymousMiddleware).toHaveProperty('name', 'AnonymousEndpointMiddleware');
     });

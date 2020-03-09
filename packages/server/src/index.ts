@@ -99,7 +99,18 @@ export function createMiddleware(
   };
 }
 
-export const defineMiddleware = createMiddleware;
+let hasWarnedAboutDefineMiddleware = false;
+
+export const defineMiddleware: typeof createMiddleware = (...args: any[]) => {
+  if (!hasWarnedAboutDefineMiddleware) {
+    hasWarnedAboutDefineMiddleware = true;
+    // eslint-disable-next-line no-console
+    console.warn(
+      'defineMiddleware is deprecated and will be removed in a future release. Use createMiddleware instead.',
+    );
+  }
+  return (createMiddleware as (...args: any[]) => any)(...args);
+};
 
 export type RouterHandleMethod = (request: any, response: any) => Promise<void>;
 
