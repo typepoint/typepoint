@@ -99,6 +99,8 @@ describe('server/express', () => {
     beforeEach(() => {
       logger = new TestLogger();
 
+      jest.spyOn(console, 'warn').mockImplementation(() => {});
+
       const middlewareDelayInMs = 100;
 
       const middleware1 = defineMiddleware(async (_context, next) => {
@@ -180,6 +182,10 @@ describe('server/express', () => {
       });
 
       expressMiddleware = toMiddleware(router, { logger });
+    });
+
+    afterEach(() => {
+      jest.restoreAllMocks();
     });
 
     it('should return a function', () => {
