@@ -1,3 +1,15 @@
+# [3.0.0](https://github.com/typepoint/typepoint/compare/@typepoint/server_v2.0.0...@typepoint/server_v3.0.0) (2020-03-10)
+
+
+### Features
+
+* force major version bump ([549e113](https://github.com/typepoint/typepoint/commit/549e1135cdd5154e0cf775039642d33b5089c178))
+
+
+### BREAKING CHANGES
+
+* The breaking changes were in earlier commits not yet released. This commit is just to forcefully bump the major version.
+
 # [2.0.0](https://github.com/typepoint/typepoint/compare/@typepoint/server_v1.0.0...@typepoint/server_v2.0.0) (2020-03-10)
 
 
