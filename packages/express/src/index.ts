@@ -2,7 +2,6 @@ import * as express from 'express';
 import {
   cleanseHttpMethod,
   Logger,
-  NoopLogger,
 } from '@typepoint/shared';
 import {
   EndpointContext,
