@@ -14,16 +14,16 @@
     "validate": "yarn lint && yarn build && yarn test"
   },
   "dependencies": {
-    "@typepoint/client": "^2.0.1",
-    "@typepoint/shared": "^2.0.2"
+    "@typepoint/client": "3.0.0",
+    "@typepoint/shared": "3.0.0"
   },
   "devDependencies": {
     "@testing-library/react": "9.3.2",
     "@typepoint/fixtures": "1.0.0",
-    "react": "16.11.0",
-    "react-dom": "16.11.0"
+    "react": "16.13.0",
+    "react-dom": "16.13.0"
   },
   "peerDependencies": {
-    "react": "^16.11.0"
+    "react": "^16.13.0"
   }
 }
