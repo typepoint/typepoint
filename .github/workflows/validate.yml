@@ -13,8 +13,11 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Install Dependencies, Build, Lint, Test
-        run: yarn install && yarn run validate
+      - name: Install Dependencies
+        run: yarn install
+
+      - name: Build, Lint, Test
+        run: yarn run validate
 
       - name: Upload Coverage - Shared
         uses: codecov/codecov-action@v1
