@@ -2,16 +2,70 @@ name: CI
 
 on:
   push:
-    branches: [ master ]
+    branches: [master]
   pull_request:
-    branches: [ master ]
+    branches: [master]
 
 jobs:
   validate:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
-    - name: Install Dependencies, Build, Lint, Test
-      run: yarn install && yarn run validate
+      - name: Install Dependencies, Build, Lint, Test
+        run: yarn install && yarn run validate
+
+      - name: Upload Coverage - Shared
+        uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: ./packages/shared/coverage/clover.xml
+          flags: shared
+          name: shared
+          fail_ci_if_error: false
+
+      - name: Upload Coverage - Server
+        uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: ./packages/server/coverage/clover.xml
+          flags: server
+          name: server
+          fail_ci_if_error: false
+
+      - name: Upload Coverage - Joiful
+        uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: ./packages/joiful/coverage/clover.xml
+          flags: joiful
+          name: joiful
+          fail_ci_if_error: false
+
+      - name: Upload Coverage - Express
+        uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: ./packages/express/coverage/clover.xml
+          flags: express
+          name: express
+          fail_ci_if_error: false
+
+      - name: Upload Coverage - Client
+        uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: ./packages/client/coverage/clover.xml
+          flags: client
+          name: client
+          fail_ci_if_error: false
+
+      - name: Upload Coverage - React
+        uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: ./packages/react/coverage/clover.xml
+          flags: react
+          name: react
+          fail_ci_if_error: false
