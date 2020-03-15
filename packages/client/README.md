@@ -1,7 +1,7 @@
-# TypePoint Client
-
 <p align="center">
-  <img src="https://github.com/typepoint/typepoint/raw/master/img/logo-no-bg-wide.png" width="400" />
+  <a href="https://typepoint.github.io">
+    <img src="https://github.com/typepoint/typepoint/raw/master/img/logo-no-bg-wide.png" width="400" />
+  </a>
   <p align="center">
     Library for easily
     <i>defining, enforcing, consuming, and/or serving</i>
@@ -10,14 +10,22 @@
   </p>
 </p>
 
+# TypePoint Client
+
+TypePoint client library for making type-safe requests to a server.
+
 ## Install
 
 TypePoint requires at least TypeScript v3.6.4.
 
 ```sh
 npm add @typepoint/client
-npm add typescript@^3.6.4 -D
+npm add typescript -D
 ```
+
+## Guide
+
+Check out our detailed [guide](https://typepoint.github.io) for how to start using TypePoint.
 
 ## Contributing
 
