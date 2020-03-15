@@ -10,6 +10,8 @@
   </p>
 </p>
 
+![npm](https://img.shields.io/npm/v/@typepoint/joiful?color=brightgreen) ![GitHub Workflow Status (branch)](https://img.shields.io/github/workflow/status/typepoint/typepoint/Validate/master) [![codecov](https://codecov.io/gh/typepoint/typepoint/branch/master/graph/badge.svg?flag=joiful)](https://codecov.io/gh/typepoint/typepoint)
+
 # TypePoint Joiful
 
 Joiful-based validation for TypePoint.

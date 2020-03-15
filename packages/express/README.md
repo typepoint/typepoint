@@ -10,6 +10,8 @@
   </p>
 </p>
 
+![npm](https://img.shields.io/npm/v/@typepoint/express?color=brightgreen) ![GitHub Workflow Status (branch)](https://img.shields.io/github/workflow/status/typepoint/typepoint/Validate/master) [![codecov](https://codecov.io/gh/typepoint/typepoint/branch/master/graph/badge.svg?flag=express)](https://codecov.io/gh/typepoint/typepoint)
+
 # TypePoint Express
 
 This library creates [express](https://expressjs.com/) compatible middleware from your TypePoint Server router.

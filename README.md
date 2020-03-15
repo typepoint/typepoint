@@ -8,6 +8,8 @@
   </p>
 </p>
 
+![GitHub Workflow Status (branch)](https://img.shields.io/github/workflow/status/typepoint/typepoint/Validate/master) [![codecov](https://codecov.io/gh/typepoint/typepoint/branch/master/graph/badge.svg)](https://codecov.io/gh/typepoint/typepoint)
+
 ## Guide
 
 Please check out our detailed [guide](https://typepoint.github.io) for how to start using TypePoint.

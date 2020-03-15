@@ -10,6 +10,8 @@
   </p>
 </p>
 
+![npm](https://img.shields.io/npm/v/@typepoint/shared?color=brightgreen) ![GitHub Workflow Status (branch)](https://img.shields.io/github/workflow/status/typepoint/typepoint/Validate/master) [![codecov](https://codecov.io/gh/typepoint/typepoint/branch/master/graph/badge.svg?flag=shared)](https://codecov.io/gh/typepoint/typepoint)
+
 # TypePoint Shared
 
 This package contains utilities and types used by both `@typepoint/client` and `@typepoint/server`.

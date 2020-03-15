@@ -10,6 +10,8 @@
   </p>
 </p>
 
+![npm](https://img.shields.io/npm/v/@typepoint/client?color=brightgreen) ![GitHub Workflow Status (branch)](https://img.shields.io/github/workflow/status/typepoint/typepoint/Validate/master) [![codecov](https://codecov.io/gh/typepoint/typepoint/branch/master/graph/badge.svg?flag=client)](https://codecov.io/gh/typepoint/typepoint)
+
 # TypePoint Client
 
 TypePoint client library for making type-safe requests to a server.
