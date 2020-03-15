@@ -10,6 +10,8 @@
   </p>
 </p>
 
+![npm](https://img.shields.io/npm/v/@typepoint/server?color=brightgreen) ![GitHub Workflow Status (branch)](https://img.shields.io/github/workflow/status/typepoint/typepoint/Validate/master) [![codecov](https://codecov.io/gh/typepoint/typepoint/branch/master/graph/badge.svg?flag=server)](https://codecov.io/gh/typepoint/typepoint)
+
 # TypePoint Server
 
 TypePoint server utilties for handling strongly typed API requests.
