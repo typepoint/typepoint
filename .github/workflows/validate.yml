@@ -26,7 +26,12 @@ jobs:
           file: ./packages/shared/coverage/lcov.info
           flags: shared
           name: shared
-          fail_ci_if_error: false
+          fail_ci_if_error: true
+
+      - name: Delay between coverage uploads
+        uses: jakejarvis/wait-action@master
+        with:
+          time: '1s'
 
       - name: Upload Coverage - Server
         uses: codecov/codecov-action@v1
@@ -35,7 +40,12 @@ jobs:
           file: ./packages/server/coverage/lcov.info
           flags: server
           name: server
-          fail_ci_if_error: false
+          fail_ci_if_error: true
+
+      - name: Delay between coverage uploads
+        uses: jakejarvis/wait-action@master
+        with:
+          time: '1s'
 
       - name: Upload Coverage - Joiful
         uses: codecov/codecov-action@v1
@@ -44,7 +54,12 @@ jobs:
           file: ./packages/joiful/coverage/lcov.info
           flags: joiful
           name: joiful
-          fail_ci_if_error: false
+          fail_ci_if_error: true
+
+      - name: Delay between coverage uploads
+        uses: jakejarvis/wait-action@master
+        with:
+          time: '1s'
 
       - name: Upload Coverage - Express
         uses: codecov/codecov-action@v1
@@ -53,7 +68,12 @@ jobs:
           file: ./packages/express/coverage/lcov.info
           flags: express
           name: express
-          fail_ci_if_error: false
+          fail_ci_if_error: true
+
+      - name: Delay between coverage uploads
+        uses: jakejarvis/wait-action@master
+        with:
+          time: '1s'
 
       - name: Upload Coverage - Client
         uses: codecov/codecov-action@v1
@@ -62,7 +82,12 @@ jobs:
           file: ./packages/client/coverage/lcov.info
           flags: client
           name: client
-          fail_ci_if_error: false
+          fail_ci_if_error: true
+
+      - name: Delay between coverage uploads
+        uses: jakejarvis/wait-action@master
+        with:
+          time: '1s'
 
       - name: Upload Coverage - React
         uses: codecov/codecov-action@v1
@@ -71,4 +96,4 @@ jobs:
           file: ./packages/react/coverage/lcov.info
           flags: react
           name: react
-          fail_ci_if_error: false
+          fail_ci_if_error: true
