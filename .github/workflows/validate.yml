@@ -20,7 +20,7 @@ jobs:
         uses: codecov/codecov-action@v1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          file: ./packages/shared/coverage/clover.xml
+          file: ./packages/shared/coverage/lcov.info
           flags: shared
           name: shared
           fail_ci_if_error: false
@@ -29,7 +29,7 @@ jobs:
         uses: codecov/codecov-action@v1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          file: ./packages/server/coverage/clover.xml
+          file: ./packages/server/coverage/lcov.info
           flags: server
           name: server
           fail_ci_if_error: false
@@ -38,7 +38,7 @@ jobs:
         uses: codecov/codecov-action@v1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          file: ./packages/joiful/coverage/clover.xml
+          file: ./packages/joiful/coverage/lcov.info
           flags: joiful
           name: joiful
           fail_ci_if_error: false
@@ -47,7 +47,7 @@ jobs:
         uses: codecov/codecov-action@v1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          file: ./packages/express/coverage/clover.xml
+          file: ./packages/express/coverage/lcov.info
           flags: express
           name: express
           fail_ci_if_error: false
@@ -56,7 +56,7 @@ jobs:
         uses: codecov/codecov-action@v1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          file: ./packages/client/coverage/clover.xml
+          file: ./packages/client/coverage/lcov.info
           flags: client
           name: client
           fail_ci_if_error: false
@@ -65,7 +65,7 @@ jobs:
         uses: codecov/codecov-action@v1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          file: ./packages/react/coverage/clover.xml
+          file: ./packages/react/coverage/lcov.info
           flags: react
           name: react
           fail_ci_if_error: false
