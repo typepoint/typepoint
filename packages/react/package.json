@@ -4,6 +4,18 @@
   "main": "src/index.tsx",
   "types": "src/index.tsx",
   "license": "SEE LICENSE IN LICENSE",
+  "author": "Ben <codeandcats@gmail.com> (https://github.com/codeandcats)",
+  "contributors": [
+    "Ben <codeandcats@gmail.com> (https://github.com/codeandcats)"
+  ],
+  "keywords": [
+    "typepoint",
+    "typesafe",
+    "typed",
+    "endpoint",
+    "api",
+    "request"
+  ],
   "scripts": {
     "clean": "../../support/clean.sh react",
     "build": "../../support/build.sh react",

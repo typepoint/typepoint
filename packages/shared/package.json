@@ -6,6 +6,17 @@
   "types": "src/index.ts",
   "license": "SEE LICENSE IN LICENSE",
   "author": "Ben <codeandcats@gmail.com> (https://github.com/codeandcats)",
+  "contributors": [
+    "Ben <codeandcats@gmail.com> (https://github.com/codeandcats)"
+  ],
+  "keywords": [
+    "typepoint",
+    "typesafe",
+    "typed",
+    "endpoint",
+    "api",
+    "request"
+  ],
   "scripts": {
     "clean": "../../support/clean.sh shared",
     "build": "../../support/build.sh shared",

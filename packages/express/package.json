@@ -9,6 +9,14 @@
   "contributors": [
     "Ben <codeandcats@gmail.com> (https://github.com/codeandcats)"
   ],
+  "keywords": [
+    "typepoint",
+    "typesafe",
+    "typed",
+    "endpoint",
+    "api",
+    "request"
+  ],
   "scripts": {
     "clean": "../../support/clean.sh express",
     "build": "../../support/build.sh express",
