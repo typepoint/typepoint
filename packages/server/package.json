@@ -24,6 +24,7 @@
     "preship": "yarn validate",
     "ship": "../../support/ship.sh server",
     "test": "../../support/test.sh server",
+    "sync-workspace-dependencies": "../../support/syncWorkspaceDependencies.sh server",
     "validate": "../../support/validate.sh server"
   },
   "dependencies": {
