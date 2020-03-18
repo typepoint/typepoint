@@ -1,3 +1,10 @@
+## [3.0.1](https://github.com/typepoint/typepoint/compare/@typepoint/shared_v3.0.0...@typepoint/shared_v3.0.1) (2020-03-18)
+
+
+### Bug Fixes
+
+* update package author, contributors, keywords ([41ba6fa](https://github.com/typepoint/typepoint/commit/41ba6fa2f66ca147008046551cd917ce0a7f4ddc))
+
 # [3.0.0](https://github.com/typepoint/typepoint/compare/@typepoint/shared_v2.0.5...@typepoint/shared_v3.0.0) (2020-03-10)
 
 
