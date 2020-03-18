@@ -7,39 +7,15 @@
 */
 
 /* eslint-disable no-console */
-import { exec } from 'child_process';
 import * as fs from 'fs-extra';
 import * as path from 'path';
 import * as Bluebird from 'bluebird';
 import { flatten } from 'lodash';
 import * as chalk from 'chalk';
 import * as glob from 'glob';
+import { getWorkspaces } from './common';
 
 import lineColumn = require('line-column');
-
-interface Workspace {
-  location: string;
-  workspaceDependencies: string[];
-}
-
-interface WorkspacesByName {
-  [name: string]: Workspace;
-}
-
-async function getWorkspaces(): Promise<WorkspacesByName> {
-  return new Promise((resolve, reject) => {
-    exec('yarn workspaces info --silent', (err, stdout) => {
-      if (err) {
-        return reject(err);
-      }
-      try {
-        return resolve(JSON.parse(stdout));
-      } catch (err2) {
-        return reject(err2);
-      }
-    });
-  });
-}
 
 async function findFiles(pattern: string) {
   return new Promise<string[]>((resolve, reject) => {
