@@ -4,10 +4,18 @@
   "private": true,
   "main": "src/index.ts",
   "types": "src/index.ts",
-  "author": "Ben <codeandcats@gmail.com> (https://github.com/codeandcats)",
   "license": "SEE LICENSE IN LICENSE",
+  "author": "Ben <codeandcats@gmail.com> (https://github.com/codeandcats)",
   "contributors": [
     "Ben <codeandcats@gmail.com> (https://github.com/codeandcats)"
+  ],
+  "keywords": [
+    "typepoint",
+    "typesafe",
+    "typed",
+    "endpoint",
+    "api",
+    "request"
   ],
   "scripts": {
     "clean": "../../support/clean.sh joiful",
