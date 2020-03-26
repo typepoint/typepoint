@@ -1,3 +1,11 @@
+## [3.0.1](https://github.com/typepoint/typepoint/compare/@typepoint/server_v3.0.0...@typepoint/server_v3.0.1) (2020-03-26)
+
+
+### Bug Fixes
+
+* update package author, contributors, keywords ([41ba6fa](https://github.com/typepoint/typepoint/commit/41ba6fa2f66ca147008046551cd917ce0a7f4ddc))
+* use latest @typepoint/shared ([ef83c44](https://github.com/typepoint/typepoint/commit/ef83c443ba3e140d51cb7c2da123092718c85535))
+
 # [3.0.0](https://github.com/typepoint/typepoint/compare/@typepoint/server_v2.0.0...@typepoint/server_v3.0.0) (2020-03-10)
 
 
