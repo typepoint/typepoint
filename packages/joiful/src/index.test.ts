@@ -94,7 +94,7 @@ describe('index', () => {
     });
   });
 
-  describe('when validating input against a class without any tsdv-joi decorators', () => {
+  describe('when validating input against a class without any joiful decorators', () => {
     class Todo {
       id?: number;
 
@@ -109,9 +109,8 @@ describe('index', () => {
         title: 'Walk the cats',
         isCompleted: 'true',
       };
-      expect(validateAndTransform(input, Todo)).toHaveProperty(
-        ['validationError', 'message'],
-        '"id" is not allowed. "title" is not allowed. "isCompleted" is not allowed',
+      expect(() => validateAndTransform(input, Todo)).toThrow(
+        'No validation schema was found for class Todo. Did you forget to decorate the class?',
       );
     });
   });
