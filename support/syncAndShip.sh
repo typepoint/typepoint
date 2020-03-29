@@ -7,6 +7,10 @@ cd "$PACKAGE_PATH"
 
 yarn workspace $PACKAGE_NAME sync-workspace-dependencies
 git add "$PACKAGE_PATH/package.json"
-git commit -m "fix: update package dependencies"
-git push
+STAGED_FILES=$(git diff --name-only --cached)
+if [ ! -z "$STAGED_FILES" ]
+then
+  git commit -m "fix: update package dependencies"
+  git push
+fi
 yarn workspace $PACKAGE_NAME ship
