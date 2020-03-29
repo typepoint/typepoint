@@ -28,8 +28,8 @@
     "validate": "yarn lint && yarn build && yarn test"
   },
   "dependencies": {
-    "@typepoint/client": "3.0.0",
-    "@typepoint/shared": "3.0.1"
+    "@typepoint/client": "3.0.1",
+    "@typepoint/shared": "3.0.2"
   },
   "devDependencies": {
     "@testing-library/react": "9.3.2",
