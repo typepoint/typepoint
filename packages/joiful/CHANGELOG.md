@@ -1,3 +1,14 @@
+## [3.0.1](https://github.com/typepoint/typepoint/compare/@typepoint/joiful_v3.0.0...@typepoint/joiful_v3.0.1) (2020-03-29)
+
+
+### Bug Fixes
+
+* fix failing test for latest joiful ([4e31bbb](https://github.com/typepoint/typepoint/commit/4e31bbb8e80204903762c2fb7906fde8ae169af4))
+* remove private field from package.json ([8e7b3ca](https://github.com/typepoint/typepoint/commit/8e7b3ca894922e10b7e3566f60e0e58dadccf545))
+* update package author, contributors, keywords ([41ba6fa](https://github.com/typepoint/typepoint/commit/41ba6fa2f66ca147008046551cd917ce0a7f4ddc))
+* update package dependencies ([5ba5f64](https://github.com/typepoint/typepoint/commit/5ba5f6450a1e710bbd1c4f3e34b3737fe9ca8e78))
+* update workspace dependencies ([c28ef2a](https://github.com/typepoint/typepoint/commit/c28ef2a00b68488cacff6dcbf58c1145f0322468))
+
 # [3.0.0](https://github.com/typepoint/typepoint/compare/@typepoint/joiful_v2.0.2...@typepoint/joiful_v3.0.0) (2020-03-10)
 
 
