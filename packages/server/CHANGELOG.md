@@ -1,3 +1,11 @@
+## [3.0.2](https://github.com/typepoint/typepoint/compare/@typepoint/server_v3.0.1...@typepoint/server_v3.0.2) (2020-03-29)
+
+
+### Bug Fixes
+
+* remove private field from package.json ([8e7b3ca](https://github.com/typepoint/typepoint/commit/8e7b3ca894922e10b7e3566f60e0e58dadccf545))
+* update package dependencies ([ae9100b](https://github.com/typepoint/typepoint/commit/ae9100bb197471a613acfc1c0b50cc83f52d39f7))
+
 ## [3.0.1](https://github.com/typepoint/typepoint/compare/@typepoint/server_v3.0.0...@typepoint/server_v3.0.1) (2020-03-26)
 
 
