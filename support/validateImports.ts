@@ -13,7 +13,7 @@ import * as Bluebird from 'bluebird';
 import { flatten } from 'lodash';
 import * as chalk from 'chalk';
 import * as glob from 'glob';
-import { getWorkspaces } from './common';
+import { getWorkspacesMap } from './common';
 
 import lineColumn = require('line-column');
 
@@ -64,7 +64,7 @@ async function getInvalidImportsInFile(fileName: string, packagePath: string) {
 }
 
 async function run() {
-  const workspacesByName = await getWorkspaces();
+  const workspacesByName = await getWorkspacesMap();
   const entries = Object.entries(workspacesByName);
 
   const allInvalidImports = flatten(await Bluebird.map(
