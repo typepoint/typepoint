@@ -10,7 +10,7 @@ git add "$PACKAGE_PATH/package.json"
 STAGED_FILES=$(git diff --name-only --cached)
 if [ ! -z "$STAGED_FILES" ]
 then
-  git commit -m "fix: update package dependencies"
+  git commit -m "fix: update package dependencies" --no-verify
   git push
 fi
 yarn workspace $PACKAGE_NAME ship
