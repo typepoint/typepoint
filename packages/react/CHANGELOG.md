@@ -1,3 +1,12 @@
+## [2.0.1](https://github.com/typepoint/typepoint/compare/@typepoint/react_v2.0.0...@typepoint/react_v2.0.1) (2020-03-29)
+
+
+### Bug Fixes
+
+* update package author, contributors, keywords ([41ba6fa](https://github.com/typepoint/typepoint/commit/41ba6fa2f66ca147008046551cd917ce0a7f4ddc))
+* update package dependencies ([0b5690d](https://github.com/typepoint/typepoint/commit/0b5690dec7daf4c1c5fdcccf8d2b47c0d4d1c4d1))
+* update workspace dependencies ([c28ef2a](https://github.com/typepoint/typepoint/commit/c28ef2a00b68488cacff6dcbf58c1145f0322468))
+
 # [2.0.0](https://github.com/typepoint/typepoint/compare/@typepoint/react_v1.0.0...@typepoint/react_v2.0.0) (2020-03-10)
 
 
