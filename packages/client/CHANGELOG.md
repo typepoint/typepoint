@@ -1,3 +1,12 @@
+## [3.0.1](https://github.com/typepoint/typepoint/compare/@typepoint/client_v3.0.0...@typepoint/client_v3.0.1) (2020-03-29)
+
+
+### Bug Fixes
+
+* update package author, contributors, keywords ([41ba6fa](https://github.com/typepoint/typepoint/commit/41ba6fa2f66ca147008046551cd917ce0a7f4ddc))
+* update workspace dependencies ([9b8ca04](https://github.com/typepoint/typepoint/commit/9b8ca040a8daaaff748f597e815d3b78c4137cee))
+* update workspace dependencies ([c28ef2a](https://github.com/typepoint/typepoint/commit/c28ef2a00b68488cacff6dcbf58c1145f0322468))
+
 # [3.0.0](https://github.com/typepoint/typepoint/compare/@typepoint/client_v2.0.6...@typepoint/client_v3.0.0) (2020-03-10)
 
 
