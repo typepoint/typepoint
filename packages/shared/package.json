@@ -23,6 +23,7 @@
     "preship": "yarn validate",
     "ship": "../../support/ship.sh shared",
     "test": "../../support/test.sh shared",
+    "sync-and-ship": "../../support/syncAndShip.sh shared",
     "sync-workspace-dependencies": "../../support/syncWorkspaceDependencies.sh shared",
     "validate": "../../support/validate.sh shared"
   },

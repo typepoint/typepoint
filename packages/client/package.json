@@ -23,6 +23,7 @@
     "preship": "yarn validate",
     "ship": "../../support/ship.sh client",
     "test": "../../support/test.sh client",
+    "sync-and-ship": "../../support/syncAndShip.sh client",
     "sync-workspace-dependencies": "../../support/syncWorkspaceDependencies.sh client",
     "validate": "yarn lint && yarn build && yarn test"
   },

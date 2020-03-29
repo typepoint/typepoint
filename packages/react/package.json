@@ -23,6 +23,7 @@
     "preship": "yarn validate",
     "ship": "../../support/ship.sh react",
     "test": "../../support/test.sh react",
+    "sync-and-ship": "../../support/syncAndShip.sh react",
     "sync-workspace-dependencies": "../../support/syncWorkspaceDependencies.sh react",
     "validate": "yarn lint && yarn build && yarn test"
   },
