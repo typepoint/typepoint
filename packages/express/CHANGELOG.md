@@ -1,3 +1,13 @@
+## [3.0.1](https://github.com/typepoint/typepoint/compare/@typepoint/express_v3.0.0...@typepoint/express_v3.0.1) (2020-03-29)
+
+
+### Bug Fixes
+
+* remove private field from package.json ([8e7b3ca](https://github.com/typepoint/typepoint/commit/8e7b3ca894922e10b7e3566f60e0e58dadccf545))
+* update package author, contributors, keywords ([41ba6fa](https://github.com/typepoint/typepoint/commit/41ba6fa2f66ca147008046551cd917ce0a7f4ddc))
+* update package dependencies ([61820ec](https://github.com/typepoint/typepoint/commit/61820ec62f253ab3035accc646cac1d6528724c3))
+* update workspace dependencies ([c28ef2a](https://github.com/typepoint/typepoint/commit/c28ef2a00b68488cacff6dcbf58c1145f0322468))
+
 # [3.0.0](https://github.com/typepoint/typepoint/compare/@typepoint/express_v2.0.2...@typepoint/express_v3.0.0) (2020-03-10)
 
 
