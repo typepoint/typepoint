@@ -29,8 +29,8 @@
   },
   "peerDependencies": {
     "joiful": "2.0.0",
-    "@typepoint/server": "3.0.1",
-    "@typepoint/shared": "3.0.1"
+    "@typepoint/server": "3.0.2",
+    "@typepoint/shared": "3.0.2"
   },
   "devDependencies": {
     "reflect-metadata": "0.1.13"
