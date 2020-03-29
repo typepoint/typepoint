@@ -23,11 +23,11 @@
     "preship": "yarn validate",
     "ship": "../../support/ship.sh express",
     "test": "../../support/test.sh express",
+    "sync-and-ship": "../../support/syncAndShip.sh express",
     "sync-workspace-dependencies": "../../support/syncWorkspaceDependencies.sh express",
     "validate": "../../support/validate.sh express"
   },
   "dependencies": {
-    "@typepoint/shared": "3.0.1",
     "@typepoint/server": "3.0.1",
     "clone": "2.1.2",
     "express": "4.17.1",
