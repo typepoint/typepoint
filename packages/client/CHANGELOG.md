@@ -1,3 +1,10 @@
+## [3.0.2](https://github.com/typepoint/typepoint/compare/@typepoint/client_v3.0.1...@typepoint/client_v3.0.2) (2021-04-02)
+
+
+### Bug Fixes
+
+* fix security vulnerability ([5a9a1bd](https://github.com/typepoint/typepoint/commit/5a9a1bd5e85ad17324cdaa8827486e5eb95d3b56))
+
 ## [3.0.1](https://github.com/typepoint/typepoint/compare/@typepoint/client_v3.0.0...@typepoint/client_v3.0.1) (2020-03-29)
 
 
