@@ -46,8 +46,8 @@
     ]
   },
   "scripts": {
-    "build": "tsc",
-    "clean": "rimraf ./packages/client/dist ./packages/express/dist ./packages/fixtures/dist ./packages/joiful/dist ./packages/server/dist ./packages/shared/dist",
+    "build": "lerna run build",
+    "clean": "lerna run clean",
     "clean-node-modules": "rm -rf ./node_modules && rm -rf ./packages/client/node_modules && rm -rf ./packages/e2e-tests/node_modules && rm -rf ./packages/express/node_modules && rm -rf ./packages/joiful/node_modules && rm -rf ./packages/react/node_modules && rm -rf ./packages/server/node_modules && rm -rf ./packages/shared/node_modules",
     "lint": "eslint ./packages --ext .js,.jsx,.ts,.tsx",
     "lint:fix": "yarn lint --fix",
@@ -95,6 +95,7 @@
     "jest": "25.1.0",
     "jest-helpers": "3.1.0",
     "jq.node": "2.1.2",
+    "lerna": "^4.0.0",
     "line-column": "1.0.2",
     "lodash": "4.17.15",
     "pre-commit": "1.2.2",
@@ -108,6 +109,5 @@
     "type-assertions": "1.1.0",
     "typescript": "3.6.4"
   },
-  "dependencies": {},
   "version": "0.0.0-development"
 }
