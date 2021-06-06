@@ -1,6 +1,6 @@
 {
   "name": "@typepoint/fixtures",
-  "version": "1.0.0",
+  "version": "3.0.3",
   "private": true,
   "main": "src/index.ts",
   "types": "src/index",

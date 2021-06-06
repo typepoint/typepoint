@@ -1,6 +1,6 @@
 {
   "name": "@typepoint/shared",
-  "version": "3.0.2",
+  "version": "3.0.3",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "license": "SEE LICENSE IN LICENSE",
@@ -28,6 +28,6 @@
     "validate": "../../support/validate.sh shared"
   },
   "devDependencies": {
-    "@typepoint/fixtures": "1.0.0"
+    "@typepoint/fixtures": "^3.0.3"
   }
 }

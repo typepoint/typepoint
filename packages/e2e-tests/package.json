@@ -1,6 +1,6 @@
 {
   "name": "@typepoint/e2e-tests",
-  "version": "2.0.0",
+  "version": "3.0.3",
   "private": true,
   "license": "SEE LICENSE IN LICENSE",
   "scripts": {
@@ -11,9 +11,9 @@
     "validate": "../../support/validate.sh e2e-tests"
   },
   "dependencies": {
-    "@typepoint/client": "^3.0.0",
-    "@typepoint/joiful": "^3.0.0",
-    "@typepoint/shared": "^3.0.1",
+    "@typepoint/client": "^3.0.3",
+    "@typepoint/joiful": "^3.0.3",
+    "@typepoint/shared": "^3.0.3",
     "body-parser": "1.19.0",
     "express": "4.17.1",
     "get-port": "5.0.0",

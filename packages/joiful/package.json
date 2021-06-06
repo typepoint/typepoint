@@ -1,6 +1,6 @@
 {
   "name": "@typepoint/joiful",
-  "version": "3.0.2",
+  "version": "3.0.3",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "license": "SEE LICENSE IN LICENSE",
@@ -34,8 +34,8 @@
     "reflect-metadata": "^0.1.13"
   },
   "devDependencies": {
-    "@typepoint/server": "3.0.2",
-    "@typepoint/shared": "3.0.2",
+    "@typepoint/server": "^3.0.3",
+    "@typepoint/shared": "^3.0.3",
     "joiful": "^2.0.0",
     "reflect-metadata": "^0.1.13"
   }

@@ -1,3 +1,16 @@
+# Change Log
+
+All notable changes to this project will be documented in this file.
+See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
+
+## 3.0.3 (2021-06-06)
+
+**Note:** Version bump only for package @typepoint/react
+
+
+
+
+
 ## [2.0.1](https://github.com/typepoint/typepoint/compare/@typepoint/react_v2.0.0...@typepoint/react_v2.0.1) (2020-03-29)
 
 
