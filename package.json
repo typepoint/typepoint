@@ -46,7 +46,7 @@
     "prebuild": "yarn run clean",
     "validate-imports": "ts-node ./support/validateImports.ts",
     "validate": "yarn validate-imports && lerna run validate",
-    "release": "yarn lerna version --conventional-commits"
+    "release": "yarn lerna version --conventional-commits --yes"
   },
   "devDependencies": {
     "@types/bluebird": "3.5.29",
