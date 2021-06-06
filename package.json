@@ -34,35 +34,20 @@
   },
   "homepage": "https://github.com/typepoint/typepoint#readme",
   "workspaces": {
-    "packages": [
-      "packages/client",
-      "packages/e2e-tests",
-      "packages/express",
-      "packages/fixtures",
-      "packages/joiful",
-      "packages/react",
-      "packages/server",
-      "packages/shared"
-    ]
+    "packages": ["packages/*"]
   },
   "scripts": {
     "build": "lerna run build",
     "clean": "lerna run clean",
-    "clean-node-modules": "rm -rf ./node_modules && rm -rf ./packages/client/node_modules && rm -rf ./packages/e2e-tests/node_modules && rm -rf ./packages/express/node_modules && rm -rf ./packages/joiful/node_modules && rm -rf ./packages/react/node_modules && rm -rf ./packages/server/node_modules && rm -rf ./packages/shared/node_modules",
+    "clean-node-modules": "rm -rf ./**/node_modules",
     "lint": "eslint ./packages --ext .js,.jsx,.ts,.tsx",
     "lint:fix": "yarn lint --fix",
     "list-workspaces": "ts-node ./support/listWorkspaces.ts",
     "prebuild": "yarn run clean",
     "validate-imports": "ts-node ./support/validateImports.ts",
-    "validate": "yarn validate-imports && yarn workspace @typepoint/client validate && yarn workspace @typepoint/express validate && yarn workspace @typepoint/joiful validate && yarn workspace @typepoint/react validate && yarn workspace @typepoint/server validate && yarn workspace @typepoint/shared validate && yarn workspace @typepoint/e2e-tests validate",
-    "semantic-release": "semantic-release"
+    "validate": "yarn validate-imports && lerna run validate"
   },
   "devDependencies": {
-    "@semantic-release/changelog": "3.0.5",
-    "@semantic-release/commit-analyzer": "6.3.3",
-    "@semantic-release/exec": "3.3.8",
-    "@semantic-release/git": "7.0.18",
-    "@semantic-release/npm": "5.3.4",
     "@types/bluebird": "3.5.29",
     "@types/chalk": "2.2.0",
     "@types/fs-extra": "8.0.0",
@@ -101,7 +86,6 @@
     "pre-commit": "1.2.2",
     "prettier": "1.18.2",
     "rimraf": "3.0.0",
-    "semantic-release-plus": "16.1.0",
     "semver": "7.1.3",
     "ts-jest": "25.2.1",
     "ts-node": "8.4.1",

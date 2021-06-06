@@ -93,7 +93,7 @@ export class TypePointClient {
 
     const url = endpoint.url({
       server: this.server,
-      params: options && (options as { params: any }).params,
+      params: options && (options as unknown as { params: any }).params,
     });
 
     const requestOptions: AxiosRequestConfig = {

@@ -1,4 +1,0 @@
-{
-  "extends": "../../.releaserc.json",
-  "tagFormat": "@typepoint/react_v${version}"
-}
