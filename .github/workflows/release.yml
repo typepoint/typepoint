@@ -105,4 +105,7 @@ jobs:
           fail_ci_if_error: false
 
       - name: Create Release
-        run: yarn release
+        run: |
+          git config user.email "release-bot@typepoint.github.io"
+          git config user.name "Release Bot"
+          yarn release
