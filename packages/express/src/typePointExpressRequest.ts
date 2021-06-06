@@ -20,8 +20,8 @@ export class TypePointExpressRequest<TParams, TBody> implements TypePointRequest
   constructor(private request: ExpressRequest) {
     this.method = cleanseHttpMethod(request.method);
     this.url = request.url;
-    this.params = request.query;
-    this.body = request.body;
+    this.params = request.query as any;
+    this.body = request.body as any;
     this.cookies = request.cookies;
     this.headers = request.headers;
     this.signedCookies = request.signedCookies;

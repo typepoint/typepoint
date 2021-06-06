@@ -59,7 +59,7 @@ export class Server {
 
     const server = http.createServer(app);
 
-    await new Promise((resolve) => {
+    await new Promise<void>((resolve) => {
       server.listen(this.port, () => resolve());
       this.server = server;
     });

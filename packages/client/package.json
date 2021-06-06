@@ -28,10 +28,13 @@
     "validate": "../../support/validate.sh client"
   },
   "dependencies": {
-    "@typepoint/shared": "3.0.2",
     "axios": "0.21.1"
   },
   "devDependencies": {
+    "@typepoint/shared": "3.0.2",
     "@typepoint/fixtures": "1.0.0"
+  },
+  "peerDependencies": {
+    "@typepoint/shared": "3.0.2"
   }
 }

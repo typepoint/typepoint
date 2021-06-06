@@ -20,7 +20,6 @@ import {
   TypePointClientResponse,
 } from './index';
 
-
 describe('TypePointClient', () => {
   class AddTodoRequestBody {
     title!: string;

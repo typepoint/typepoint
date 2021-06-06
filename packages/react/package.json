@@ -28,16 +28,18 @@
     "validate": "../../support/validate.sh react"
   },
   "dependencies": {
-    "@typepoint/client": "3.0.2",
-    "@typepoint/shared": "3.0.2"
   },
   "devDependencies": {
     "@testing-library/react": "9.3.2",
+    "@typepoint/client": "3.0.2",
     "@typepoint/fixtures": "1.0.0",
+    "@typepoint/shared": "3.0.2",
     "react": "16.13.0",
     "react-dom": "16.13.0"
   },
   "peerDependencies": {
-    "react": "^16.13.0"
+    "react": "^16.13.0 || ^17",
+    "@typepoint/client": "3.0.2",
+    "@typepoint/shared": "3.0.2"
   }
 }
