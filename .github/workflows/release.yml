@@ -20,7 +20,7 @@ jobs:
         run: yarn install --frozen-lockfile
 
       - name: Symlink Local Dependencies
-        run: yarn lerna bootstrap
+        run: yarn lerna bootstrap --hoist
 
       - name: Build, Lint, Test
         run: yarn run validate
