@@ -1,10 +1,6 @@
 name: Validate
 
-on:
-  push:
-    branches: [master]
-  pull_request:
-    branches: [master]
+on: [pull_request]
 
 jobs:
   validate:
@@ -13,87 +9,15 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Install Yarn
+        if: ${{ env.ACT }}
+        run: npm install yarn -g
+
       - name: Install Dependencies
         run: yarn install --frozen-lockfile
 
+      - name: Bootstrap Local Dependencies
+        run: yarn lerna bootstrap --hoist
+
       - name: Build, Lint, Test
-        run: yarn run validate
-
-      - name: Upload Coverage - Shared
-        uses: codecov/codecov-action@v1
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          file: ./packages/shared/coverage/lcov.info
-          flags: shared
-          name: shared
-          fail_ci_if_error: false
-
-      - name: Delay between coverage uploads
-        uses: jakejarvis/wait-action@master
-        with:
-          time: '1s'
-
-      - name: Upload Coverage - Server
-        uses: codecov/codecov-action@v1
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          file: ./packages/server/coverage/lcov.info
-          flags: server
-          name: server
-          fail_ci_if_error: false
-
-      - name: Delay between coverage uploads
-        uses: jakejarvis/wait-action@master
-        with:
-          time: '1s'
-
-      - name: Upload Coverage - Joiful
-        uses: codecov/codecov-action@v1
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          file: ./packages/joiful/coverage/lcov.info
-          flags: joiful
-          name: joiful
-          fail_ci_if_error: false
-
-      - name: Delay between coverage uploads
-        uses: jakejarvis/wait-action@master
-        with:
-          time: '1s'
-
-      - name: Upload Coverage - Express
-        uses: codecov/codecov-action@v1
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          file: ./packages/express/coverage/lcov.info
-          flags: express
-          name: express
-          fail_ci_if_error: false
-
-      - name: Delay between coverage uploads
-        uses: jakejarvis/wait-action@master
-        with:
-          time: '1s'
-
-      - name: Upload Coverage - Client
-        uses: codecov/codecov-action@v1
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          file: ./packages/client/coverage/lcov.info
-          flags: client
-          name: client
-          fail_ci_if_error: false
-
-      - name: Delay between coverage uploads
-        uses: jakejarvis/wait-action@master
-        with:
-          time: '1s'
-
-      - name: Upload Coverage - React
-        uses: codecov/codecov-action@v1
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          file: ./packages/react/coverage/lcov.info
-          flags: react
-          name: react
-          fail_ci_if_error: false
+        run: yarn validate
