@@ -1,9 +1,12 @@
-name: Validate
+name: Publish
 
-on: [pull_request]
+on:
+  release:
+    types: [created]
 
 jobs:
-  validate:
+  validate_and_publish:
+    name: Validate and Publish
     runs-on: ubuntu-latest
 
     steps:
@@ -17,7 +20,12 @@ jobs:
         run: yarn install --frozen-lockfile
 
       - name: Symlink Local Dependencies
-        run: yarn lerna bootstrap --hoist
+        run: yarn lerna bootstrap
 
       - name: Build, Lint, Test
-        run: yarn validate
+        run: yarn run validate
+
+      - name: Pubish Release
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: yarn lerna publish --yes
