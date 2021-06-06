@@ -4,9 +4,9 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "license": "SEE LICENSE IN LICENSE",
-  "author": "Ben <codeandcats@gmail.com> (https://github.com/codeandcats)",
+  "author": "Benji <codeandcats@gmail.com> (https://github.com/codeandcats)",
   "contributors": [
-    "Ben <codeandcats@gmail.com> (https://github.com/codeandcats)"
+    "Benji <codeandcats@gmail.com> (https://github.com/codeandcats)"
   ],
   "keywords": [
     "typepoint",
