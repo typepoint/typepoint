@@ -9,7 +9,6 @@
     "clean": "../../support/clean.sh fixtures",
     "build": "../../support/build.sh fixtures",
     "lint": "../../support/lint.sh fixtures",
-    "test": "../../support/test.sh fixtures",
     "validate": "../../support/validate.sh fixtures"
   }
 }

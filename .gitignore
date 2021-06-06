@@ -66,9 +66,6 @@ dist
 tests-output
 tsconfig.tsbuildinfo
 
-# Generated scripts, configs, etc
-packages/**/jest.config.json
-
 # Parcel
 .cache
 
