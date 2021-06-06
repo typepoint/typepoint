@@ -15,7 +15,6 @@ import {
   isEmptyValue,
 } from './index';
 
-
 describe('shared', () => {
   describe('arrayOf', () => {
     class User {

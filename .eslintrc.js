@@ -27,6 +27,16 @@ module.exports = {
     'max-classes-per-file': ['error', 2],
     'max-len': ['error', 120],
     'react-hooks/rules-of-hooks': 'error',
-    'react-hooks/exhaustive-deps': 'warn'
+    'react-hooks/exhaustive-deps': 'warn',
+    'import/extensions': [
+      'error',
+      'ignorePackages',
+      {
+        "js": "never",
+        "jsx": "never",
+        "ts": "never",
+        "tsx": "never"
+      }
+   ]
   },
 };

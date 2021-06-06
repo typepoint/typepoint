@@ -8,6 +8,6 @@ cd "$PACKAGE_PATH"
 JEST_CONFIG_FILE_NAME="$PACKAGE_PATH/jest.config.js"
 if test -f "$JEST_CONFIG_FILE_NAME"
 then
-  yarn jest --config "$JEST_CONFIG_FILE_NAME" "$FILE_TO_TEST"  
+  yarn jest --config "$JEST_CONFIG_FILE_NAME" "$FILE_TO_TEST" || exit 1
 fi
 

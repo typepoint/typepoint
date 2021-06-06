@@ -13,7 +13,6 @@ export const isContentTypeJson = (contentType: string) => (
   (contentType || '').toLowerCase() === 'application/json'
 );
 
-
 export class TypePointExpressResponse<TResponseBody> implements TypePointResponse<TResponseBody> {
   get hasFlushedHeaders(): boolean {
     return this.response.headersSent;

@@ -81,7 +81,7 @@ export interface SetCookieOptions {
   domain?: string;
   secure?: boolean;
   encode?: (val: string) => string;
-  sameSite?: boolean | string;
+  sameSite?: boolean | 'lax' | 'strict' | 'none';
 }
 
 export type ResponseContentType = 'application/json' | string;

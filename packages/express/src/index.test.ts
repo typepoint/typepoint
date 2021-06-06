@@ -88,7 +88,7 @@ describe('server/express', () => {
     let loginHandlerFn: EndpointHandlerFunctionFromDefinition<EndpointDefinition<Empty, LoginRequestBody, Empty>>;
     let getTodosHandler: EndpointHandler;
 
-    const delay = (durationInMs: number) => new Promise((resolve) => {
+    const delay = (durationInMs: number) => new Promise<void>((resolve) => {
       logger.debug(`Waiting ${durationInMs}ms`);
       setTimeout(() => {
         logger.debug('Wait over');
@@ -210,8 +210,8 @@ describe('server/express', () => {
       });
 
       const runExpressMiddlewareAsync = async (next = () => {}) => {
-        await new Promise((resolve) => {
-          res.end = resolve;
+        await new Promise<void>((resolve) => {
+          res.end = () => resolve();
           expressMiddleware(req, res, () => {
             next();
             resolve();

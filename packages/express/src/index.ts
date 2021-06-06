@@ -11,10 +11,9 @@ import {
   Router,
   validateAndTransformRequestPayload,
 } from '@typepoint/server';
+import * as clone from 'clone';
 import { combineMiddlewares } from './middleware';
 import { createContext, getLogger, trySendInternalServerError } from './utils';
-
-import clone = require('clone');
 
 export interface ToMiddlewareOptions {
   expressMiddlewares?: express.RequestHandler[];

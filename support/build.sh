@@ -3,9 +3,11 @@ ROOT_PATH="$SCRIPT_PATH/.."
 PACKAGE_PATH="$ROOT_PATH/packages/$1"
 DIST_PATH="$PACKAGE_PATH/dist"
 
-cd "$PACKAGE_PATH"
+echo "--------------------------------"
+echo "Building $1"
+echo "--------------------------------"
 
-"$SCRIPT_PATH/clean.sh" $1
+cd "$PACKAGE_PATH"
 
 TS_BUILD_INFO_PATH="$PACKAGE_PATH/tsconfig.tsbuildinfo"
 if test -f "$TS_BUILD_INFO_PATH"; then
@@ -19,7 +21,7 @@ else
   TS_CONFIG_FILE_NAME="$PACKAGE_PATH/tsconfig.json"
 fi
 
-yarn tsc -p "$TS_CONFIG_FILE_NAME"
+yarn tsc -p "$TS_CONFIG_FILE_NAME" || exit 1
 
 if test -d "$DIST_PATH"; then
   cp ./README.md ./dist
