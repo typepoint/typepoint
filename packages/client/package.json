@@ -25,7 +25,7 @@
     "test": "../../support/test.sh client",
     "sync-and-ship": "../../support/syncAndShip.sh client",
     "sync-workspace-dependencies": "../../support/syncWorkspaceDependencies.sh client",
-    "validate": "yarn lint && yarn build && yarn test"
+    "validate": "../../support/validate.sh client"
   },
   "dependencies": {
     "@typepoint/shared": "3.0.2",
