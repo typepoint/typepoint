@@ -2,10 +2,6 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "baseUrl": "./src",
-    "jsx": "react",
-    "paths": {
-      "@typepoint/client": ["../client/src"],
-      "@typepoint/shared": ["../shared/src"]
-    }
+    "jsx": "react"
   }
 }

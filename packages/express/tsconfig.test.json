@@ -2,11 +2,7 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "baseUrl": "src",
-    "noEmit": true,
-    "paths": {
-      "@typepoint/server": ["../shared/src"],
-      "@typepoint/shared": ["../shared/src"]
-    }
+    "noEmit": true
   },
   "include": ["src/**/*.test.ts"]
 }

@@ -4,10 +4,7 @@
     "baseUrl": "src",
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "outDir": "dist",
-    "paths": {
-      "@typepoint/shared": ["../shared/src"]
-    }
+    "outDir": "dist"
   },
   "include": ["src/**/*.ts"],
   "exclude": ["src/**/*.test.ts"]
