@@ -71,3 +71,6 @@ tsconfig.tsbuildinfo
 
 # NextJS
 .next
+
+# Workspace license files - these are copied from root at build time
+packages/*/LICENSE

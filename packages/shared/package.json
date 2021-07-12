@@ -3,7 +3,13 @@
   "version": "3.0.3",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "license": "SEE LICENSE IN LICENSE",
+  "license": "ISC",
+  "files": [
+    "/dist",
+    "/src",
+    "/LICENSE",
+    "/README.md"
+  ],
   "author": "Benji <codeandcats@gmail.com> (https://github.com/codeandcats)",
   "contributors": [
     "Benji <codeandcats@gmail.com> (https://github.com/codeandcats)"
@@ -17,15 +23,11 @@
     "request"
   ],
   "scripts": {
-    "clean": "../../support/clean.sh shared",
-    "build": "../../support/build.sh shared",
-    "lint": "../../support/lint.sh shared",
-    "preship": "yarn validate",
-    "ship": "../../support/ship.sh shared",
-    "test": "../../support/test.sh shared",
-    "sync-and-ship": "../../support/syncAndShip.sh shared",
-    "sync-workspace-dependencies": "../../support/syncWorkspaceDependencies.sh shared",
-    "validate": "../../support/validate.sh shared"
+    "clean": "rm -rf ./dist ./LICENSE",
+    "build": "yarn clean && rollup -c && cp ../../LICENSE ./",
+    "lint": "yarn eslint -c '../../.eslintrc.js' ./src/**/* --ext .js,.jsx,.ts,.tsx --format visualstudio",
+    "test": "jest",
+    "validate": "yarn lint && yarn build && yarn test"
   },
   "devDependencies": {
     "@typepoint/fixtures": "^3.0.3"
