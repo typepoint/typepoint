@@ -6,6 +6,7 @@ export interface Logger {
   error(...args: any[]): void;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-empty-function
 const noop = () => { };
 
 export class NoopLogger {

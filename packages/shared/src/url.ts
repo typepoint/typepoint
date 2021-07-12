@@ -54,6 +54,7 @@ export interface QueryParameterValues {
 export function parseQueryString(queryString: string): QueryParameterValues {
   const result: QueryParameterValues = {};
 
+  // eslint-disable-next-line no-shadow
   enum Position {
     key,
     value

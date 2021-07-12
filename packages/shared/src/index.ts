@@ -104,6 +104,8 @@ export type NormalizeTypePointType<T> = (
   T extends ArrayOf<infer TElementType>
     ? TElementType[]
     : T extends Empty
+      // TODO: Revisit this {} type
+      // eslint-disable-next-line @typescript-eslint/ban-types
       ? ({} | undefined)
       : T
 );
