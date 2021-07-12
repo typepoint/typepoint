@@ -37,6 +37,7 @@ module.exports = {
         "ts": "never",
         "tsx": "never"
       }
-   ]
+   ],
+   '@typescript-eslint/explicit-module-boundary-types': 'off'
   },
 };
