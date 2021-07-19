@@ -2,7 +2,7 @@
   "name": "typepoint",
   "private": true,
   "author": "Benji <codeandcats@gmail.com> (https://github.com/codeandcats)",
-  "license": "SEE LICENSE IN LICENSE",
+  "license": "ISC",
   "contributors": [
     "Benji <codeandcats@gmail.com> (https://github.com/codeandcats)",
     "Laurence Dougal Myers (https://github.com/laurence-myers)"
@@ -51,6 +51,7 @@
     "release": "yarn lerna version --conventional-commits --yes"
   },
   "devDependencies": {
+    "@rollup/plugin-node-resolve": "13.0.2",
     "@rollup/plugin-typescript": "8.2.1",
     "@types/bluebird": "3.5.29",
     "@types/chalk": "2.2.0",

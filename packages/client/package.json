@@ -3,7 +3,13 @@
   "version": "3.0.3",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "license": "SEE LICENSE IN LICENSE",
+  "license": "ISC",
+  "files": [
+    "/dist",
+    "/src",
+    "/LICENSE",
+    "/README.md"
+  ],
   "author": "Benji <codeandcats@gmail.com> (https://github.com/codeandcats)",
   "contributors": [
     "Benji <codeandcats@gmail.com> (https://github.com/codeandcats)"
@@ -17,24 +23,19 @@
     "request"
   ],
   "scripts": {
-    "clean": "../../support/clean.sh client",
-    "build": "../../support/build.sh client",
-    "lint": "../../support/lint.sh client",
-    "preship": "yarn validate",
-    "ship": "../../support/ship.sh client",
-    "test": "../../support/test.sh client",
-    "sync-and-ship": "../../support/syncAndShip.sh client",
-    "sync-workspace-dependencies": "../../support/syncWorkspaceDependencies.sh client",
-    "validate": "../../support/validate.sh client"
-  },
-  "dependencies": {
-    "axios": "0.21.1"
+    "clean": "rm -rf ./dist ./LICENSE",
+    "build": "yarn clean && rollup -c && cp ../../LICENSE ./",
+    "lint": "yarn eslint -c '../../.eslintrc.js' ./src/**/* --ext .js,.jsx,.ts,.tsx --format visualstudio",
+    "test": "jest",
+    "validate": "yarn lint && yarn build && yarn test"
   },
   "devDependencies": {
     "@typepoint/fixtures": "^3.0.3",
-    "@typepoint/shared": "^3.0.3"
+    "@typepoint/shared": "^3.0.3",
+    "axios": "0.21.1"
   },
   "peerDependencies": {
-    "@typepoint/shared": "3.0.2"
+    "@typepoint/shared": "3.0.2",
+    "axios": "0.21.1"
   }
 }

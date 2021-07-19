@@ -1,4 +1,4 @@
-import axios, {
+import type {
   AxiosInstance, AxiosRequestConfig, Method, AxiosResponse,
 } from 'axios';
 import {
@@ -9,6 +9,7 @@ import {
   GetEndpointDefinitionResponseBody,
   NormalizeTypePointType,
 } from '@typepoint/shared';
+import * as Axios from 'axios';
 
 export interface TypePointClientResponse<TBody> {
   body: NormalizeTypePointType<TBody>;
@@ -79,7 +80,7 @@ export class TypePointClient {
   private readonly server: string;
 
   constructor(options?: TypePointClientOptions) {
-    this.axios = (options && options.axios) || axios.create();
+    this.axios = (options && options.axios) || Axios.default.create();
     this.server = (options && options.server) || '';
   }
 
