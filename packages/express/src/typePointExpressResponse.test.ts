@@ -18,9 +18,11 @@ type ResponseBody<TBody> = (
 
 describe('server/express/typePointExpressResponse', () => {
   describe('isContentTypeJson', () => {
-    expect(isContentTypeJson('application/json')).toBe(true);
-    expect(isContentTypeJson('text/html')).toBe(false);
-    expect(isContentTypeJson('')).toBe(false);
+    it('should return true if the content-type is json', () => {
+      expect(isContentTypeJson('application/json')).toBe(true);
+      expect(isContentTypeJson('text/html')).toBe(false);
+      expect(isContentTypeJson('')).toBe(false);
+    });
   });
 
   describe('TypePointExpressResponse', () => {

@@ -24,7 +24,7 @@
   ],
   "scripts": {
     "clean": "rm -rf ./dist ./LICENSE",
-    "build": "yarn clean && rollup -c && cp ../../LICENSE ./",
+    "build": "yarn clean && webpack && cp ../../LICENSE ./",
     "lint": "yarn eslint -c '../../.eslintrc.js' ./src/**/* --ext .js,.jsx,.ts,.tsx --format visualstudio",
     "test": "jest",
     "validate": "yarn lint && yarn build && yarn test"
@@ -32,10 +32,15 @@
   "devDependencies": {
     "@typepoint/fixtures": "^3.0.3",
     "@typepoint/shared": "^3.0.3",
-    "axios": "0.21.1"
+    "axios": "0.21.1",
+    "terser-webpack-plugin": "^5.1.4",
+    "ts-loader": "9.2.4",
+    "typescript": "4.3.5",
+    "webpack": "5.47.1",
+    "webpack-cli": "4.7.2"
   },
   "peerDependencies": {
-    "@typepoint/shared": "3.0.2",
+    "@typepoint/shared": "3.0.3",
     "axios": "0.21.1"
   }
 }

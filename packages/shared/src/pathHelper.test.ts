@@ -572,8 +572,10 @@ describe('shared/pathHelper', () => {
         const helper = new PathHelper(testCase.input.pattern);
         const result = helper.parse(testCase.input.path);
         if (testCase.expected === undefined) {
+          // eslint-disable-next-line jest/no-conditional-expect
           expect(result).toBeUndefined();
         } else {
+          // eslint-disable-next-line jest/no-conditional-expect
           expect(result).toEqual(testCase.expected);
         }
       });

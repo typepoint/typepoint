@@ -1,3 +1,4 @@
+/* eslint-disable jest/expect-expect */
 import axios, { AxiosInstance } from 'axios';
 import {
   defineEndpoint,
@@ -160,9 +161,11 @@ describe('TypePointClient', () => {
     assert<UnionIncludesExact<SecondParam, undefined>>();
 
     type EmptyParamsOptions = FetchParamsOptions<Empty>;
+    // eslint-disable-next-line @typescript-eslint/ban-types
     assert<Equal<EmptyParamsOptions, {}>>();
 
     type EmptyBodyOptions = FetchBodyOptions<Empty>;
+    // eslint-disable-next-line @typescript-eslint/ban-types
     assert<Equal<EmptyBodyOptions, {}>>();
   });
 
@@ -174,6 +177,8 @@ describe('TypePointClient', () => {
     // Ensure 2nd param cannot be undefined
     assert<Not<UnionIncludesExact<SecondParam, undefined>>>();
 
+    // TODO: Revisit this lint
+    // eslint-disable-next-line @typescript-eslint/ban-types
     assert<Extends<SecondParam, {} | { params: any } | { body: any } | { params: any; body: any }>>();
 
     type UpdateTodoParams = {
@@ -182,7 +187,11 @@ describe('TypePointClient', () => {
 
     type UpdateTodoParamsOptions = FetchParamsOptions<UpdateTodoParams>;
 
+    // TODO: Revisit this lint
+    // eslint-disable-next-line @typescript-eslint/ban-types
     assert<Not<Equal<UpdateTodoParamsOptions, {}>>>();
+    // TODO: Revisit this lint
+    // eslint-disable-next-line @typescript-eslint/ban-types
     assert<Not<Equal<UpdateTodoParamsOptions, { params: { } }>>>();
     assert<Not<Equal<UpdateTodoParamsOptions, { params: { id?: string } }>>>();
 
@@ -194,7 +203,11 @@ describe('TypePointClient', () => {
     }
 
     type UpdateTodoBodyOptions = FetchBodyOptions<UpdateTodoBody>;
+    // TODO: Revisit this lint
+    // eslint-disable-next-line @typescript-eslint/ban-types
     assert<Not<Equal<UpdateTodoBodyOptions, {}>>>();
+    // TODO: Revisit this lint
+    // eslint-disable-next-line @typescript-eslint/ban-types
     assert<Not<Equal<UpdateTodoBodyOptions, { body: { } }>>>();
     assert<Not<Equal<UpdateTodoBodyOptions, { body: { title?: string } }>>>();
 

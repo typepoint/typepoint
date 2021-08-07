@@ -1,4 +1,6 @@
-import * as React from 'react';
+import React, {
+  createContext, useCallback, useContext, useEffect, useMemo, useState,
+} from 'react';
 import {
   Empty,
   EndpointDefinition,
@@ -12,10 +14,6 @@ import {
   TypePointClientResponseError,
 } from '@typepoint/client';
 import { parse, stringify } from './json';
-
-const {
-  createContext, useCallback, useContext, useEffect, useState,
-} = React;
 
 function notNil<T>(value: T): Exclude<T, undefined | null> {
   // istanbul ignore next
@@ -101,9 +99,11 @@ export const useEndpointLazily = <TEndpointDefinition extends EndpointDefinition
     }, [context, endpointDefinition],
   );
 
-  return {
+  const result = useMemo(() => ({
     fetch, loading, error, response,
-  };
+  }), [fetch, loading, error, response]);
+
+  return result;
 };
 
 interface UseEndpointFunctionResult<TResponseBody> {
@@ -129,8 +129,6 @@ export const useEndpoint = (<TEndpointDefinition extends EndpointDefinition<any,
   endpointDefinition: TEndpointDefinition,
   options?: TypePointClientFetchOptions<TEndpointDefinition>,
 ) => {
-  useEndpointLazily(endpointDefinition);
-
   const {
     fetch, loading, error, response,
   } = useEndpointLazily(endpointDefinition);
@@ -146,10 +144,17 @@ export const useEndpoint = (<TEndpointDefinition extends EndpointDefinition<any,
     refetch();
   }, [refetch]);
 
-  return {
+  const result = useMemo(() => ({
     refetch,
     loading,
     error,
     response,
-  };
+  }), [
+    refetch,
+    loading,
+    error,
+    response,
+  ]);
+
+  return result;
 }) as UseEndpointFunction;

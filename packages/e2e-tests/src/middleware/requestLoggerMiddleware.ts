@@ -14,4 +14,4 @@ export const requestLoggerMiddleware = createMiddleware(async ({ request, respon
       `${request.method} ${request.url} - ${responseTime}${errorMessage}`,
     );
   }
-});
+}, 'requestLoggerMiddleware');

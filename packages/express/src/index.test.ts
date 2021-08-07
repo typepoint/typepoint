@@ -31,6 +31,9 @@ import { mocked } from 'ts-jest/utils';
 import { toMiddleware } from '.';
 import { createContext, getLogger } from './utils';
 
+// eslint-disable-next-line @typescript-eslint/no-empty-function
+const noop = () => {};
+
 jest.mock('./utils', () => {
   const originalUtils = jest.requireActual('./utils');
 
@@ -99,7 +102,7 @@ describe('server/express', () => {
     beforeEach(() => {
       logger = new TestLogger();
 
-      jest.spyOn(console, 'warn').mockImplementation(() => {});
+      jest.spyOn(console, 'warn').mockImplementation(noop);
 
       const middlewareDelayInMs = 100;
 
@@ -205,11 +208,11 @@ describe('server/express', () => {
         });
         res = partialOf<express.Response>({
           json: jest.fn(),
-          end: () => {},
+          end: noop,
         });
       });
 
-      const runExpressMiddlewareAsync = async (next = () => {}) => {
+      const runExpressMiddlewareAsync = async (next = noop) => {
         await new Promise<void>((resolve) => {
           res.end = () => resolve();
           expressMiddleware(req, res, () => {

@@ -18,11 +18,8 @@ This package contains utilities and types used by both `@typepoint/client` and `
 
 ## Install
 
-TypePoint requires at least TypeScript v3.6.4.
-
 ```sh
 npm add @typepoint/shared
-npm add typescript -D
 ```
 
 ## Guide

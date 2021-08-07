@@ -27,10 +27,14 @@ export interface TypePointClientOptions {
 export type EndpointDefinitionWithNoParamsOrBody = EndpointDefinition<Empty, Empty, any>;
 
 export type FetchParamsOptions<TRequestParams extends Record<string, any>> = (
+  // TODO: Revisit this lint
+  // eslint-disable-next-line @typescript-eslint/ban-types
   TRequestParams extends Empty ? {} : { params: NormalizeTypePointType<TRequestParams> }
 );
 
 export type FetchBodyOptions<TRequestBody extends Record<string, any>> = (
+  // TODO: Revisit this lint
+  // eslint-disable-next-line @typescript-eslint/ban-types
   TRequestBody extends Empty ? {} : { body: NormalizeTypePointType<TRequestBody> }
 );
 

@@ -14,16 +14,12 @@
 
 # TypePoint React
 
-React helpers for TypePoint.
+React hooks for TypePoint.
 
 ## Install
 
-TypePoint requires at least TypeScript v3.6.4.
-
 ```sh
-npm add @typepoint/react
-npm add react@^16.11.0
-npm add typescript@^3.6.4 -D
+npm add @typepoint/react @typepoint/client @typepoint/shared react@^17
 ```
 
 ## Guide

@@ -10,6 +10,9 @@ import {
 
 const { useCallback, useState } = React;
 
+// eslint-disable-next-line @typescript-eslint/no-empty-function
+const noop = () => {};
+
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 describe('useEndpoint', () => {
@@ -71,7 +74,7 @@ describe('useEndpoint', () => {
       );
     };
 
-    jest.spyOn(console, 'error').mockImplementation(() => {});
+    jest.spyOn(console, 'error').mockImplementation(noop);
   });
 
   it('should error if no TypePointProvider has been used further up the component tree', () => {
@@ -225,7 +228,7 @@ describe('useEndpointLazily', () => {
       );
     };
 
-    jest.spyOn(console, 'error').mockImplementation(() => {});
+    jest.spyOn(console, 'error').mockImplementation(noop);
   });
 
   it('should allow waiting on promise that resolves', async () => {

@@ -11,6 +11,8 @@ module.exports = {
     },
   },
   rules: {
+    "no-use-before-define": "off",
+    "@typescript-eslint/no-use-before-define": ["error"],
     'no-param-reassign': 'off',
     'react/jsx-filename-extension': [2, { extensions: ['.js', '.jsx', '.ts', '.tsx'] }],
     'import/no-extraneous-dependencies': 'off', // [2, { devDependencies: ['**/*.test.tsx', '**/*.test.ts'] }],

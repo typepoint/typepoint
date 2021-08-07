@@ -16,8 +16,5 @@ jobs:
       - name: Install Dependencies
         run: yarn install --frozen-lockfile
 
-      - name: Symlink Local Dependencies
-        run: yarn lerna bootstrap --hoist
-
       - name: Build, Lint, Test
         run: yarn validate

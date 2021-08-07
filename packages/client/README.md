@@ -18,11 +18,8 @@ TypePoint client library for making type-safe requests to a server.
 
 ## Install
 
-TypePoint requires at least TypeScript v3.6.4.
-
 ```sh
-npm add @typepoint/client
-npm add typescript -D
+npm add @typepoint/client axios
 ```
 
 ## Guide

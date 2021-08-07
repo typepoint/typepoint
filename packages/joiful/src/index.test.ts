@@ -88,7 +88,7 @@ describe('index', () => {
         };
         expect(validateAndTransform(input, Todo)).toHaveProperty(
           ['validationError', 'message'],
-          'child "title" fails because ["title" is not allowed to be empty]',
+          '"title" is not allowed to be empty',
         );
       });
     });
@@ -167,7 +167,7 @@ describe('index', () => {
       }];
       expect(validateAndTransform(input, arrayOf(Todo))).toHaveProperty(
         ['validationError', 'message'],
-        '"value" at position 0 fails because [child "title" fails because ["title" is not allowed to be empty]]',
+        '"[0].title" is not allowed to be empty',
       );
     });
 

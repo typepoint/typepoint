@@ -4,11 +4,11 @@
   "private": true,
   "main": "src/index.ts",
   "types": "src/index",
-  "license": "SEE LICENSE IN LICENSE",
+  "license": "ISC",
   "scripts": {
-    "clean": "../../support/clean.sh fixtures",
-    "build": "../../support/build.sh fixtures",
-    "lint": "../../support/lint.sh fixtures",
-    "validate": "../../support/validate.sh fixtures"
+    "clean": "rm -rf ./dist",
+    "build": "yarn clean && tsc -p ./tsconfig.main.json --noEmit false",
+    "lint": "yarn eslint -c '../../.eslintrc.js' ./src/**/* --ext .js,.jsx,.ts,.tsx --format visualstudio",
+    "validate": "yarn lint && yarn build"
   }
 }

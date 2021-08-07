@@ -18,12 +18,10 @@ Joiful-based validation for TypePoint.
 
 ## Install
 
-TypePoint requires at least TypeScript v3.6.4.
+Install `@typepoint/joiful` and it's peer dependencies.
 
 ```sh
-npm add joiful
-npm add @typepoint/joiful
-npm add typescript -D
+npm add @typepoint/joiful joiful  @typepoint/server @typepoint/shared reflect-metadata
 ```
 
 ## Guide

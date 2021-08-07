@@ -3,7 +3,13 @@
   "version": "3.0.3",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "license": "SEE LICENSE IN LICENSE",
+  "license": "ISC",
+  "files": [
+    "/dist",
+    "/src",
+    "/LICENSE",
+    "/README.md"
+  ],
   "author": "Benji <codeandcats@gmail.com> (https://github.com/codeandcats)",
   "contributors": [
     "Benji <codeandcats@gmail.com> (https://github.com/codeandcats)"
@@ -17,26 +23,22 @@
     "request"
   ],
   "scripts": {
-    "clean": "../../support/clean.sh joiful",
-    "build": "../../support/build.sh joiful",
-    "lint": "../../support/lint.sh joiful",
-    "preship": "yarn validate",
-    "ship": "../../support/ship.sh joiful",
-    "test": "../../support/test.sh joiful",
-    "sync-and-ship": "../../support/syncAndShip.sh joiful",
-    "sync-workspace-dependencies": "../../support/syncWorkspaceDependencies.sh joiful",
-    "validate": "../../support/validate.sh joiful"
+    "clean": "rm -rf ./dist ./LICENSE",
+    "build": "yarn clean && tsc -p ./tsconfig.main.json --noEmit false && cp ../../LICENSE ./",
+    "lint": "yarn eslint -c '../../.eslintrc.js' ./src/**/* --ext .js,.jsx,.ts,.tsx --format visualstudio",
+    "test": "jest",
+    "validate": "yarn lint && yarn build && yarn test"
   },
   "peerDependencies": {
-    "@typepoint/server": "3.0.2",
-    "@typepoint/shared": "3.0.2",
-    "joiful": "^2.0.0",
+    "@typepoint/server": "3.0.3",
+    "@typepoint/shared": "3.0.3",
+    "joiful": "^3.0.2",
     "reflect-metadata": "^0.1.13"
   },
   "devDependencies": {
     "@typepoint/server": "^3.0.3",
     "@typepoint/shared": "^3.0.3",
-    "joiful": "^2.0.0",
+    "joiful": "^3.0.2",
     "reflect-metadata": "^0.1.13"
   }
 }

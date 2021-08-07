@@ -18,9 +18,10 @@ This library creates [express](https://expressjs.com/) compatible middleware fro
 
 ## Install
 
+Install `@typepoint/express` and it's peer dependencies.
+
 ```sh
-npm add express
-npm add @typepoint/express
+npm add @typepoint/express express @typepoint/shared @typepoint/server
 ```
 
 ## Guide

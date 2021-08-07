@@ -167,7 +167,6 @@ describe('api/Sample Server', () => {
     }
 
     expect(error).toHaveProperty(['response', 'statusCode'], 400);
-    expect(error).toHaveProperty(['response', 'body', 'name'], 'ValidationError');
     expect(error).toHaveProperty(['response', 'body', 'details', '0', 'path'], ['title']);
     expect(error).toHaveProperty(['response', 'body', 'details', '0', 'message'], '"title" is not allowed to be empty');
   });

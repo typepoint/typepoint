@@ -4,7 +4,8 @@
     "declaration": true,
     "experimentalDecorators": false,
     "emitDecoratorMetadata": false,
-    "outDir": "dist"
+    "outDir": "dist",
+    "noEmit": false
   },
   "include": ["src/**/*.ts"],
   "exclude": ["src/**/*.test.ts"]

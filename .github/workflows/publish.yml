@@ -1,8 +1,8 @@
 name: Publish
 
 on:
-  release:
-    types: [created]
+  push:
+    branches: [master]
 
 jobs:
   validate_and_publish:
@@ -19,13 +19,93 @@ jobs:
       - name: Install Dependencies
         run: yarn install --frozen-lockfile
 
-      - name: Symlink Local Dependencies
-        run: yarn lerna bootstrap --hoist
-
       - name: Build, Lint, Test
         run: yarn run validate
 
-      - name: Pubish Release
+      - name: Upload Coverage - Shared
+        uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: ./packages/shared/coverage/lcov.info
+          flags: shared
+          name: shared
+          fail_ci_if_error: false
+
+      - name: Delay between coverage uploads
+        uses: jakejarvis/wait-action@master
+        with:
+          time: '1s'
+
+      - name: Upload Coverage - Server
+        uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: ./packages/server/coverage/lcov.info
+          flags: server
+          name: server
+          fail_ci_if_error: false
+
+      - name: Delay between coverage uploads
+        uses: jakejarvis/wait-action@master
+        with:
+          time: '1s'
+
+      - name: Upload Coverage - Joiful
+        uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: ./packages/joiful/coverage/lcov.info
+          flags: joiful
+          name: joiful
+          fail_ci_if_error: false
+
+      - name: Delay between coverage uploads
+        uses: jakejarvis/wait-action@master
+        with:
+          time: '1s'
+
+      - name: Upload Coverage - Express
+        uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: ./packages/express/coverage/lcov.info
+          flags: express
+          name: express
+          fail_ci_if_error: false
+
+      - name: Delay between coverage uploads
+        uses: jakejarvis/wait-action@master
+        with:
+          time: '1s'
+
+      - name: Upload Coverage - Client
+        uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: ./packages/client/coverage/lcov.info
+          flags: client
+          name: client
+          fail_ci_if_error: false
+
+      - name: Delay between coverage uploads
+        uses: jakejarvis/wait-action@master
+        with:
+          time: '1s'
+
+      - name: Upload Coverage - React
+        uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: ./packages/react/coverage/lcov.info
+          flags: react
+          name: react
+          fail_ci_if_error: false
+
+      - name: Create Release
+        if: ${{ false }}
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: yarn lerna publish --yes
+        run: |
+          git config user.email "release-bot@typepoint.github.io"
+          git config user.name "Release Bot"
+          yarn lerna publish --yes

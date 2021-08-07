@@ -3,7 +3,13 @@
   "version": "3.0.3",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "license": "SEE LICENSE IN LICENSE",
+  "license": "ISC",
+  "files": [
+    "/dist",
+    "/src",
+    "/LICENSE",
+    "/README.md"
+  ],
   "author": "Benji <codeandcats@gmail.com> (https://github.com/codeandcats)",
   "contributors": [
     "Benji <codeandcats@gmail.com> (https://github.com/codeandcats)"
@@ -17,27 +23,30 @@
     "request"
   ],
   "scripts": {
-    "clean": "../../support/clean.sh react",
-    "build": "../../support/build.sh react",
-    "lint": "../../support/lint.sh react",
-    "preship": "yarn validate",
-    "ship": "../../support/ship.sh react",
-    "test": "../../support/test.sh react",
-    "sync-and-ship": "../../support/syncAndShip.sh react",
-    "sync-workspace-dependencies": "../../support/syncWorkspaceDependencies.sh react",
-    "validate": "../../support/validate.sh react"
+    "clean": "rm -rf ./dist ./LICENSE",
+    "build": "yarn clean && webpack && cp ../../LICENSE ./",
+    "lint": "yarn eslint -c '../../.eslintrc.js' ./src/**/* --ext .js,.jsx,.ts,.tsx --format visualstudio",
+    "test": "jest",
+    "validate": "yarn lint && yarn build && yarn test"
   },
   "devDependencies": {
     "@testing-library/react": "9.3.2",
     "@typepoint/client": "^3.0.3",
     "@typepoint/fixtures": "^3.0.3",
     "@typepoint/shared": "^3.0.3",
-    "react": "16.13.0",
-    "react-dom": "16.13.0"
+    "http-status-codes": "2.1.4",
+    "react": "^17",
+    "react-dom": "^17",
+    "terser-webpack-plugin": "^5.1.4",
+    "ts-loader": "9.2.4",
+    "typescript": "4.3.5",
+    "webpack": "5.47.1",
+    "webpack-cli": "4.7.2"
   },
   "peerDependencies": {
-    "@typepoint/client": "3.0.2",
-    "@typepoint/shared": "3.0.2",
-    "react": "^16.13.0 || ^17"
+    "@typepoint/client": "3.0.3",
+    "@typepoint/shared": "3.0.3",
+    "react": "^16.13.0 || ^17",
+    "react-dom": "^16.13.0 || ^17"
   }
 }
