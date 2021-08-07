@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [4.0.1](https://github.com/typepoint/typepoint/compare/v4.0.0...v4.0.1) (2021-08-07)
+
+
+### Bug Fixes
+
+* bump peer dependency versions ([2397ccb](https://github.com/typepoint/typepoint/commit/2397ccb05c8c7540212ce2743f2d7db1d2e4380a))
+
+
+
+
+
 # [4.0.0](https://github.com/typepoint/typepoint/compare/v3.0.3...v4.0.0) (2021-08-07)
 
 
