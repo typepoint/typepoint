@@ -1,6 +1,6 @@
 {
   "name": "@typepoint/e2e-tests",
-  "version": "3.0.3",
+  "version": "4.0.0",
   "private": true,
   "license": "ISC",
   "scripts": {
@@ -11,9 +11,9 @@
     "validate": "yarn lint && yarn build && yarn test"
   },
   "dependencies": {
-    "@typepoint/client": "^3.0.3",
-    "@typepoint/joiful": "^3.0.3",
-    "@typepoint/shared": "^3.0.3",
+    "@typepoint/client": "^4.0.0",
+    "@typepoint/joiful": "^4.0.0",
+    "@typepoint/shared": "^4.0.0",
     "body-parser": "1.19.0",
     "express": "4.17.1",
     "get-port": "5.0.0",
@@ -21,9 +21,9 @@
     "joiful": "3.0.2"
   },
   "devDependencies": {
-    "@types/node": "12.11.1",
     "@types/body-parser": "1.19.1",
     "@types/express": "4.17.13",
+    "@types/node": "12.11.1",
     "reflect-metadata": "0.1.13"
   }
 }

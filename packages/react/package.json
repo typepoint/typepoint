@@ -1,6 +1,6 @@
 {
   "name": "@typepoint/react",
-  "version": "3.0.3",
+  "version": "4.0.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "license": "ISC",
@@ -31,9 +31,9 @@
   },
   "devDependencies": {
     "@testing-library/react": "9.3.2",
-    "@typepoint/client": "^3.0.3",
-    "@typepoint/fixtures": "^3.0.3",
-    "@typepoint/shared": "^3.0.3",
+    "@typepoint/client": "^4.0.0",
+    "@typepoint/fixtures": "^4.0.0",
+    "@typepoint/shared": "^4.0.0",
     "http-status-codes": "2.1.4",
     "react": "^17",
     "react-dom": "^17",
