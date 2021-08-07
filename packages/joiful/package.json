@@ -30,14 +30,14 @@
     "validate": "yarn lint && yarn build && yarn test"
   },
   "peerDependencies": {
-    "@typepoint/server": "3.0.3",
-    "@typepoint/shared": "3.0.3",
+    "@typepoint/server": "4.0.0",
+    "@typepoint/shared": "4.0.0",
     "joiful": "^3.0.2",
     "reflect-metadata": "^0.1.13"
   },
   "devDependencies": {
-    "@typepoint/server": "^4.0.0",
-    "@typepoint/shared": "^4.0.0",
+    "@typepoint/server": "4.0.0",
+    "@typepoint/shared": "4.0.0",
     "joiful": "^3.0.2",
     "reflect-metadata": "^0.1.13"
   }

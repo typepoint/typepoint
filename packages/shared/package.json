@@ -30,7 +30,7 @@
     "validate": "yarn lint && yarn build && yarn test"
   },
   "devDependencies": {
-    "@typepoint/fixtures": "^4.0.0",
+    "@typepoint/fixtures": "4.0.0",
     "terser-webpack-plugin": "^5.1.4",
     "ts-loader": "^9.2.4",
     "typescript": "4.3.5",
