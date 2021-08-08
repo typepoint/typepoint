@@ -32,7 +32,7 @@
   "devDependencies": {
     "@typepoint/fixtures": "4.0.4",
     "@typepoint/shared": "4.0.4",
-    "axios": "0.21.1",
+    "axios": "^0.21.1",
     "terser-webpack-plugin": "^5.1.4",
     "ts-loader": "9.2.4",
     "typescript": "4.3.5",
@@ -41,6 +41,6 @@
   },
   "peerDependencies": {
     "@typepoint/shared": "4.0.4",
-    "axios": "0.21.1"
+    "axios": "^0.21.1"
   }
 }
