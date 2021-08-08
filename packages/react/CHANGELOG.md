@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 4.0.5 (2021-08-08)
+
+
+### Bug Fixes
+
+* update client axios peer version range ([5d93f32](https://github.com/typepoint/typepoint/commit/5d93f32df0fdb022b923931f7580eea46716df30))
+
+
+
+
+
 ## 4.0.4 (2021-08-08)
 
 **Note:** Version bump only for package @typepoint/react

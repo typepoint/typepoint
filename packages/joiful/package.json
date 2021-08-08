@@ -1,6 +1,6 @@
 {
   "name": "@typepoint/joiful",
-  "version": "4.0.4",
+  "version": "4.0.5",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "license": "ISC",
@@ -30,14 +30,14 @@
     "validate": "yarn lint && yarn build && yarn test"
   },
   "peerDependencies": {
-    "@typepoint/server": "4.0.4",
-    "@typepoint/shared": "4.0.4",
+    "@typepoint/server": "4.0.5",
+    "@typepoint/shared": "4.0.5",
     "joiful": "^3.0.2",
     "reflect-metadata": "^0.1.13"
   },
   "devDependencies": {
-    "@typepoint/server": "4.0.4",
-    "@typepoint/shared": "4.0.4",
+    "@typepoint/server": "4.0.5",
+    "@typepoint/shared": "4.0.5",
     "joiful": "^3.0.2",
     "reflect-metadata": "^0.1.13"
   }
