@@ -1,6 +1,6 @@
 {
   "name": "@typepoint/express",
-  "version": "4.0.1",
+  "version": "4.0.2",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "license": "ISC",
@@ -34,17 +34,17 @@
     "http-status-codes": "2.1.4"
   },
   "devDependencies": {
-    "@typepoint/fixtures": "4.0.0",
-    "@typepoint/server": "4.0.1",
-    "@typepoint/shared": "4.0.1",
+    "@typepoint/fixtures": "4.0.2",
+    "@typepoint/server": "4.0.2",
+    "@typepoint/shared": "4.0.2",
     "@types/body-parser": "1.19.1",
     "@types/clone": "2.1.1",
     "@types/express": "4.17.13",
     "express": "^4.17.1"
   },
   "peerDependencies": {
-    "@typepoint/server": "4.0.1",
-    "@typepoint/shared": "4.0.1",
+    "@typepoint/server": "4.0.2",
+    "@typepoint/shared": "4.0.2",
     "express": "^4.17.1"
   },
   "resolution": {
