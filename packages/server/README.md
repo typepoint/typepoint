@@ -18,11 +18,10 @@ TypePoint server utilties for handling strongly typed API requests.
 
 ## Install
 
-TypePoint requires at least TypeScript v3.6.4.
+Install `@typepoint/server` and it's peer dependencies.
 
 ```sh
-npm add @typepoint/server
-npm add typescript -D
+npm add @typepoint/server @typepoint/shared
 ```
 
 ## Guide

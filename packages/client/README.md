@@ -18,8 +18,10 @@ TypePoint client library for making type-safe requests to a server.
 
 ## Install
 
+Install `@typepoint/client` and it's peer dependencies.
+
 ```sh
-npm add @typepoint/client axios
+npm add @typepoint/client @typepoint/shared axios
 ```
 
 ## Guide

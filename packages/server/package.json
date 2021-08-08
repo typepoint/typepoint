@@ -35,10 +35,10 @@
   },
   "devDependencies": {
     "@typepoint/fixtures": "4.0.0",
-    "@typepoint/shared": "^4.0.1",
+    "@typepoint/shared": "4.0.1",
     "@types/clone": "0.1.30"
   },
   "peerDependencies": {
-    "@typepoint/shared": "4.0.0"
+    "@typepoint/shared": "4.0.1"
   }
 }

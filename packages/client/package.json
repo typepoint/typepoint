@@ -31,7 +31,7 @@
   },
   "devDependencies": {
     "@typepoint/fixtures": "4.0.0",
-    "@typepoint/shared": "^4.0.1",
+    "@typepoint/shared": "4.0.1",
     "axios": "0.21.1",
     "terser-webpack-plugin": "^5.1.4",
     "ts-loader": "9.2.4",
@@ -40,7 +40,7 @@
     "webpack-cli": "4.7.2"
   },
   "peerDependencies": {
-    "@typepoint/shared": "4.0.0",
+    "@typepoint/shared": "4.0.1",
     "axios": "0.21.1"
   }
 }

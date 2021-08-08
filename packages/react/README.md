@@ -18,8 +18,10 @@ React hooks for TypePoint.
 
 ## Install
 
+Install `@typepoint/react` and it's peer dependencies.
+
 ```sh
-npm add @typepoint/react @typepoint/client @typepoint/shared react@^17
+npm add @typepoint/react @typepoint/client @typepoint/shared react@^17 react-dom@^17
 ```
 
 ## Guide
