@@ -39,7 +39,7 @@ jobs:
       - name: Delay between coverage uploads
         uses: jakejarvis/wait-action@master
         with:
-          time: '1s'
+          time: '2s'
 
       - name: Upload Coverage - Server
         uses: codecov/codecov-action@v1
@@ -53,7 +53,7 @@ jobs:
       - name: Delay between coverage uploads
         uses: jakejarvis/wait-action@master
         with:
-          time: '1s'
+          time: '2s'
 
       - name: Upload Coverage - Joiful
         uses: codecov/codecov-action@v1
@@ -67,7 +67,7 @@ jobs:
       - name: Delay between coverage uploads
         uses: jakejarvis/wait-action@master
         with:
-          time: '1s'
+          time: '2s'
 
       - name: Upload Coverage - Express
         uses: codecov/codecov-action@v1
@@ -81,7 +81,7 @@ jobs:
       - name: Delay between coverage uploads
         uses: jakejarvis/wait-action@master
         with:
-          time: '1s'
+          time: '2s'
 
       - name: Upload Coverage - Client
         uses: codecov/codecov-action@v1
@@ -95,7 +95,7 @@ jobs:
       - name: Delay between coverage uploads
         uses: jakejarvis/wait-action@master
         with:
-          time: '1s'
+          time: '2s'
 
       - name: Upload Coverage - React
         uses: codecov/codecov-action@v1
