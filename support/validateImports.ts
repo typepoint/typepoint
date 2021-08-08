@@ -13,9 +13,8 @@ import * as Bluebird from 'bluebird';
 import { flatten } from 'lodash';
 import * as chalk from 'chalk';
 import * as glob from 'glob';
-import { getWorkspacesMap } from './common';
-
 import lineColumn = require('line-column');
+import { getWorkspacesMap } from './common';
 
 async function findFiles(pattern: string) {
   return new Promise<string[]>((resolve, reject) => {

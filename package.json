@@ -50,7 +50,8 @@
     "list-workspaces": "ts-node ./support/listWorkspaces.ts",
     "prebuild": "yarn run clean",
     "validate-imports": "ts-node ./support/validateImports.ts",
-    "validate": "yarn validate-imports && lerna run validate"
+    "validate": "yarn validate-imports && lerna run validate",
+    "version": "ts-node ./support/updatePeerDependencyVersions.ts"
   },
   "devDependencies": {
     "@types/bluebird": "3.5.29",

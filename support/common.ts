@@ -16,6 +16,7 @@ export type Package = {
   dependencies?: PackageDependencies;
   devDependencies?: PackageDependencies;
   peerDependencies?: PackageDependencies;
+  [key: string]: any;
 }
 
 export type RequiredWorkspace = {
@@ -94,7 +95,6 @@ function getWorkspaceDependencies(workspacesMap: WorkspacesMap, workspace: Works
     })
     .filter(Boolean) as RequiredWorkspace[];
 
-
   return requiredWorkspaces;
 }
 
@@ -115,8 +115,9 @@ export async function getWorkspacesMap(): Promise<WorkspacesMap> {
       if (err) {
         return reject(err);
       }
+      const json = stdout.replace(/^yarn workspaces v.+\n/im, '').replace(/Done in .+/gim, '');
       try {
-        const result = JSON.parse(stdout) as YarnWorkspacesInfo;
+        const result = JSON.parse(json) as YarnWorkspacesInfo;
         return resolve(result);
       } catch (err2) {
         return reject(err2);
