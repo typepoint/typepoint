@@ -112,4 +112,4 @@ jobs:
         run: |
           git config user.email "release-bot@typepoint.github.io"
           git config user.name "Release Bot"
-          yarn lerna publish --yes --conventional-commits
+          yarn lerna publish --yes --conventional-commits --no-verify-access
