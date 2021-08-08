@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 4.1.0 (2021-08-08)
+
+
+### Features
+
+* return statusCode and body directly from useEndpoint and useEndpointLazily hooks ([ba5587d](https://github.com/typepoint/typepoint/commit/ba5587d8209d7537d284de22291a41afbc6088ec))
+
+
+
+
+
 ## 4.0.5 (2021-08-08)
 
 
