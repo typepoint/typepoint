@@ -99,9 +99,11 @@ export const useEndpointLazily = <TEndpointDefinition extends EndpointDefinition
     }, [context, endpointDefinition],
   );
 
+  const { statusCode, statusText, body } = response ?? {};
+
   const result = useMemo(() => ({
-    fetch, loading, error, response,
-  }), [fetch, loading, error, response]);
+    fetch, loading, error, response, statusCode, statusText, body,
+  }), [fetch, loading, error, response, statusCode, statusText, body]);
 
   return result;
 };
@@ -111,6 +113,9 @@ interface UseEndpointFunctionResult<TResponseBody> {
   loading: boolean;
   error?: TypePointClientResponseError | undefined;
   response?: TypePointClientResponse<TResponseBody>;
+  statusCode?: number;
+  statusText?: string;
+  body?: TResponseBody;
 }
 
 interface UseEndpointFunction {
@@ -130,7 +135,7 @@ export const useEndpoint = (<TEndpointDefinition extends EndpointDefinition<any,
   options?: TypePointClientFetchOptions<TEndpointDefinition>,
 ) => {
   const {
-    fetch, loading, error, response,
+    fetch, loading, error, response, statusCode, statusText, body,
   } = useEndpointLazily(endpointDefinition);
 
   const optionsString = stringify(options);
@@ -149,11 +154,17 @@ export const useEndpoint = (<TEndpointDefinition extends EndpointDefinition<any,
     loading,
     error,
     response,
+    statusCode,
+    statusText,
+    body,
   }), [
     refetch,
     loading,
     error,
     response,
+    statusCode,
+    statusText,
+    body,
   ]);
 
   return result;
