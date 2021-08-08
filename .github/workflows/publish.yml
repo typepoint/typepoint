@@ -102,10 +102,9 @@ jobs:
           fail_ci_if_error: false
 
       - name: Create Release
-        if: ${{ false }}
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           git config user.email "release-bot@typepoint.github.io"
           git config user.name "Release Bot"
-          yarn lerna publish --yes
+          yarn lerna publish --yes --conventional-commits
