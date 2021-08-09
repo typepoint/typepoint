@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 4.2.0 (2021-08-09)
+
+
+### Features
+
+* add onSuccess and onFailure handlers ([2d776c9](https://github.com/typepoint/typepoint/commit/2d776c980a854412a259134d7f6fed06da174e17))
+
+
+
+
+
 # 4.1.0 (2021-08-08)
 
 
