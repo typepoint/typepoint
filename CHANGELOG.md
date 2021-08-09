@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 4.3.0 (2021-08-09)
+
+
+### Features
+
+* improved route matching ([dd2a917](https://github.com/typepoint/typepoint/commit/dd2a917ec1e6becdf579ca51014f59bff123b247)), closes [#63](https://github.com/typepoint/typepoint/issues/63)
+
+
+
+
+
 # 4.2.0 (2021-08-09)
 
 
