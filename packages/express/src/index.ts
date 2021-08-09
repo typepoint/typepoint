@@ -5,8 +5,6 @@ import {
 } from '@typepoint/shared';
 import {
   EndpointContext,
-  EndpointHandler,
-  EndpointMiddleware,
   HandlerMatchIterator,
   Router,
   validateAndTransformRequestPayload,
@@ -42,12 +40,7 @@ export function toMiddleware(router: Router, options?: ToMiddlewareOptions): exp
     }
 
     try {
-      const allHandlers: (EndpointHandler | EndpointMiddleware)[] = [
-        ...router.middlewares,
-        ...router.handlers,
-      ];
-
-      const handlerMatchIterator = new HandlerMatchIterator(allHandlers, {
+      const handlerMatchIterator = new HandlerMatchIterator([...router.middlewares, ...router.handlers], {
         method: cleanseHttpMethod(req.method),
         url: req.url,
       });

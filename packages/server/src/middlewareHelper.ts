@@ -5,14 +5,9 @@ import {
   parseQueryString,
   parseUrl,
 } from '@typepoint/shared';
-import {
-  EndpointContext,
-  EndpointHandler,
-  EndpointMiddleware,
-} from './types';
-import { Router } from './router';
-
 import clone = require('clone');
+import { EndpointContext, EndpointHandler, EndpointMiddleware } from './types';
+import { Router } from './router';
 
 export interface HandlerMatch {
   type: 'handler' | 'middleware';
@@ -24,14 +19,14 @@ export class HandlerMatchIterator {
   private handlerIndex = 0;
 
   constructor(
-    private handlers: (EndpointMiddleware | EndpointHandler)[],
+    private sortedHandlers: Array<EndpointMiddleware | EndpointHandler>,
     private request: { method: string; url: string },
   ) {
   }
 
   getNextMatch(): HandlerMatch | undefined {
-    while (this.handlerIndex < this.handlers.length) {
-      const handler = this.handlers[this.handlerIndex++];
+    while (this.handlerIndex < this.sortedHandlers.length) {
+      const handler = this.sortedHandlers[this.handlerIndex++];
       if ('match' in handler && handler.match) {
         const parsedUrl = handler.match(this.request);
         if (parsedUrl) {

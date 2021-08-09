@@ -153,3 +153,7 @@ export interface EndpointHandler extends EndpointMiddleware {
   definition: EndpointDefinition<any, any, any>;
   match: (request: { method: string; url: string }) => PathHelperParseMatch | undefined;
 }
+
+export const hasDefinition = (
+  handler: EndpointMiddleware | EndpointHandler,
+): handler is EndpointHandler => 'definition' in handler;

@@ -1,8 +1,14 @@
 /* eslint-disable max-classes-per-file */
-import { partialOf, deepPartialOf } from 'jest-helpers';
-import { Todo } from '@typepoint/fixtures';
-import { EndpointDefinitionClassInfo, Empty } from '@typepoint/shared';
-import { EndpointHandler, EndpointContext, EndpointMiddleware } from './index';
+import { deepPartialOf } from 'jest-helpers';
+import {
+  getProducts, Product, getTodos, Todo,
+} from '@typepoint/fixtures';
+import {
+  EndpointDefinitionClassInfo, Empty, defineEndpoint, EndpointDefinition,
+} from '@typepoint/shared';
+import {
+  createHandler, createMiddleware, EndpointHandler, EndpointContext, EndpointMiddleware,
+} from './index';
 import {
   HandlerMatch,
   HandlerMatchIterator,
@@ -11,30 +17,29 @@ import {
   validateAndTransformRequestPayload,
 } from './middlewareHelper';
 import { Router } from './router';
+import { getDefinitionAndHandlerFixtures } from './fixtures';
 
 describe('server/middlewareHelper', () => {
   describe('HandlerMatchIterator', () => {
     it('should return handlers that match', () => {
-      const requestLogger = partialOf<EndpointMiddleware>({
-      });
+      const {
+        handlers,
+        handlersByName: { getProductHandler },
+        middlewares,
+        middlewaresByName: { requestLogger },
+      } = getDefinitionAndHandlerFixtures();
+      const router = new Router({ middleware: middlewares, handlers });
 
-      const getProduct = partialOf<EndpointHandler>({
-        match: jest.fn().mockReturnValue({ id: '1337' }),
-      });
-
-      const getProducts = partialOf<EndpointHandler>({
-        match: jest.fn().mockReturnValue(undefined),
-      });
-
-      const allHandlers = [requestLogger, getProducts, getProduct];
-
-      const handlerMatchIterator = new HandlerMatchIterator(allHandlers, { method: 'GET', url: '/etc' });
+      const handlerMatchIterator = new HandlerMatchIterator(
+        [...router.middlewares, ...router.handlers],
+        { method: 'GET', url: '/products/1' },
+      );
 
       let handlerMatch = handlerMatchIterator.getNextMatch();
       expect(handlerMatch).toBeDefined();
       expect(handlerMatch).toHaveProperty('parsedUrl', {
         params: {},
-        path: '/etc',
+        path: '/products/1',
         postPath: '',
         prePath: '',
       });
@@ -42,25 +47,30 @@ describe('server/middlewareHelper', () => {
 
       handlerMatch = handlerMatchIterator.getNextMatch();
       expect(handlerMatch).toBeDefined();
-      expect(handlerMatch).toHaveProperty('parsedUrl', { id: '1337' });
-      expect(handlerMatch).toHaveProperty('handler', getProduct);
+      expect(handlerMatch).toHaveProperty('parsedUrl', {
+        params: { id: '1' },
+        path: '/products/1',
+        postPath: '',
+        prePath: '',
+      });
+      expect(handlerMatch).toHaveProperty('handler', getProductHandler);
 
       handlerMatch = handlerMatchIterator.getNextMatch();
       expect(handlerMatch).toBeUndefined();
     });
 
     it('should return undefined when no matching handlers', () => {
-      const handler1 = partialOf<EndpointHandler>({
-        match: jest.fn().mockReturnValue(undefined),
-      });
-      const handler2 = partialOf<EndpointHandler>({
-        match: jest.fn().mockReturnValue(undefined),
-      });
-
-      const allHandlers = [handler1, handler2];
-
-      const handlerMatchIterator = new HandlerMatchIterator(allHandlers, { method: 'GET', url: '/etc' });
-
+      const {
+        handlers,
+        handlersByName: { getProductHandler },
+        middlewares,
+        middlewaresByName: { requestLogger },
+      } = getDefinitionAndHandlerFixtures();
+      const router = new Router({ middleware: middlewares, handlers });
+      const handlerMatchIterator = new HandlerMatchIterator(
+        [...router.handlers],
+        { method: 'GET', url: '/doesNotExist' },
+      );
       const handlerMatch = handlerMatchIterator.getNextMatch();
       expect(handlerMatch).toBeUndefined();
     });
