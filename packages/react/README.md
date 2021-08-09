@@ -26,7 +26,7 @@ npm add @typepoint/react @typepoint/client @typepoint/shared react@^17 react-dom
 
 ## Guide
 
-Check out our detailed [guide](https://typepoint.github.io) for how to start using TypePoint.
+Check out the React section of the detailed [guide](https://typepoint.github.io/#/?id=react-hooks) for how to start using TypePoint.
 
 ## Contributing
 

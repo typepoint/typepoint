@@ -1,5 +1,5 @@
 import React, {
-  createContext, useCallback, useContext, useEffect, useMemo, useState,
+  createContext, useCallback, useContext, useEffect, useMemo, useRef, useState,
 } from 'react';
 import {
   Empty,
@@ -49,11 +49,16 @@ export type FetchFunctionResult<TEndpointDefinition extends EndpointDefinition<a
   promise(): Promise<TypePointClientResponse<GetEndpointDefinitionResponseBody<TEndpointDefinition>>>;
 }
 
+type UseEndpointFetchOptions<TEndpointDefinition extends EndpointDefinition<any, any, any>> = {
+  onSuccess?: (response: TypePointClientResponse<GetEndpointDefinitionResponseBody<TEndpointDefinition>>) => void
+  onFailure?: (error: TypePointClientResponseError) => void
+} & TypePointClientFetchOptions<TEndpointDefinition>;
+
 export type FetchFunction<TEndpointDefinition extends EndpointDefinition<any, any, any>> = (
   TEndpointDefinition extends EndpointDefinitionWithNoParamsOrBody
-    ? (options?: TypePointClientFetchOptions<TEndpointDefinition>) => FetchFunctionResult<TEndpointDefinition>
-    : (options: TypePointClientFetchOptions<TEndpointDefinition>) => FetchFunctionResult<TEndpointDefinition>
-);
+    ? (options?: UseEndpointFetchOptions<TEndpointDefinition>) => FetchFunctionResult<TEndpointDefinition>
+    : (options: UseEndpointFetchOptions<TEndpointDefinition>) => FetchFunctionResult<TEndpointDefinition>
+)
 
 export const useEndpointLazily = <TEndpointDefinition extends EndpointDefinition<any, any, any>>(
   endpointDefinition: TEndpointDefinition,
@@ -70,7 +75,7 @@ export const useEndpointLazily = <TEndpointDefinition extends EndpointDefinition
   );
 
   const fetch = useCallback(
-    (options?: TypePointClientFetchOptions<TEndpointDefinition>) => {
+    (options?: UseEndpointFetchOptions<TEndpointDefinition>) => {
       setLoading(true);
       setError(undefined);
 
@@ -79,12 +84,14 @@ export const useEndpointLazily = <TEndpointDefinition extends EndpointDefinition
         .then((res) => {
           setResponse(res);
           setLoading(false);
+          options?.onSuccess?.(res);
           return { res, err: undefined };
         })
         .catch((err: TypePointClientResponseError) => {
           setError(err);
           setResponse(err.response);
           setLoading(false);
+          options?.onFailure?.(err);
           return { res: undefined, err };
         });
 
@@ -121,27 +128,29 @@ interface UseEndpointFunctionResult<TResponseBody> {
 interface UseEndpointFunction {
   <TEndpointDefinition extends EndpointDefinition<Empty, Empty, any>>(
     endpointDefinition: TEndpointDefinition,
-    options?: TypePointClientFetchOptions<TEndpointDefinition>,
+    options?: UseEndpointFetchOptions<TEndpointDefinition>,
   ): UseEndpointFunctionResult<GetEndpointDefinitionResponseBody<TEndpointDefinition>>;
 
   <TEndpointDefinition extends EndpointDefinition<any, any, any>>(
     endpointDefinition: TEndpointDefinition,
-    options: TypePointClientFetchOptions<TEndpointDefinition>,
+    options: UseEndpointFetchOptions<TEndpointDefinition>,
   ): UseEndpointFunctionResult<GetEndpointDefinitionResponseBody<TEndpointDefinition>>;
 }
 
 export const useEndpoint = (<TEndpointDefinition extends EndpointDefinition<any, any, any>>(
   endpointDefinition: TEndpointDefinition,
-  options?: TypePointClientFetchOptions<TEndpointDefinition>,
+  options?: UseEndpointFetchOptions<TEndpointDefinition>,
 ) => {
   const {
     fetch, loading, error, response, statusCode, statusText, body,
   } = useEndpointLazily(endpointDefinition);
 
   const optionsString = stringify(options);
+  const optionsRef = useRef(options);
+  optionsRef.current = options;
 
   const refetch = useCallback(
-    () => fetch(parse(optionsString)),
+    () => fetch({ ...optionsRef.current, ...parse(optionsString) }),
     [fetch, optionsString],
   );
 

@@ -1,9 +1,10 @@
+/* eslint-disable max-classes-per-file */
 import * as React from 'react';
-import { TypePointClient } from '@typepoint/client';
+import { TypePointClient, TypePointClientResponseError } from '@typepoint/client';
 import { defineEndpoint, Empty, EndpointDefinition } from '@typepoint/shared';
 import { getTodos, Todo } from '@typepoint/fixtures';
-import { render, fireEvent } from '@testing-library/react';
-import * as httpStatusCodes from 'http-status-codes';
+import { render, fireEvent, waitFor } from '@testing-library/react';
+import { getReasonPhrase, StatusCodes } from 'http-status-codes';
 import {
   MissingTypePointProvider, TypePointProvider, useEndpoint, useEndpointLazily,
 } from './index';
@@ -163,17 +164,111 @@ describe('useEndpoint', () => {
     const errorElement = await findByText(/Error:\s+Computer says no/);
     expect(errorElement).toBeTruthy();
   });
+
+  describe('response handlers', () => {
+    beforeEach(() => {
+      TodoList = () => {
+        // eslint-disable-next-line no-shadow
+        const [todos, setTodos] = useState<Todo[]>([]);
+        const [error, setError] = useState<Error | any>();
+
+        const { refetch, loading } = useEndpoint(getTodosEndpoint, {
+          params: {
+            filter: 'all',
+          },
+          onSuccess: ({ body }) => setTodos(body),
+          onFailure: (err) => setError(err),
+        });
+
+        if (loading) {
+          return <p>Loading...</p>;
+        }
+
+        if (error) {
+          return (
+            <p data-testid="error-message">
+              Error:
+              {' '}
+              {error.message || error }
+            </p>
+          );
+        }
+
+        return (
+          <div>
+            <button type="button" data-testid="refresh" onClick={refetch}>Refresh</button>
+            <ul>
+              { todos.map((todo) => (<li data-testid="todo" key={todo.id}>{todo.title}</li>)) }
+            </ul>
+          </div>
+        );
+      };
+
+      jest.spyOn(console, 'error').mockImplementation(noop);
+    });
+
+    it('should call onSuccess handler', async () => {
+      const { findAllByTestId, queryByTestId } = render(
+        <TypePointProvider client={client}>
+          <TodoList />
+        </TypePointProvider>,
+      );
+
+      const todoElements = await findAllByTestId('todo');
+      expect(todoElements.length).toEqual(getTodos().length);
+
+      expect(queryByTestId('error-message')).toBeFalsy();
+
+      expect(client.fetch).toHaveBeenCalledWith(getTodosEndpoint, {
+        params: {
+          filter: 'all',
+        },
+        onSuccess: expect.any(Function),
+        onFailure: expect.any(Function),
+      });
+      expect(client.fetch).toHaveBeenCalledTimes(1);
+    });
+
+    it('should call onFailure handler', async () => {
+      jest.spyOn(client, 'fetch').mockRejectedValue(new TypePointClientResponseError('Internal Server Error', {
+        body: null,
+        statusCode: 500,
+        statusText: 'Internal Server Error',
+        header: jest.fn().mockReturnValue(''),
+        headers: {},
+      }));
+
+      const { queryByTestId, queryAllByTestId } = render(
+        <TypePointProvider client={client}>
+          <TodoList />
+        </TypePointProvider>,
+      );
+
+      await waitFor(async () => {
+        const todoElements = await queryAllByTestId('todo');
+        expect(todoElements.length).toEqual(0);
+        expect(queryByTestId('error-message')).toBeTruthy();
+      });
+
+      expect(client.fetch).toHaveBeenCalledWith(getTodosEndpoint, {
+        params: {
+          filter: 'all',
+        },
+        onSuccess: expect.any(Function),
+        onFailure: expect.any(Function),
+      });
+      expect(client.fetch).toHaveBeenCalledTimes(1);
+    });
+  });
 });
 
 describe('useEndpointLazily', () => {
-  class LoginRequestBody {
-    username!: string;
-
-    password!: string;
+  class SubscribeRequestBody {
+    email!: string;
   }
 
   let client: TypePointClient;
-  let subscribeEndpoint: EndpointDefinition<Empty, LoginRequestBody, Empty>;
+  let subscribeEndpoint: EndpointDefinition<Empty, SubscribeRequestBody, Empty>;
   let SubscribeToNewsletter: () => JSX.Element;
 
   beforeEach(() => {
@@ -202,7 +297,7 @@ describe('useEndpointLazily', () => {
       const handleSubmit = useCallback(async () => {
         try {
           const { statusCode } = await fetch().promise();
-          setSubscribed(statusCode === httpStatusCodes.OK);
+          setSubscribed(statusCode === StatusCodes.OK);
         } catch (err) {
           setError(err);
         }
@@ -243,9 +338,9 @@ describe('useEndpointLazily', () => {
     const submitButton = getByTestId('submit');
     fireEvent.click(submitButton);
 
-    await delay(200);
-
-    expect(queryByTestId('subscribed')).toBeTruthy();
+    await waitFor(() => {
+      expect(queryByTestId('subscribed')).toBeTruthy();
+    });
   });
 
   it('should allow waiting on promise that rejects', async () => {
@@ -253,7 +348,7 @@ describe('useEndpointLazily', () => {
       message: 'Bad Request',
       response: {
         statusCode: 400,
-        statusText: httpStatusCodes.getStatusText(400),
+        statusText: getReasonPhrase(400),
         headers: {},
         header: jest.fn().mockReturnValue(''),
         body: {},
@@ -269,9 +364,115 @@ describe('useEndpointLazily', () => {
     const submitButton = getByTestId('submit');
     fireEvent.click(submitButton);
 
-    await delay(200);
+    await waitFor(() => {
+      expect(queryByTestId('subscribed')).toBeFalsy();
+      expect(queryByTestId('error-message')).toBeTruthy();
+    });
+  });
 
-    expect(queryByTestId('subscribed')).toBeFalsy();
-    expect(queryByTestId('error-message')).toBeTruthy();
+  describe('response handlers', () => {
+    beforeEach(() => {
+      SubscribeToNewsletter = () => {
+        const [email, setEmail] = useState('');
+        const [error, setError] = useState(null as Error | null);
+        const [subscribed, setSubscribed] = useState(false);
+
+        const handleEmailChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+          setEmail(event.target.value);
+        }, [setEmail]);
+
+        const { fetch: subscribe } = useEndpointLazily(subscribeEndpoint);
+
+        const handleSubmit = useCallback(async () => {
+          subscribe({
+            body: { email },
+            onSuccess: ({ statusCode }) => {
+              setSubscribed(statusCode === StatusCodes.OK);
+            },
+            onFailure: setError,
+          });
+        }, [email, setError, setSubscribed, subscribe]);
+
+        if (error) {
+          return (
+            <p data-testid="error-message">
+              {`Error: ${error.message || error}`}
+            </p>
+          );
+        }
+
+        if (subscribed) {
+          return <p data-testid="subscribed">Thanks for subscribing!</p>;
+        }
+
+        return (
+          <div>
+            <input id="email" name="email" data-testid="email" value={email} onChange={handleEmailChange} />
+            <button type="button" data-testid="submit" onClick={handleSubmit}>Submit</button>
+          </div>
+        );
+      };
+    });
+
+    it('should call onSuccess handler', async () => {
+      jest.spyOn(client, 'fetch').mockResolvedValue({
+        statusCode: 200,
+        statusText: getReasonPhrase(200),
+        headers: {},
+        header: jest.fn().mockReturnValue(''),
+        body: {},
+      });
+
+      const { getByTestId, queryByTestId } = render(
+        <TypePointProvider client={client}>
+          <SubscribeToNewsletter />
+        </TypePointProvider>,
+      );
+
+      const emailInput = getByTestId('email');
+      fireEvent.change(emailInput, { target: { value: 'joe@example.com' } });
+
+      const submitButton = getByTestId('submit');
+      fireEvent.click(submitButton);
+
+      await waitFor(async () => {
+        expect(client.fetch).toHaveBeenCalledTimes(1);
+
+        await waitFor(() => {
+          expect(queryByTestId('subscribed')).toBeTruthy();
+          expect(queryByTestId('error-message')).toBeFalsy();
+        });
+      });
+    });
+
+    it('should call onFailure handler', async () => {
+      jest.spyOn(client, 'fetch').mockRejectedValue({
+        message: 'Bad Request',
+        response: {
+          statusCode: 400,
+          statusText: getReasonPhrase(400),
+          headers: {},
+          header: jest.fn().mockReturnValue(''),
+          body: {},
+        },
+      });
+
+      const { getByTestId, queryByTestId } = render(
+        <TypePointProvider client={client}>
+          <SubscribeToNewsletter />
+        </TypePointProvider>,
+      );
+
+      const emailInput = getByTestId('email');
+      fireEvent.change(emailInput, { target: { value: 'joe' } });
+
+      const submitButton = getByTestId('submit');
+      fireEvent.click(submitButton);
+
+      await waitFor(() => {
+        expect(queryByTestId('subscribed')).toBeFalsy();
+        expect(queryByTestId('error-message')).toBeTruthy();
+      });
+    });
   });
 });
