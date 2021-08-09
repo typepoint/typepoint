@@ -112,8 +112,13 @@ export interface Response<TResponseBody> {
 export interface EndpointContextMetadata {
 }
 
-export interface EndpointContext<TRequestParams, TRequestBody, TResponseBody> {
-  meta: EndpointContextMetadata;
+export interface EndpointContext<
+  TRequestParams,
+  TRequestBody,
+  TResponseBody,
+  TEndpointContextMetadata = EndpointContextMetadata
+> {
+  meta: TEndpointContextMetadata & EndpointContextMetadata;
   request: Request<TRequestParams, TRequestBody>;
   response: Response<TResponseBody>;
 }
@@ -125,12 +130,16 @@ export type EndpointContextFromDefinition<TEndpointDefinition extends EndpointDe
   GetEndpointDefinitionResponseBody<TEndpointDefinition>
   >;
 
-export type EndpointHandlerFunctionFromDefinition<TEndpointDefinition extends EndpointDefinition<any, any, any>> =
+export type EndpointHandlerFunctionFromDefinition<
+  TEndpointDefinition extends EndpointDefinition<any, any, any>,
+  TEndpointContextMetadata = EndpointContextMetadata,
+> =
   (
     context: EndpointContext<
     GetEndpointDefinitionRequestParams<TEndpointDefinition>,
     GetEndpointDefinitionRequestBody<TEndpointDefinition>,
-    GetEndpointDefinitionResponseBody<TEndpointDefinition>
+    GetEndpointDefinitionResponseBody<TEndpointDefinition>,
+    TEndpointContextMetadata
     >,
     next: () => Promise<void>
   ) => Promise<void> | void;

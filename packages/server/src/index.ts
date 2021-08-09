@@ -64,9 +64,12 @@ export class HeadersAlreadySent extends Error {
   }
 }
 
-export function createHandler<TEndpointDefinition extends EndpointDefinition<any, any, any>>(
+export function createHandler<
+  TEndpointDefinition extends EndpointDefinition<any, any, any>,
+  TEndpointContextMetadata = EndpointContextMetadata
+>(
   definition: TEndpointDefinition,
-  handler: EndpointHandlerFunctionFromDefinition<TEndpointDefinition>,
+  handler: EndpointHandlerFunctionFromDefinition<TEndpointDefinition, TEndpointContextMetadata>,
   name?: string,
 ): EndpointHandler {
   return {
@@ -83,14 +86,16 @@ export function createHandler<TEndpointDefinition extends EndpointDefinition<any
   };
 }
 
-export type EndpointMiddlewareHandlerFunction = (
-  context: EndpointContext<any, any, any>, next: () => Promise<void>
+export type EndpointMiddlewareHandlerFunction<
+  TEndpointContextMetadata extends EndpointContextMetadata = EndpointContextMetadata
+> = (
+  context: EndpointContext<any, any, any, TEndpointContextMetadata>, next: () => Promise<void>
 ) => Promise<void>;
 
 export type EndpointMiddlewareClass = Constructor<EndpointMiddleware>;
 
-export function createMiddleware(
-  handler: EndpointMiddlewareHandlerFunction,
+export function createMiddleware<TEndpointContextMetadata extends EndpointContextMetadata = EndpointContextMetadata>(
+  handler: EndpointMiddlewareHandlerFunction<TEndpointContextMetadata>,
   name?: string,
 ): EndpointMiddleware {
   return {
@@ -101,6 +106,8 @@ export function createMiddleware(
 
 let hasWarnedAboutDefineMiddleware = false;
 
+type AnyFunction = (...args: any[]) => any;
+
 export const defineMiddleware: typeof createMiddleware = (...args: any[]) => {
   if (!hasWarnedAboutDefineMiddleware) {
     hasWarnedAboutDefineMiddleware = true;
@@ -109,7 +116,7 @@ export const defineMiddleware: typeof createMiddleware = (...args: any[]) => {
       'defineMiddleware is deprecated and will be removed in a future release. Use createMiddleware instead.',
     );
   }
-  return (createMiddleware as (...args: any[]) => any)(...args);
+  return (createMiddleware as AnyFunction)(...args);
 };
 
 export type RouterHandleMethod = (request: any, response: any) => Promise<void>;
