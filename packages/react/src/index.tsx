@@ -45,6 +45,14 @@ export class MissingTypePointProvider extends Error {
   }
 }
 
+export const useTypePoint = (): TypePointClient => {
+  const context = useContext(TypePointContext);
+  if (!context) {
+    throw new MissingTypePointProvider();
+  }
+  return context;
+};
+
 export type FetchFunctionResult<TEndpointDefinition extends EndpointDefinition<any, any, any>> = {
   promise(): Promise<TypePointClientResponse<GetEndpointDefinitionResponseBody<TEndpointDefinition>>>;
 }
@@ -63,10 +71,7 @@ export type FetchFunction<TEndpointDefinition extends EndpointDefinition<any, an
 export const useEndpointLazily = <TEndpointDefinition extends EndpointDefinition<any, any, any>>(
   endpointDefinition: TEndpointDefinition,
 ) => {
-  const context = useContext(TypePointContext);
-  if (!context) {
-    throw new MissingTypePointProvider();
-  }
+  const context = useTypePoint();
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(undefined as TypePointClientResponseError | undefined);
