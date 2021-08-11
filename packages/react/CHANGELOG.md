@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 4.4.0 (2021-08-11)
+
+
+### Features
+
+* add useTypePoint react hook ([86fa580](https://github.com/typepoint/typepoint/commit/86fa5809603bca7694c3501ab242c841f4591be8))
+
+
+
+
+
 # 4.3.0 (2021-08-09)
 
 
