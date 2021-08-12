@@ -121,7 +121,7 @@ export const useEndpointLazily = <TEndpointDefinition extends EndpointDefinition
 };
 
 interface UseEndpointFunctionResult<TResponseBody> {
-  refetch: () => void;
+  refetch(): { promise: () => Promise<TypePointClientResponse<TResponseBody>> }
   loading: boolean;
   error?: TypePointClientResponseError | undefined;
   response?: TypePointClientResponse<TResponseBody>;
