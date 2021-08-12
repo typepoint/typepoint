@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 4.5.0 (2021-08-12)
+
+
+### Features
+
+* useEndpoint().refetch() now returns an object with promise property ([b4a7656](https://github.com/typepoint/typepoint/commit/b4a7656f34a1bddba64944c5378ab4068c083a53))
+
+
+
+
+
 # 4.4.0 (2021-08-11)
 
 
