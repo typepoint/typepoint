@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 4.5.3 (2021-12-06)
+
+
+### Bug Fixes
+
+* sync peer dependencies after version bump and before publishing packages - attempt 3 ([00c177d](https://github.com/typepoint/typepoint/commit/00c177dcc73f5f6f6b40573efe9ac9b3c598f551))
+
+
+
+
+
 ## 4.5.2 (2021-12-06)
 
 
