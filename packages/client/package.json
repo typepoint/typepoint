@@ -1,6 +1,6 @@
 {
   "name": "@typepoint/client",
-  "version": "4.5.1",
+  "version": "4.5.2",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "license": "ISC",
@@ -30,8 +30,8 @@
     "validate": "yarn lint && yarn build && yarn test"
   },
   "devDependencies": {
-    "@typepoint/fixtures": "^4.5.1",
-    "@typepoint/shared": "^4.5.1",
+    "@typepoint/fixtures": "4.5.2",
+    "@typepoint/shared": "4.5.2",
     "axios": "^0.21.1",
     "terser-webpack-plugin": "^5.1.4",
     "ts-loader": "9.2.4",
@@ -40,7 +40,7 @@
     "webpack-cli": "4.7.2"
   },
   "peerDependencies": {
-    "@typepoint/shared": "4.5.0",
+    "@typepoint/shared": "4.5.2",
     "axios": "^0.21.1"
   }
 }
