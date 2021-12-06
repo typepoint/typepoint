@@ -1,8 +1,13 @@
 {
+  "command": {
+    "publish": {
+      "graphType": "all"
+    }
+  },
+  "npmClient": "yarn",
   "packages": [
     "packages/*"
   ],
-  "version": "4.5.0",
-  "npmClient": "yarn",
-  "useWorkspaces": true
+  "useWorkspaces": true,
+  "version": "4.5.0"
 }

@@ -49,9 +49,10 @@
     "lint:fix": "yarn lint --fix",
     "list-workspaces": "ts-node ./support/listWorkspaces.ts",
     "prebuild": "yarn run clean",
+    "postversion": "yarn update-peer-dependency-versions",
+    "update-peer-dependency-versions": "ts-node ./support/updatePeerDependencyVersions.ts",
     "validate-imports": "ts-node ./support/validateImports.ts",
-    "validate": "yarn validate-imports && lerna run validate",
-    "version": "ts-node ./support/updatePeerDependencyVersions.ts"
+    "validate": "yarn validate-imports && lerna run validate"
   },
   "devDependencies": {
     "@types/bluebird": "3.5.29",

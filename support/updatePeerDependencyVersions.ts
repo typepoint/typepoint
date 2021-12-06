@@ -32,8 +32,12 @@ const updatePeerDependencies = async (workspace: Workspace, workspaces: Workspac
   if (changed) {
     const updatedPackage = {
       ...workspace.pkg,
-      devDependencies: Object.values(updatedDevDependencies).length ? updatedDevDependencies : undefined,
-      peerDependencies: Object.values(updatedPeerDependencies).length ? updatedPeerDependencies : undefined,
+      devDependencies: Object.values(updatedDevDependencies).length
+        ? updatedDevDependencies
+        : workspace.pkg.devDependencies,
+      peerDependencies: Object.values(updatedPeerDependencies).length
+        ? updatedPeerDependencies
+        : workspace.pkg.peerDependencies,
     };
     await workspace.updatePackage(updatedPackage);
   }
