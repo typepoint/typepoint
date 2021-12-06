@@ -49,6 +49,7 @@
     "lint:fix": "yarn lint --fix",
     "list-workspaces": "ts-node ./support/listWorkspaces.ts",
     "prebuild": "yarn run clean",
+    "prepublish": "yarn update-peer-dependency-versions",
     "update-peer-dependency-versions": "ts-node ./support/updatePeerDependencyVersions.ts",
     "validate-imports": "ts-node ./support/validateImports.ts",
     "validate": "yarn validate-imports && lerna run validate",
