@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 4.5.4 (2021-12-09)
+
+
+### Bug Fixes
+
+* query param values were not being decoded ([7e5bbd7](https://github.com/typepoint/typepoint/commit/7e5bbd77923eda65f1f19e4be95c1d71366d9ec4)), closes [#77](https://github.com/typepoint/typepoint/issues/77)
+
+
+
+
+
 ## 4.5.3 (2021-12-06)
 
 
