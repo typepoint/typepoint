@@ -185,6 +185,13 @@ describe('shared/url', () => {
           pretty: '',
         },
       },
+      {
+        input: '?name=John%20Doe&department=Human%20Resources',
+        expected: {
+          name: 'John Doe',
+          department: 'Human Resources',
+        },
+      },
     ];
 
     it('should return parameter names and values', () => {

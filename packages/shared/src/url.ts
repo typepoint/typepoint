@@ -71,13 +71,14 @@ export function parseQueryString(queryString: string): QueryParameterValues {
   let parameterValue = '';
 
   const addParameter = () => {
+    const decodedValue = decodeURIComponent(parameterValue);
     const existingValue = result[parameterName];
     if (existingValue === undefined) {
-      result[parameterName] = parameterValue;
+      result[parameterName] = decodedValue;
     } else if (typeof existingValue === 'string') {
-      result[parameterName] = [existingValue, parameterValue];
+      result[parameterName] = [existingValue, decodedValue];
     } else {
-      existingValue.push(parameterValue);
+      existingValue.push(decodedValue);
     }
     parameterName = '';
     parameterValue = '';
