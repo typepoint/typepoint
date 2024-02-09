@@ -46,10 +46,46 @@ describe('shared', () => {
       expect(addProduct).toBeDefined();
       expect(addProduct).toHaveProperty('method', method);
       expect(addProduct).toHaveProperty('path', '/products');
+      expect(addProduct.deprecated).not.toBeDefined();
+    });
+
+    it('should return an endpoint definition with the specified method and path and depreciation info', () => {
+      const method = 'POST';
+      const addProduct = defineEndpoint<Empty, Product, Product>(method, (path) => path.literal('products'), {
+        deprecated: {
+          at: new Date(2024, 0, 1),
+          endOfLife: new Date(2025, 5, 1),
+          message: 'Use /v2/products instead',
+        },
+      });
+
+      assert<Equal<typeof addProduct, EndpointDefinition<Empty, Product, Product>>>();
+
+      expect(addProduct).toBeDefined();
+      expect(addProduct).toHaveProperty('method', method);
+      expect(addProduct).toHaveProperty('path', '/products');
+      expect(addProduct).toHaveProperty('deprecated', {
+        at: new Date(2024, 0, 1),
+        endOfLife: new Date(2025, 5, 1),
+        message: 'Use /v2/products instead',
+      });
     });
 
     it('should default a GET method if method is not specified', () => {
       const getProducts = defineEndpoint<Empty, Empty, Product[]>((path) => path.literal('products'));
+
+      assert<Equal<typeof getProducts, EndpointDefinition<Empty, Empty, Product[]>>>();
+
+      expect(getProducts).toBeDefined();
+      expect(getProducts).toHaveProperty('method', 'GET');
+      expect(getProducts).toHaveProperty('path', '/products');
+
+      const getTodos = defineEndpoint<Empty, Empty, Todo[]>('', (path) => path.literal('/api/todos'));
+      expect(getTodos).toHaveProperty('method', 'GET');
+    });
+
+    it('should default a GET method if method is not specified (for different overload)', () => {
+      const getProducts = defineEndpoint<Empty, Empty, Product[]>('', (path) => path.literal('products'), {});
 
       assert<Equal<typeof getProducts, EndpointDefinition<Empty, Empty, Product[]>>>();
 
@@ -184,6 +220,53 @@ describe('shared', () => {
     expect(classInfo.request.params).toEqual(Empty);
     expect(classInfo.request.body).toEqual(Empty);
     expect(classInfo.response.body).toEqual(Empty);
+  });
+
+  it('should include classInfo and depreciation', () => {
+    class GetClientRequestParams {
+      // eslint-disable-next-line no-empty-function
+      constructor(public id: number) {
+      }
+    }
+
+    class Client {
+      constructor(
+        public name: string,
+        public creationDate: Date,
+        public modificationDate: Date,
+        _id?: number,
+      // eslint-disable-next-line no-empty-function
+      ) {
+      }
+    }
+
+    const method = 'GET';
+    const getClient = defineEndpoint({
+      method,
+      path: (path) => path.literal('v1').literal('clients').param('id'),
+      requestParams: GetClientRequestParams,
+      requestBody: Empty,
+      responseBody: Client,
+      deprecated: {
+        at: new Date(2024, 0, 1),
+        endOfLife: new Date(2025, 5, 1),
+        message: 'Use /v2/clients/:id instead',
+      },
+    });
+
+    assert<Equal<typeof getClient, EndpointDefinition<GetClientRequestParams, Empty, Client>>>();
+
+    expect(getClient).toBeDefined();
+    expect(getClient).toHaveProperty('method', method);
+    expect(getClient).toHaveProperty('path', '/v1/clients/:id');
+    expect(getClient.classInfo).toHaveProperty(['request', 'params'], GetClientRequestParams);
+    expect(getClient.classInfo).toHaveProperty(['request', 'body'], Empty);
+    expect(getClient.classInfo).toHaveProperty(['response', 'body'], Client);
+    expect(getClient).toHaveProperty('deprecated', {
+      at: new Date(2024, 0, 1),
+      endOfLife: new Date(2025, 5, 1),
+      message: 'Use /v2/clients/:id instead',
+    });
   });
 
   it('should parse urls', () => {

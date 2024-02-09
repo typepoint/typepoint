@@ -124,11 +124,21 @@ export interface EndpointDefinitionUrlOptions<TRequestParams> {
   params?: NormalizeDefinitionType<TRequestParams> | undefined;
 }
 
+export type DeprecationInfo = {
+  at?: Date
+  endOfLife?: Date
+  message: string
+}
+
+export type EndpointOptions = {
+  deprecated?: DeprecationInfo
+}
+
 export interface ClassBasedEndpointDefinitionOptions<
   TRequestParams extends AllowableClassBasedRequestParams,
   TRequestBody extends AllowableClassBasedRequestBody,
   TResponseBody extends AllowableClassBasedResponseBody
-> {
+> extends EndpointOptions {
   method?: string;
   path: PathBuildingFunction<NormalizeDefinitionType<TRequestParams>>;
   requestParams?: TRequestParams;
@@ -194,6 +204,8 @@ export interface EndpointDefinition<
   parse(url: string): PathHelperParseMatch | undefined;
 
   url(options?: EndpointDefinitionUrlOptions<TRequestParams> | undefined): string;
+
+  readonly deprecated?: DeprecationInfo
 }
 
 export function defineEndpoint<
@@ -201,7 +213,8 @@ export function defineEndpoint<
   TRequestBody extends AllowableRequestBody,
   TResponseBody extends AllowableResponseBody
 >(
-  buildPath: PathBuildingFunction<TRequestParams>
+  buildPath: PathBuildingFunction<TRequestParams>,
+  options?: EndpointOptions
 ): EndpointDefinition<
 NormalizeDefinitionType<TRequestParams>,
 NormalizeDefinitionType<TRequestBody>,
@@ -214,7 +227,8 @@ export function defineEndpoint<
   TResponseBody extends AllowableResponseBody = Empty,
 >(
   method: string,
-  buildPath: PathBuildingFunction<TRequestParams>
+  buildPath: PathBuildingFunction<TRequestParams>,
+  options?: EndpointOptions
 ): EndpointDefinition<
 NormalizeDefinitionType<TRequestParams>,
 NormalizeDefinitionType<TRequestBody>,
@@ -244,10 +258,13 @@ NormalizeDefinitionType<TResponseBody>
 > {
   const DEFAULT_METHOD = 'GET';
 
-  const make = ({ classInfo, method, pathFunc }: {
+  const make = ({
+    classInfo, method, pathFunc, options,
+  }: {
     classInfo?: EndpointDefinitionClassInfo | undefined;
     method: string;
     pathFunc: PathBuildingFunction<NormalizeDefinitionType<TRequestParams>>;
+    options: EndpointOptions
   }) => {
     const path = createPath(pathFunc);
     const pathHelper = new PathHelper(path);
@@ -256,7 +273,8 @@ NormalizeDefinitionType<TResponseBody>
       path,
       classInfo,
       parse: (url: string) => pathHelper.parse(url),
-      url: (options?: EndpointDefinitionUrlOptions<NormalizeDefinitionType<TRequestParams>>) => pathHelper.url(options),
+      url: (urlOptions?: EndpointDefinitionUrlOptions<NormalizeDefinitionType<TRequestParams>>) => pathHelper.url(urlOptions),
+      deprecated: options.deprecated,
     };
   };
 
@@ -267,6 +285,7 @@ NormalizeDefinitionType<TResponseBody>
         return make({
           method: DEFAULT_METHOD,
           pathFunc: firstArg,
+          options: {},
         });
       }
 
@@ -281,6 +300,7 @@ NormalizeDefinitionType<TResponseBody>
           classInfo,
           method: cleanseHttpMethod(firstArg.method || DEFAULT_METHOD),
           pathFunc: firstArg.path,
+          options: { deprecated: firstArg.deprecated },
         });
       }
 
@@ -296,6 +316,20 @@ NormalizeDefinitionType<TResponseBody>
       return make({
         method: cleanseHttpMethod(method || DEFAULT_METHOD),
         pathFunc,
+        options: {},
+      });
+    }
+
+    case 3: {
+      const [method, pathFunc, options] = args;
+      if (typeof method !== 'string' || typeof pathFunc !== 'function') {
+        throw new EndpointDefinitionInvalidConstructorArgs(args);
+      }
+
+      return make({
+        method: cleanseHttpMethod(method || DEFAULT_METHOD),
+        pathFunc,
+        options,
       });
     }
 

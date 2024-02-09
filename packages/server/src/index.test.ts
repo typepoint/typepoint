@@ -168,7 +168,7 @@ describe('server', () => {
       jest.restoreAllMocks();
     });
 
-    it('warns that it is depreciated', () => {
+    it('warns that it is deprecated', () => {
       defineMiddleware(async () => {});
       // eslint-disable-next-line no-console
       expect(console.warn).toHaveBeenLastCalledWith(
