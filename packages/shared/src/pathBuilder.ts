@@ -9,7 +9,7 @@ export class PathBuilder<TRequestParams> {
 
   // Marked as private to discourage consumers from instantiating directly.
   // Use the createPath function instead
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  // eslint-disable-next-line no-empty-function
   protected constructor() {
   }
 
@@ -22,7 +22,7 @@ export class PathBuilder<TRequestParams> {
 
   param(name: keyof TRequestParams): PathBuilder<TRequestParams> {
     if (name) {
-      this.parts.push(`:${name}`);
+      this.parts.push(`:${String(name)}`);
     }
     return this;
   }

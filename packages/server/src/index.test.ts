@@ -119,7 +119,6 @@ describe('server', () => {
 
       expect(context).toHaveProperty(['response', 'body'], todos);
 
-
       type GetTodosHandleFunction = EndpointHandlerFunctionFromDefinition<typeof getTodosV2>;
       type ContextType = Parameters<GetTodosHandleFunction>[0];
       type Next = Parameters<GetTodosHandleFunction>[1];
@@ -196,7 +195,9 @@ describe('server', () => {
         log += `${text}\n`;
       };
 
-      const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+      const delay = (ms: number) => new Promise((resolve) => {
+        setTimeout(resolve, ms);
+      });
 
       beforeEach(() => {
         log = '';

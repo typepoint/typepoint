@@ -17,13 +17,13 @@ describe('index', () => {
     it('should allow passing a custom joi validator', () => {
       class Todo {
         @jf.number().integer().optional()
-        id?: number;
+          id?: number;
 
         @jf.string().min(1).required()
-        title = '';
+          title = '';
 
         @jf.boolean().required()
-        isCompleted = false;
+          isCompleted = false;
       }
 
       const todo = {
@@ -57,13 +57,13 @@ describe('index', () => {
     describe('when validating input against a class with joiful decorators', () => {
       class Todo {
         @jf.number().integer().optional()
-        id?: number;
+          id?: number;
 
         @jf.string().min(1).required()
-        title = '';
+          title = '';
 
         @jf.boolean().required()
-        isCompleted = false;
+          isCompleted = false;
       }
 
       it('should return transformed result when input is valid', () => {
@@ -136,13 +136,13 @@ describe('index', () => {
   describe('when validating input against an array of class', () => {
     class Todo {
       @jf.number().integer().optional()
-      id?: number;
+        id?: number;
 
       @jf.string().min(1).required()
-      title = '';
+        title = '';
 
       @jf.boolean().required()
-      isCompleted = false;
+        isCompleted = false;
     }
 
     it('should return transformed result when input is valid', () => {

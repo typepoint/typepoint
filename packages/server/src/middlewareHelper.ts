@@ -21,6 +21,7 @@ export class HandlerMatchIterator {
   constructor(
     private sortedHandlers: Array<EndpointMiddleware | EndpointHandler>,
     private request: { method: string; url: string },
+  // eslint-disable-next-line no-empty-function
   ) {
   }
 

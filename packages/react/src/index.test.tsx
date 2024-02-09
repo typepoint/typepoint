@@ -14,7 +14,9 @@ const { useCallback, useState } = React;
 // eslint-disable-next-line @typescript-eslint/no-empty-function
 const noop = () => {};
 
-const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+const delay = (ms: number) => new Promise((resolve) => {
+  setTimeout(resolve, ms);
+});
 
 describe('useEndpoint', () => {
   class GetTodosRequestParams {
@@ -39,7 +41,8 @@ describe('useEndpoint', () => {
       body: todos,
     });
 
-    TodoList = () => {
+    // eslint-disable-next-line func-names
+    TodoList = function () {
       const {
         response, refetch, loading, error,
       } = useEndpoint(getTodosEndpoint, {
@@ -167,7 +170,8 @@ describe('useEndpoint', () => {
 
   describe('response handlers', () => {
     beforeEach(() => {
-      TodoList = () => {
+      // eslint-disable-next-line func-names
+      TodoList = function () {
         // eslint-disable-next-line no-shadow
         const [todos, setTodos] = useState<Todo[]>([]);
         const [error, setError] = useState<Error | any>();
@@ -283,9 +287,10 @@ describe('useEndpointLazily', () => {
       body: {},
     });
 
-    SubscribeToNewsletter = () => {
+    // eslint-disable-next-line func-names
+    SubscribeToNewsletter = function () {
       const [email, setEmail] = useState('');
-      const [error, setError] = useState(null as Error | null);
+      const [error, setError] = useState<any>(null);
       const [subscribed, setSubscribed] = useState(false);
 
       const handleEmailChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
@@ -372,7 +377,8 @@ describe('useEndpointLazily', () => {
 
   describe('response handlers', () => {
     beforeEach(() => {
-      SubscribeToNewsletter = () => {
+      // eslint-disable-next-line func-names
+      SubscribeToNewsletter = function () {
         const [email, setEmail] = useState('');
         const [error, setError] = useState(null as Error | null);
         const [subscribed, setSubscribed] = useState(false);

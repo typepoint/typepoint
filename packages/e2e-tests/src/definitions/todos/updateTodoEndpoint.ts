@@ -4,15 +4,15 @@ import { Todo, UpdatableTodoFields } from '../../models/todo';
 
 export class UpdateTodoRequestParams {
   @jf.string().min(1).required()
-  id!: string;
+    id!: string;
 }
 
 export class UpdateTodoRequestBody implements UpdatableTodoFields {
   @jf.string().required()
-  title = '';
+    title = '';
 
   @jf.boolean().required()
-  isCompleted = false;
+    isCompleted = false;
 }
 
 export const updateTodoEndpoint = defineEndpoint({

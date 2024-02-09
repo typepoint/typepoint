@@ -24,6 +24,7 @@ export class Server {
 
   private server: http.Server | undefined;
 
+  // eslint-disable-next-line no-empty-function
   constructor(private port: number) {
   }
 

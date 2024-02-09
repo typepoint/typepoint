@@ -21,9 +21,7 @@ export interface ToMiddlewareOptions {
 export function toMiddleware(router: Router, options?: ToMiddlewareOptions): express.RequestHandler {
   const logger = getLogger(options);
 
-  const handlersMiddleware: express.RequestHandler = async (
-    req: express.Request, res: express.Response, next: express.NextFunction,
-  ) => {
+  const handlersMiddleware: express.RequestHandler = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
     let context: EndpointContext<any, any, any> | undefined;
 
     const originalRequestBody = clone(req.body);

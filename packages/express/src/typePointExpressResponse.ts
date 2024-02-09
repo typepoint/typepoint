@@ -72,6 +72,7 @@ export class TypePointExpressResponse<TResponseBody> implements TypePointRespons
 
   private innerContentType: ResponseContentType = 'application/json';
 
+  // eslint-disable-next-line no-empty-function
   constructor(private response: ExpressResponse) {
   }
 

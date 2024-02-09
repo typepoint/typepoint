@@ -18,7 +18,7 @@ import {
 describe('shared', () => {
   describe('arrayOf', () => {
     class User {
-      id = ''
+      id = '';
 
       name = '';
     }
@@ -63,6 +63,7 @@ describe('shared', () => {
 
     it('should include classInfo when defining endpoint using classes', () => {
       class GetClientRequestParams {
+        // eslint-disable-next-line no-empty-function
         constructor(public id: number) {
         }
       }
@@ -73,6 +74,7 @@ describe('shared', () => {
           public creationDate: Date,
           public modificationDate: Date,
           _id?: number,
+        // eslint-disable-next-line no-empty-function
         ) {
         }
       }
@@ -107,6 +109,7 @@ describe('shared', () => {
           public creationDate: Date,
           public modificationDate: Date,
           id?: number,
+        // eslint-disable-next-line no-empty-function
         ) {
         }
       }
@@ -142,6 +145,7 @@ describe('shared', () => {
         public creationDate: Date,
         public modificationDate: Date,
         id?: number,
+      // eslint-disable-next-line no-empty-function
       ) {
       }
     }
@@ -243,7 +247,7 @@ describe('shared', () => {
 
 describe('isArrayOf', () => {
   class User {
-    id = ''
+    id = '';
 
     name = '';
   }

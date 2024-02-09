@@ -30,12 +30,13 @@ export interface ArrayOfTypeInfo<T> {
 }
 
 export class ArrayOfClassInfo<T> {
+  // eslint-disable-next-line no-empty-function
   constructor(readonly element: Constructor<T>) {
   }
 }
 
 export abstract class ArrayOf<T> {
-  static isArrayOf: true = true;
+  static readonly isArrayOf = true as const;
 
   readonly classInfo?: ArrayOfClassInfo<T>;
 
@@ -139,6 +140,7 @@ export class EndpointDefinitionRequestClassInfo<TParams, TBody> {
   constructor(
     readonly params: Constructor<TParams>,
     readonly body: Constructor<TBody> | [any],
+  // eslint-disable-next-line no-empty-function
   ) {
   }
 }
@@ -146,6 +148,7 @@ export class EndpointDefinitionRequestClassInfo<TParams, TBody> {
 export class EndpointDefinitionResponseClassInfo<TBody> {
   constructor(
     readonly body: Constructor<TBody> | [any],
+  // eslint-disable-next-line no-empty-function
   ) {
   }
 }

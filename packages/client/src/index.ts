@@ -135,5 +135,5 @@ export class TypePointClient {
 
         throw error;
       });
-  }
+  };
 }

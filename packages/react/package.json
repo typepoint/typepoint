@@ -24,7 +24,7 @@
   ],
   "scripts": {
     "clean": "rm -rf ./dist ./LICENSE",
-    "build": "yarn clean && webpack && cp ../../LICENSE ./",
+    "build": "yarn clean && NODE_OPTIONS=--openssl-legacy-provider webpack && cp ../../LICENSE ./",
     "lint": "yarn eslint -c '../../.eslintrc.js' ./src/**/* --ext .js,.jsx,.ts,.tsx --format visualstudio",
     "test": "jest",
     "validate": "yarn lint && yarn build && yarn test"

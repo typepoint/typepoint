@@ -32,11 +32,13 @@ export interface TypePointProviderProps {
   client: TypePointClient;
 }
 
-export const TypePointProvider = ({ children, client }: TypePointProviderProps) => (
-  <TypePointContext.Provider value={client}>
-    {children}
-  </TypePointContext.Provider>
-);
+export function TypePointProvider({ children, client }: TypePointProviderProps) {
+  return (
+    <TypePointContext.Provider value={client}>
+      {children}
+    </TypePointContext.Provider>
+  );
+}
 
 export class MissingTypePointProvider extends Error {
   constructor() {
@@ -79,37 +81,35 @@ export const useEndpointLazily = <TEndpointDefinition extends EndpointDefinition
     undefined as TypePointClientResponse<GetEndpointDefinitionResponseBody<TEndpointDefinition>> | undefined,
   );
 
-  const fetch = useCallback(
-    (options?: UseEndpointFetchOptions<TEndpointDefinition>) => {
-      setLoading(true);
-      setError(undefined);
+  const fetch = useCallback((options?: UseEndpointFetchOptions<TEndpointDefinition>) => {
+    setLoading(true);
+    setError(undefined);
 
-      const promise = context
-        .fetch(endpointDefinition, options)
-        .then((res) => {
-          setResponse(res);
-          setLoading(false);
-          options?.onSuccess?.(res);
-          return { res, err: undefined };
-        })
-        .catch((err: TypePointClientResponseError) => {
-          setError(err);
-          setResponse(err.response);
-          setLoading(false);
-          options?.onFailure?.(err);
-          return { res: undefined, err };
-        });
+    const promise = context
+      .fetch(endpointDefinition, options)
+      .then((res) => {
+        setResponse(res);
+        setLoading(false);
+        options?.onSuccess?.(res);
+        return { res, err: undefined };
+      })
+      .catch((err: TypePointClientResponseError) => {
+        setError(err);
+        setResponse(err.response);
+        setLoading(false);
+        options?.onFailure?.(err);
+        return { res: undefined, err };
+      });
 
-      return {
-        promise: async () => promise.then(({ res, err }) => {
-          if (err) {
-            throw err;
-          }
-          return notNil(res);
-        }),
-      };
-    }, [context, endpointDefinition],
-  );
+    return {
+      promise: async () => promise.then(({ res, err }) => {
+        if (err) {
+          throw err;
+        }
+        return notNil(res);
+      }),
+    };
+  }, [context, endpointDefinition]);
 
   const { statusCode, statusText, body } = response ?? {};
 
