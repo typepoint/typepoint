@@ -17,6 +17,7 @@ describe('createContext', () => {
     expect(context.meta).toEqual({});
     expect(context.request).toBeInstanceOf(TypePointExpressRequest);
     expect(context.response).toBeInstanceOf(TypePointExpressResponse);
+    expect(context.endpoint).toBeUndefined();
   });
 });
 

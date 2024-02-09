@@ -1,15 +1,21 @@
 import { Request, Response } from 'express';
 import { INTERNAL_SERVER_ERROR } from 'http-status-codes';
-import { EndpointContextMetadata } from '@typepoint/server';
+import { EndpointContextMetadata, EndpointContext } from '@typepoint/server';
 import { Logger, NoopLogger } from '@typepoint/shared';
 import { TypePointExpressRequest } from './typePointExpressRequest';
 import { TypePointExpressResponse } from './typePointExpressResponse';
 
-export function createContext(req: Request, res: Response) {
+export function createContext(req: Request, res: Response): EndpointContext<any, any, any> {
   const meta: EndpointContextMetadata = {};
+  const endpoint = undefined;
   const request = new TypePointExpressRequest(req);
   const response = new TypePointExpressResponse(res);
-  return { meta, request, response };
+  return {
+    meta,
+    endpoint,
+    request,
+    response,
+  };
 }
 
 export function trySendInternalServerError(res: Response, err: Error | string | any) {

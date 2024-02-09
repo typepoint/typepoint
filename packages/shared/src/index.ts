@@ -208,6 +208,8 @@ export interface EndpointDefinition<
   readonly deprecated?: DeprecationInfo
 }
 
+export type AnyEndpointDefinition = EndpointDefinition<any, any, any>;
+
 export function defineEndpoint<
   TRequestParams extends AllowableRequestParams,
   TRequestBody extends AllowableRequestBody,

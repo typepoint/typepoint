@@ -5,6 +5,9 @@ import {
   GetEndpointDefinitionResponseBody,
   NormalizeTypePointType,
   PathHelperParseMatch,
+  AllowableRequestParams,
+  AllowableRequestBody,
+  AllowableResponseBody,
 } from '@typepoint/shared';
 
 export interface RequestCookies {
@@ -113,12 +116,13 @@ export interface EndpointContextMetadata {
 }
 
 export interface EndpointContext<
-  TRequestParams,
-  TRequestBody,
-  TResponseBody,
+  TRequestParams extends AllowableRequestParams,
+  TRequestBody extends AllowableRequestBody,
+  TResponseBody extends AllowableResponseBody,
   TEndpointContextMetadata = EndpointContextMetadata
 > {
   meta: TEndpointContextMetadata & EndpointContextMetadata;
+  endpoint: EndpointDefinition<TRequestParams, TRequestBody, TResponseBody> | undefined;
   request: Request<TRequestParams, TRequestBody>;
   response: Response<TResponseBody>;
 }

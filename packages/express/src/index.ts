@@ -47,6 +47,7 @@ export function toMiddleware(router: Router, options?: ToMiddlewareOptions): exp
         const handlerMatch = handlerMatchIterator.getNextMatch();
         if (context && handlerMatch) {
           context.request.params = handlerMatch.parsedUrl.params;
+          context.endpoint = 'definition' in handlerMatch.handler ? handlerMatch.handler.definition : undefined;
 
           if (!validateAndTransformRequestPayload({
             context, handlerMatch, originalRequestBody, router,

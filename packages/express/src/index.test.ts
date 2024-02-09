@@ -127,7 +127,11 @@ describe('server/express', () => {
         path: (path) => path.literal('api/auth/login'),
       });
 
-      loginHandlerFn = jest.fn().mockImplementation((context) => {
+      loginHandlerFn = jest.fn().mockImplementation((context: Parameters<typeof loginHandlerFn>[0]) => {
+        if (context.endpoint !== loginEndpoint) {
+          throw new Error('Unexpected endpoint in context');
+        }
+
         const { request: { body: { username, password } }, response } = context;
         if (username === 'hugh' && password === 'swordfish') {
           response.statusCode = OK;
@@ -146,6 +150,9 @@ describe('server/express', () => {
       });
 
       getTodosHandler = createHandler(getTodosEndpoint, (context) => {
+        if (context.endpoint !== getTodosEndpoint) {
+          throw new Error('Unexpected endpoint in context');
+        }
         context.response.body = getTodos();
       }, 'getTodosHandler');
 
@@ -161,6 +168,10 @@ describe('server/express', () => {
       });
 
       const getTodoHandler = createHandler(getTodoEndpoint, (context) => {
+        if (context.endpoint !== getTodoEndpoint) {
+          throw new Error('Unexpected endpoint in context');
+        }
+
         const { id } = context.request.params;
         const todo = getTodos().find((t) => t.id === id);
         if (!todo) {
@@ -251,7 +262,7 @@ describe('server/express', () => {
         expect(res.statusCode).toBe(UNAUTHORIZED);
       });
 
-      it('should response with BAD_REQUEST if request body is invalid', async () => {
+      it('should respond with BAD_REQUEST if request body is invalid', async () => {
         mocked(validateAndTransform)
           .mockImplementationOnce((value) => ({ value }))
           .mockImplementationOnce(() => ({
