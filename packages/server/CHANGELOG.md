@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 4.7.0 (2024-02-09)
+
+
+### Features
+
+* pass endpoint definition in context to handler ([2492aba](https://github.com/typepoint/typepoint/commit/2492abae5cadf68ddf1b674f9fb0b7aeb44d88fb))
+
+
+
+
+
 # 4.6.0 (2024-02-09)
 
 
