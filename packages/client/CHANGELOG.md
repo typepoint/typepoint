@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 4.6.0 (2024-02-09)
+
+
+### Features
+
+* add ability to mark endpoints as deprecated ([f3f0834](https://github.com/typepoint/typepoint/commit/f3f0834213a38d0a82f7b1fe92b0bf47a431c1ee))
+
+
+
+
+
 ## 4.5.4 (2021-12-09)
 
 
