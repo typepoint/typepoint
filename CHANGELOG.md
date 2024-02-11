@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 4.8.0 (2024-02-11)
+
+
+### Features
+
+* allow defineEndpoint overload without method and with deprecation ([127e7c3](https://github.com/typepoint/typepoint/commit/127e7c3a71679ea9a655146725da9afd1cdfda64))
+
+
+
+
+
 # 4.7.0 (2024-02-09)
 
 
