@@ -74,7 +74,7 @@ export function createHandler<
 ): EndpointHandler {
   return {
     definition,
-    handle: handler,
+    handle: handler as unknown as (context: EndpointContext<any, any, any>, next: () => Promise<void>) => Promise<void> | void,
     match: (request: { method: string; url: string }): PathHelperParseMatch | undefined => {
       if (request.method !== definition.method) {
         return undefined;

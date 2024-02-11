@@ -282,27 +282,27 @@ NormalizeDefinitionType<TResponseBody>
 
   switch (args.length) {
     case 1: {
-      const [firstArg] = args;
-      if (typeof firstArg === 'function') {
+      if (typeof args[0] === 'function') {
         return make({
           method: DEFAULT_METHOD,
-          pathFunc: firstArg,
+          pathFunc: args[0],
           options: {},
         });
       }
 
-      if (firstArg && typeof firstArg === 'object') {
+      if (args[0] && typeof args[0] === 'object') {
+        const [options] = args;
         const classInfo = new EndpointDefinitionClassInfo(
-          normalizeDefinitionType(firstArg.requestParams || Empty),
-          normalizeDefinitionType(firstArg.requestBody || Empty),
-          normalizeDefinitionType(firstArg.responseBody || Empty),
+          normalizeDefinitionType(options.requestParams || Empty),
+          normalizeDefinitionType(options.requestBody || Empty),
+          normalizeDefinitionType(options.responseBody || Empty),
         );
 
         return make({
           classInfo,
-          method: cleanseHttpMethod(firstArg.method || DEFAULT_METHOD),
-          pathFunc: firstArg.path,
-          options: { deprecated: firstArg.deprecated },
+          method: cleanseHttpMethod(options.method || DEFAULT_METHOD),
+          pathFunc: options.path,
+          options: { deprecated: options.deprecated },
         });
       }
 
@@ -310,16 +310,26 @@ NormalizeDefinitionType<TResponseBody>
     }
 
     case 2: {
-      const [method, pathFunc] = args;
-      if (typeof method !== 'string' || typeof pathFunc !== 'function') {
-        throw new EndpointDefinitionInvalidConstructorArgs(args);
+      if (typeof args[0] === 'string' && typeof args[1] === 'function') {
+        const [method, pathFunc] = args;
+        return make({
+          method: cleanseHttpMethod(method || DEFAULT_METHOD),
+          pathFunc,
+          options: {},
+        });
       }
 
-      return make({
-        method: cleanseHttpMethod(method || DEFAULT_METHOD),
-        pathFunc,
-        options: {},
-      });
+      if (typeof args[0] === 'function' && typeof args[1] === 'object') {
+        const [pathFunc, options] = args;
+
+        return make({
+          method: DEFAULT_METHOD,
+          pathFunc,
+          options: { deprecated: options.deprecated },
+        });
+      }
+
+      throw new EndpointDefinitionInvalidConstructorArgs(args);
     }
 
     case 3: {
